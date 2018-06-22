@@ -4,7 +4,7 @@ class Call extends React.Component {
 
     render() {
         return (
-            <li className="list-group-item" >{this.props.name}</li>
+            <li className="list-group-item btn btn-outline-secondary" onClick={this.props.onClick}>{this.props.nickname}</li>
         )
     }
 
