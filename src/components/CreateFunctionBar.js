@@ -12,7 +12,10 @@ class CreateFunctionBar extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.saveCollection(this.state.collectionName);
+        const result = this.props.saveCollection(this.state.collectionName);
+        if (result) {
+            this.setState({ collectionName: "" })
+        };
     }
 
     render() {
@@ -37,7 +40,7 @@ class CreateFunctionBar extends React.Component {
                 </li>
             </ul>
             <form className="form-inline" onSubmit={this.handleSubmit}>
-                <input className="form-control mr-sm-2"placeholder="Name Collection" value={this.state.collectionName} onChange={this.handleChange}/>
+                <input className="form-control mr-sm-2" placeholder="Name Collection" value={this.state.collectionName} onChange={this.handleChange}/>
                 <button className="btn btn-sm btn-outline-secondary my-2 my-sm-0" type="submit">Save Collection</button>
             </form>
 

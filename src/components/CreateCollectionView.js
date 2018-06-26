@@ -60,13 +60,13 @@ class CreateCollectionView extends React.Component {
         console.log("Remove all");
     }
 
-    saveCollection = (name) => {
+    saveCollection = async (name) => {
         if (!name) {
             this.showAlert("alert-warning", "Please name your collection");
         } else if (this.state.collectionList.length === 0) {
             this.showAlert("alert-warning", "Please add some calls to your collection");
         } else {
-            sampleClassRef.collection("Collections").where("name", "==", name).get().then((snapshot) => {
+            await sampleClassRef.collection("Collections").where("name", "==", name).get().then((snapshot) => {
                 if (snapshot.size > 0) {
                     this.showAlert("alert-warning", "A collection with that name already exists");
                 } else {
@@ -81,9 +81,12 @@ class CreateCollectionView extends React.Component {
                         })
                     })
                     this.showAlert("alert-success", "Collection saved");
+                    this.removeAll();
+                    return true;
                 }
             })
         }
+        return false;
     }
 
     showAlert(type, text) {
@@ -91,10 +94,19 @@ class CreateCollectionView extends React.Component {
         this.setState({ alerts });
     }
 
+    clearAlerts = () => {
+        this.setState({ alerts: [] });
+    }
+
     render() {
         const alerts = this.state.alerts.map((alert) => 
             <div className={`alert ${alert.type} m-2`} role="alert" key={alert.text}>
-                {alert.text}
+                <span className="mr-auto">
+                    {alert.text}
+                </span>
+                <button type="button" className="close" aria-label="Close" onClick={this.clearAlerts}>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
         );
         return (
@@ -102,7 +114,7 @@ class CreateCollectionView extends React.Component {
                 <CreateFunctionBar 
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
-                    saveCollection={(name)=>this.saveCollection(name)}
+                    saveCollection={(name)=> this.saveCollection(name)}
                 />
                 {alerts}
                 <div className="row">
