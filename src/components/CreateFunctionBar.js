@@ -26,7 +26,7 @@ class CreateFunctionBar extends React.Component {
                 </li>
                 <li className="nav-item dropdown">
                     <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Add previous Collection
+                    Add previous collection
                     </a>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a className="dropdown-item" href="#">Collections here</a>
@@ -37,7 +37,7 @@ class CreateFunctionBar extends React.Component {
                 </li>
             </ul>
             <form className="form-inline" onSubmit={this.handleSubmit}>
-                <input className="form-control mr-sm-2"placeholder="Name" value={this.state.collectionName} onChange={this.handleChange}/>
+                <input className="form-control mr-sm-2"placeholder="Name Collection" value={this.state.collectionName} onChange={this.handleChange}/>
                 <button className="btn btn-sm btn-outline-secondary my-2 my-sm-0" type="submit">Save Collection</button>
             </form>
 

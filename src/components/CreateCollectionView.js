@@ -66,7 +66,23 @@ class CreateCollectionView extends React.Component {
         } else if (this.state.collectionList.length === 0) {
             this.showAlert("alert-warning", "Please add some calls to your collection");
         } else {
-            console.log("Save collection");
+            sampleClassRef.collection("Collections").where("name", "==", name).get().then((snapshot) => {
+                if (snapshot.size > 0) {
+                    this.showAlert("alert-warning", "A collection with that name already exists");
+                } else {
+                    const newCollection = sampleClassRef.collection("Collections").doc()
+                    newCollection.set({
+                        name: name
+                    })
+                    this.state.collectionList.forEach((call) => {
+                        newCollection.collection("Calls").add({
+                            displayData: call,
+                            used: false
+                        })
+                    })
+                    this.showAlert("alert-success", "Collection saved");
+                }
+            })
         }
     }
 
@@ -77,7 +93,7 @@ class CreateCollectionView extends React.Component {
 
     render() {
         const alerts = this.state.alerts.map((alert) => 
-            <div className={`alert ${alert.type} m-2`} role="alert">
+            <div className={`alert ${alert.type} m-2`} role="alert" key={alert.text}>
                 {alert.text}
             </div>
         );
