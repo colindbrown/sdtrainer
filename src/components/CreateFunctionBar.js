@@ -1,24 +1,41 @@
 import React from "react";
+import { sampleClassRef } from "../db";
 
 class CreateFunctionBar extends React.Component {
 
     state = {
-        collectionName: ""
+        newCollectionName: "",
+        collectionNames: []
+    }
+
+    componentDidMount() {
+        sampleClassRef.collection("Collections").get().then((snapshot) => {
+            var collectionNames = [];
+            snapshot.forEach(((doc) => {
+                collectionNames.push(doc.data().name);
+            }));
+            this.setState({collectionNames});
+
+        })
     }
 
     handleChange = (e) => {
-        this.setState({collectionName: e.target.value});
+        this.setState({newCollectionName: e.target.value});
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const result = this.props.saveCollection(this.state.collectionName);
+        const result = this.props.saveCollection(this.state.newCollectionName);
         if (result) {
-            this.setState({ collectionName: "" })
+            this.setState({ newCollectionName: "" })
         };
     }
 
+
     render() {
+        const collectionListItems = this.state.collectionNames.map((name) => 
+            <span className="dropdown-item" key={name} onClick={() => this.props.addCollection(name)}>{name}</span>
+        );
 
         return (
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
@@ -32,7 +49,7 @@ class CreateFunctionBar extends React.Component {
                     Add previous collection
                     </a>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a className="dropdown-item" href="#">Collections here</a>
+                        {collectionListItems}
                     </div>
                 </li>
                 <li className="nav-item">
@@ -40,7 +57,7 @@ class CreateFunctionBar extends React.Component {
                 </li>
             </ul>
             <form className="form-inline" onSubmit={this.handleSubmit}>
-                <input className="form-control mr-sm-2" placeholder="Name Collection" value={this.state.collectionName} onChange={this.handleChange}/>
+                <input className="form-control mr-sm-2" placeholder="Name Collection" value={this.state.newCollectionName} onChange={this.handleChange}/>
                 <button className="btn btn-sm btn-outline-secondary my-2 my-sm-0" type="submit">Save Collection</button>
             </form>
 

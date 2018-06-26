@@ -38,12 +38,16 @@ class CreateCollectionView extends React.Component {
 
         if (destination === "collectionList") {
             const index = callList.findIndex((call) => call.name === name);
-            collectionList.push(callList[index]);
-            callList.splice(index, 1);
+            if (index >= 0) {
+                collectionList.push(callList[index]);
+                callList.splice(index, 1);
+            }
         } else {
             const index = collectionList.findIndex((call) => call.name === name);
-            callList.push(collectionList[index]);
-            collectionList.splice(index,1);
+            if (index >= 0) {
+                callList.push(collectionList[index]);
+                collectionList.splice(index,1);
+            }
         }
         callList.sort((a,b) => this.compareCalls(a,b));
         collectionList.sort((a,b) => this.compareCalls(a,b));
@@ -55,9 +59,21 @@ class CreateCollectionView extends React.Component {
         console.log("Add all used");
     }
 
+    addCollection = (name) => {
+        const collectionsRef = sampleClassRef.collection("Collections");
+        collectionsRef.where("name", "==", name).get().then((colSnapshot) => {
+            collectionsRef.doc(colSnapshot.docs[0].id).collection("Calls").get().then((snapshot) => {
+                snapshot.forEach(((doc) => {
+                    this.moveCall(doc.data().displayData.name, "collectionList");
+                }));
+            });
+        });
+    }
+
     removeAll = (e) => {
         e.preventDefault();
-        console.log("Remove all");
+        const collectionList = this.state.collectionList.slice(0);
+        collectionList.forEach((call) => this.moveCall(call.name, "callList"));
     }
 
     saveCollection = async (name) => {
@@ -114,7 +130,8 @@ class CreateCollectionView extends React.Component {
                 <CreateFunctionBar 
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
-                    saveCollection={(name)=> this.saveCollection(name)}
+                    saveCollection={(name) => this.saveCollection(name)}
+                    addCollection={(name) => this.addCollection(name)}
                 />
                 {alerts}
                 <div className="row">
