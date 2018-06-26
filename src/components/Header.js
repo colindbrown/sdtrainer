@@ -4,7 +4,7 @@ import squareLogo from "../img/squares.png";
 
 const Header = () => (
   <header>
-    <nav className="navbar navbar-light navbar-expand-lg bg-light">
+    <nav className="navbar navbar-dark navbar-expand-lg bg-dark">
       <img
         src={squareLogo}
         width="30"
@@ -13,11 +13,11 @@ const Header = () => (
         alt=""
       />
       <a className="navbar-brand" href="/">
-        Hello Poppop
+        Square
       </a>
 
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
       </button>
 
       <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
