@@ -9,7 +9,8 @@ class List extends React.Component {
             name: PropTypes.string,
             group: PropTypes.number
         })),
-        onClick: PropTypes.func
+        onClick: PropTypes.func,
+        size: PropTypes.string
     }
 
     render() {
@@ -20,7 +21,7 @@ class List extends React.Component {
             </ul>
         )
     }
-    
+
 }
 
 export default List;

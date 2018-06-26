@@ -1,12 +1,14 @@
 import React from "react";
 import List from "./List";
 import { sampleClassRef } from "../db";
+import CreateFunctionBar from "./CreateFunctionBar";
 
 class CreateCollectionView extends React.Component {
 
     state = {
         callList: [],
-        collectionList: []
+        collectionList: [],
+        alerts: []
     }
 
     componentDidMount() {
@@ -48,11 +50,49 @@ class CreateCollectionView extends React.Component {
         this.setState({callList, collectionList});
     }
 
+    addAllUsed = (e) => {
+        e.preventDefault();
+        console.log("Add all used");
+    }
+
+    removeAll = (e) => {
+        e.preventDefault();
+        console.log("Remove all");
+    }
+
+    saveCollection = (name) => {
+        if (!name) {
+            this.showAlert("alert-warning", "Please name your collection");
+        } else if (this.state.collectionList.length === 0) {
+            this.showAlert("alert-warning", "Please add some calls to your collection");
+        } else {
+            console.log("Save collection");
+        }
+    }
+
+    showAlert(type, text) {
+        const alerts = [{type: type, text: text}];
+        this.setState({ alerts });
+    }
+
     render() {
+        const alerts = this.state.alerts.map((alert) => 
+            <div className={`alert ${alert.type} m-2`} role="alert">
+                {alert.text}
+            </div>
+        );
         return (
-            <div className="row">
-                <List size="col-md-6" calls={this.state.callList} onClick={(name) => this.moveCall(name, "collectionList")} />
-                <List size="col-md-6" calls={this.state.collectionList} onClick={(name) => this.moveCall(name, "callList")} />
+            <div>
+                <CreateFunctionBar 
+                    addAllUsed={(e) => this.addAllUsed(e)}
+                    removeAll={(e) => this.removeAll(e)}
+                    saveCollection={(name)=>this.saveCollection(name)}
+                />
+                {alerts}
+                <div className="row">
+                    <List size="col-md-6" calls={this.state.callList} onClick={(name) => this.moveCall(name, "collectionList")} />
+                    <List size="col-md-6" calls={this.state.collectionList} onClick={(name) => this.moveCall(name, "callList")} />
+                </div>
             </div>
         )
     }
