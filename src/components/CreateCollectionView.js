@@ -1,25 +1,43 @@
 import React from "react";
 import List from "./List";
+import { sampleClassRef } from "../db";
+import CreateFunctionBar from "./CreateFunctionBar";
 
 class CreateCollectionView extends React.Component {
 
     state = {
-        group1: [
-            {name: "Call 0", nickname: "C0", group: 1, level: 0 },
-            {name: "Call 1", nickname: "C1", group: 2, level: 0 },
-            {name: "Call 2", nickname: "C2", group: 3, level: 2 },
-            {name: "Call 3", nickname: "C3", group: 4, level: 2 },
-            {name: "Call 4", nickname: "C4", group: 3, level: 1 },
-            {name: "Call 5", nickname: "C5", group: 1, level: 1 }
-        ],
-        group2: [
-            {name: "Call 6", nickname: "C6", group: 1, level: 0 },
-            {name: "Call 7", nickname: "C7", group: 4, level: 0 },
-            {name: "Call 8", nickname: "C8", group: 3, level: 1 },
-            {name: "Call 9", nickname: "C9", group: 4, level: 2 },
-            {name: "Call 10", nickname: "C10", group: 2, level: 2 },
-            {name: "Call 11", nickname: "C11", group: 3, level: 1 }
-        ]
+        callList: [],
+        collectionList: [],
+        alerts: [],
+        collectionNames: []
+    }
+
+    componentDidMount() {
+        this.fetchAllCalls();
+        this.fetchCollectionNames();
+    }
+
+    fetchAllCalls() {
+        sampleClassRef.collection("AllCalls").get().then((snapshot) => {
+            const allCalls = [];
+            snapshot.forEach(((doc) => {
+                allCalls.push(doc.data().displayData);
+            }));
+            allCalls.sort((a,b) => this.compareCalls(a,b));
+            this.setState({ callList: allCalls });
+        });
+    }
+
+    fetchCollectionNames() {
+        sampleClassRef.collection("Collections").get().then((snapshot) => {
+            var collectionNames = [];
+            snapshot.forEach(((doc) => {
+                collectionNames.push(doc.data().name);
+            }));
+            const collectionsExist = (collectionNames.length > 0);
+            this.setState({collectionNames, collectionsExist});
+
+        });
     }
 
     compareCalls(a,b) {
@@ -33,28 +51,112 @@ class CreateCollectionView extends React.Component {
     }
 
     moveCall = (name, destination) => {
-        var group1 = this.state.group1;
-        var group2 = this.state.group2;
+        var callList = this.state.callList;
+        var collectionList = this.state.collectionList;
 
-        if (destination === "group2") {
-            const index = group1.findIndex((call) => call.name === name);
-            group2.push(group1[index]);
-            group1.splice(index, 1);
+        if (destination === "collectionList") {
+            const index = callList.findIndex((call) => call.name === name);
+            if (index >= 0) {
+                collectionList.push(callList[index]);
+                callList.splice(index, 1);
+            }
         } else {
-            const index = group2.findIndex((call) => call.name === name);
-            group1.push(group2[index]);
-            group2.splice(index,1);
+            const index = collectionList.findIndex((call) => call.name === name);
+            if (index >= 0) {
+                callList.push(collectionList[index]);
+                collectionList.splice(index,1);
+            }
         }
-        group1.sort((a,b) => this.compareCalls(a,b));
-        group2.sort((a,b) => this.compareCalls(a,b));
-        this.setState({group1, group2});
+        callList.sort((a,b) => this.compareCalls(a,b));
+        collectionList.sort((a,b) => this.compareCalls(a,b));
+        this.setState({callList, collectionList});
+    }
+
+    addAllUsed = (e) => {
+        e.preventDefault();
+        console.log("Add all used");
+    }
+
+    addCollection = (name) => {
+        const collectionsRef = sampleClassRef.collection("Collections");
+        collectionsRef.where("name", "==", name).get().then((colSnapshot) => {
+            collectionsRef.doc(colSnapshot.docs[0].id).collection("Calls").get().then((snapshot) => {
+                snapshot.forEach(((doc) => {
+                    this.moveCall(doc.data().displayData.name, "collectionList");
+                }));
+            });
+        });
+    }
+
+    removeAll = () => {
+        const collectionList = this.state.collectionList.slice(0);
+        collectionList.forEach((call) => this.moveCall(call.name, "callList"));
+    }
+
+    saveCollection = async (name) => {
+        if (!name) {
+            this.showAlert("alert-warning", "Please name your collection");
+        } else if (this.state.collectionList.length === 0) {
+            this.showAlert("alert-warning", "Please add some calls to your collection");
+        } else {
+            await sampleClassRef.collection("Collections").where("name", "==", name).get().then((snapshot) => {
+                if (snapshot.size > 0) {
+                    this.showAlert("alert-warning", "A collection with that name already exists");
+                } else {
+                    const newCollection = sampleClassRef.collection("Collections").doc()
+                    newCollection.set({
+                        name: name
+                    })
+                    this.state.collectionList.forEach((call) => {
+                        newCollection.collection("Calls").add({
+                            displayData: call,
+                            used: false
+                        })
+                    })
+                    this.showAlert("alert-success", "Collection saved");
+                    this.removeAll();
+                    this.fetchCollectionNames();
+                    return true;
+                }
+            })
+        }
+        return false;
+    }
+
+    showAlert(type, text) {
+        const alerts = [{type: type, text: text}];
+        this.setState({ alerts });
+    }
+
+    clearAlerts = () => {
+        this.setState({ alerts: [] });
     }
 
     render() {
+        const alerts = this.state.alerts.map((alert) => 
+            <div className={`alert ${alert.type} m-2`} role="alert" key={alert.text}>
+                <span className="mr-auto">
+                    {alert.text}
+                </span>
+                <button type="button" className="close" aria-label="Close" onClick={this.clearAlerts}>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        );
         return (
-            <div className="row">
-                <List size="col-md-6" calls={this.state.group1} onClick={(name) => this.moveCall(name, "group2")} />
-                <List size="col-md-6" calls={this.state.group2} onClick={(name) => this.moveCall(name, "group1")} />
+            <div>
+                <CreateFunctionBar 
+                    addAllUsed={(e) => this.addAllUsed(e)}
+                    removeAll={(e) => this.removeAll(e)}
+                    saveCollection={(name) => this.saveCollection(name)}
+                    addCollection={(name) => this.addCollection(name)}
+                    collectionNames={this.state.collectionNames}
+                />
+                {alerts}
+                <div className="row">
+                    <List size="col-md-6" calls={this.state.callList} onClick={(name) => this.moveCall(name, "collectionList")} />
+                    <List size="col-md-6" calls={this.state.collectionList} onClick={(name) => this.moveCall(name, "callList")} />
+                </div>
             </div>
         )
     }
