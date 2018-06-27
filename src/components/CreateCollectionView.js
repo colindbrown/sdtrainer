@@ -8,10 +8,16 @@ class CreateCollectionView extends React.Component {
     state = {
         callList: [],
         collectionList: [],
-        alerts: []
+        alerts: [],
+        collectionNames: []
     }
 
     componentDidMount() {
+        this.fetchAllCalls();
+        this.fetchCollectionNames();
+    }
+
+    fetchAllCalls() {
         sampleClassRef.collection("AllCalls").get().then((snapshot) => {
             const allCalls = [];
             snapshot.forEach(((doc) => {
@@ -19,6 +25,18 @@ class CreateCollectionView extends React.Component {
             }));
             allCalls.sort((a,b) => this.compareCalls(a,b));
             this.setState({ callList: allCalls });
+        });
+    }
+
+    fetchCollectionNames() {
+        sampleClassRef.collection("Collections").get().then((snapshot) => {
+            var collectionNames = [];
+            snapshot.forEach(((doc) => {
+                collectionNames.push(doc.data().name);
+            }));
+            const collectionsExist = (collectionNames.length > 0);
+            this.setState({collectionNames, collectionsExist});
+
         });
     }
 
@@ -70,8 +88,7 @@ class CreateCollectionView extends React.Component {
         });
     }
 
-    removeAll = (e) => {
-        e.preventDefault();
+    removeAll = () => {
         const collectionList = this.state.collectionList.slice(0);
         collectionList.forEach((call) => this.moveCall(call.name, "callList"));
     }
@@ -98,6 +115,7 @@ class CreateCollectionView extends React.Component {
                     })
                     this.showAlert("alert-success", "Collection saved");
                     this.removeAll();
+                    this.fetchCollectionNames();
                     return true;
                 }
             })
@@ -132,6 +150,7 @@ class CreateCollectionView extends React.Component {
                     removeAll={(e) => this.removeAll(e)}
                     saveCollection={(name) => this.saveCollection(name)}
                     addCollection={(name) => this.addCollection(name)}
+                    collectionNames={this.state.collectionNames}
                 />
                 {alerts}
                 <div className="row">
