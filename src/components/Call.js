@@ -6,12 +6,14 @@ class Call extends React.Component {
     static propTypes = {
         name: PropTypes.string,
         group: PropTypes.number,
+        disabled: PropTypes.bool,
         onClick: PropTypes.func
     }
 
     render() {
+        const disabled = this.props.disabled ? "list-group-item-dark" : "btn btn-outline-secondary";
         return (
-            <li className="list-group-item btn btn-outline-secondary" onClick={this.props.onClick}>{this.props.name}</li>
+            <li className={`list-group-item ${disabled}`} onClick={this.props.onClick}>{this.props.name}</li>
         )
     }
 

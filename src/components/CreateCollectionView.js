@@ -34,8 +34,7 @@ class CreateCollectionView extends React.Component {
             snapshot.forEach(((doc) => {
                 collectionNames.push(doc.data().name);
             }));
-            const collectionsExist = (collectionNames.length > 0);
-            this.setState({collectionNames, collectionsExist});
+            this.setState({collectionNames});
 
         });
     }

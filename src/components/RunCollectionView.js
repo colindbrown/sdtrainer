@@ -7,11 +7,68 @@ class RunCollectionView extends React.Component {
 
     state = {
         collectionCalls: [],
-        alerts: []
+        alerts: [],
+        collectionNames: []
+    }
+
+
+    componentDidMount() {
+        this.fetchAllCalls();
+        this.fetchCollectionNames();
+    }
+
+    fetchAllCalls() {
+        sampleClassRef.collection("AllCalls").get().then((snapshot) => {
+            const allCalls = [];
+            snapshot.forEach(((doc) => {
+                const displayData = doc.data().displayData;
+                displayData["disabled"] = false;
+                allCalls.push(displayData);
+            }));
+            allCalls.sort((a,b) => this.compareCalls(a,b));
+            this.setState({ collectionCalls: allCalls });
+        });
+    }
+
+    fetchCollectionNames() {
+        sampleClassRef.collection("Collections").get().then((snapshot) => {
+            var collectionNames = [];
+            snapshot.forEach(((doc) => {
+                collectionNames.push(doc.data().name);
+            }));
+            this.setState({collectionNames});
+
+        });
+    }
+
+    compareCalls(a,b) {
+        if (a.name < b.name) {
+            return -1;
+        } else if (a.name > b.name) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     toggleCall(name) {
-        console.log(name);
+        var collectionCalls = this.state.collectionCalls;
+        const index = collectionCalls.findIndex((call) => call.name === name);
+        if (index >= 0) {
+            const call = collectionCalls[index];
+            call.disabled = !call.disabled;
+            collectionCalls[index] = call;
+            this.setState({collectionCalls});
+        }
+    }
+
+    showAlert(type, text) {
+        const alerts = [{type: type, text: text}];
+        this.setState({ alerts });
+    }
+
+    clearAlerts = () => {
+        this.setState({ alerts: [] });
     }
 
     render() {
