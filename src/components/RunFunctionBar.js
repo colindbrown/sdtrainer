@@ -1,5 +1,4 @@
 import React from "react";
-import { sampleClassRef } from "../db";
 
 class CreateFunctionBar extends React.Component {
 
@@ -18,17 +17,17 @@ class CreateFunctionBar extends React.Component {
 
             <div className="navbar-nav mr-auto ml-2">
                 <div className="dropdown mr-2">
-                    <a className={` btn btn-secondary dropdown-toggle`} href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button className={` btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {activeCollection}
-                    </a>
+                    </button>
                     <div className="dropdown-menu">
                         {collectionListItems}
                     </div>
                 </div>
                 <div className="dropdown mr-2">
-                    <a className={` btn btn-secondary dropdown-toggle`} href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button className={` btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {sortBy}
-                    </a>
+                    </button>
                     <div className="dropdown-menu">
                         <button className="dropdown-item" key={"used"} onClick={() => this.props.selectSortMethod("used")}>Used first</button>
                         <button className="dropdown-item" key={"unused"} onClick={() => this.props.selectSortMethod("unused")}>Unused first</button>
@@ -36,15 +35,15 @@ class CreateFunctionBar extends React.Component {
                     </div>
                 </div>
                 <div className="dropdown mr-2">
-                    <a className={` btn btn-secondary dropdown-toggle`} href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button className={` btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {activeGroup}
-                    </a>
+                    </button>
                     <div className="dropdown-menu">
                         {groupButtons}
                     </div>
                 </div>
             </div>
-            <button className="btn btn-secondary" href="#" onClick={this.props.finishCollection}>Finish running collection</button>
+            <button className="btn btn-secondary" onClick={this.props.finishCollection}>Finish running collection</button>
            </nav>
         )
     }
