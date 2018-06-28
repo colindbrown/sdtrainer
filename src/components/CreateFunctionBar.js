@@ -1,5 +1,4 @@
 import React from "react";
-import { sampleClassRef } from "../db";
 
 class CreateFunctionBar extends React.Component {
 

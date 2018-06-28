@@ -22,7 +22,7 @@ class RunCollectionView extends React.Component {
             const allCalls = [];
             snapshot.forEach(((doc) => {
                 const displayData = doc.data().displayData;
-                displayData["disabled"] = false;
+                displayData["used"] = false;
                 allCalls.push(displayData);
             }));
             allCalls.sort((a,b) => this.compareCalls(a,b));
@@ -39,6 +39,11 @@ class RunCollectionView extends React.Component {
             this.setState({collectionNames});
 
         });
+    }
+
+    finishCollection(e) {
+        e.preventDefault();
+        console.log("finish Collection");
     }
 
     compareCalls(a,b) {
@@ -71,6 +76,18 @@ class RunCollectionView extends React.Component {
         this.setState({ alerts: [] });
     }
 
+    selectActiveCollection = (name) => {
+        console.log(`Selected Collection: ${name}`)
+    }
+
+    selectSortMethod = (sort) => {
+        console.log(`Selected Sort: ${sort}`)
+    }
+
+    selectActiveGroup = (group) => {
+        console.log(`Selected Group: ${group}`)
+    }
+
     render() {
         const alerts = this.state.alerts.map((alert) => 
             <div className={`alert ${alert.type} m-2`} role="alert" key={alert.text}>
@@ -84,7 +101,16 @@ class RunCollectionView extends React.Component {
         );
         return (
             <div>
-                <RunFunctionBar />
+                <RunFunctionBar 
+                    finishCollection={(e) => this.finishCollection(e)}
+                    collectionNames={this.state.collectionNames}
+                    activeCollection={this.state.activeCollection}
+                    sortBy={this.state.sortBy}
+                    activeGroup={this.state.activeGroup}
+                    selectActiveCollection={(collection) => this.selectActiveCollection(collection)}
+                    selectSortMethod={(sort) => this.selectSortMethod(sort)}
+                    selectActiveGroup={(group) => this.selectActiveGroup(group)}
+                    />
                 {alerts}
                 <div className="row">
                     <List size="col-md-12" calls={this.state.collectionCalls} onClick={(name) => this.toggleCall(name)} />
