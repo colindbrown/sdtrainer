@@ -8,7 +8,7 @@ class CreateFunctionBar extends React.Component {
         const sortBy = this.props.sortBy || "Sort by";
         const activeGroup = this.props.activeGroup || "Select group";
         const groupButtons = [...Array(7).keys()].map((number) => 
-            <button className="dropdown-item" key={number} onClick={() => this.props.selectActiveGroup(number)}>Group {number}</button>
+            <button className="dropdown-item" key={number} onClick={() => this.props.selectActiveGroup(number)}>Group {number+1}</button>
         );
         const collectionListItems = this.props.collectionNames.map((name) => 
             <button className="dropdown-item" key={name} onClick={() => this.props.selectActiveCollection(name)}>{name}</button>
@@ -16,7 +16,7 @@ class CreateFunctionBar extends React.Component {
         return (
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
-            <div className="navbar-nav mr-auto">
+            <div className="navbar-nav mr-auto ml-2">
                 <div className="dropdown mr-2">
                     <a className={` btn btn-secondary dropdown-toggle`} href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {activeCollection}
@@ -44,7 +44,7 @@ class CreateFunctionBar extends React.Component {
                     </div>
                 </div>
             </div>
-            <button className="btn btn-secondary mr-2" href="#" onClick={this.props.finishCollection}>Finish running collection</button>
+            <button className="btn btn-secondary" href="#" onClick={this.props.finishCollection}>Finish running collection</button>
            </nav>
         )
     }

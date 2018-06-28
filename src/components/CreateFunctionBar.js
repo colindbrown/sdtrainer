@@ -34,7 +34,7 @@ class CreateFunctionBar extends React.Component {
         return (
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
-            <div className="navbar-nav mr-auto">
+            <div className="navbar-nav mr-auto ml-2">
                 <button className="btn btn-secondary mr-2" href="#" onClick={this.props.addAllUsed}>Add all used calls</button>
                 <div className="dropdown mr-2">
                     <a className={`${disableCollectionMenu} btn btn-secondary dropdown-toggle`} href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

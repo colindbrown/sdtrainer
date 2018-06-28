@@ -8,25 +8,28 @@ class RunCollectionView extends React.Component {
     state = {
         collectionCalls: [],
         alerts: [],
-        collectionNames: []
+        collectionNames: [],
+        activeCollection: ""
     }
 
 
     componentDidMount() {
-        this.fetchAllCalls();
         this.fetchCollectionNames();
     }
 
-    fetchAllCalls() {
-        sampleClassRef.collection("AllCalls").get().then((snapshot) => {
-            const allCalls = [];
-            snapshot.forEach(((doc) => {
-                const displayData = doc.data().displayData;
-                displayData["used"] = false;
-                allCalls.push(displayData);
-            }));
-            allCalls.sort((a,b) => this.compareCalls(a,b));
-            this.setState({ collectionCalls: allCalls });
+    addCollection = (name) => {
+        const collectionsRef = sampleClassRef.collection("Collections");
+        collectionsRef.where("name", "==", name).get().then((colSnapshot) => {
+            collectionsRef.doc(colSnapshot.docs[0].id).collection("Calls").get().then((snapshot) => {
+                var collectionCalls = []
+                snapshot.forEach(((doc) => {
+                    const call = doc.data().displayData;
+                    call["disabled"] = false;
+                    collectionCalls.push(call);
+                }));
+                collectionCalls.sort((a,b) => this.compareCalls(a,b));
+                this.setState({collectionCalls: collectionCalls, activeCollection: name});
+            });
         });
     }
 
@@ -37,7 +40,6 @@ class RunCollectionView extends React.Component {
                 collectionNames.push(doc.data().name);
             }));
             this.setState({collectionNames});
-
         });
     }
 
@@ -77,7 +79,7 @@ class RunCollectionView extends React.Component {
     }
 
     selectActiveCollection = (name) => {
-        console.log(`Selected Collection: ${name}`)
+        this.addCollection(name);
     }
 
     selectSortMethod = (sort) => {
