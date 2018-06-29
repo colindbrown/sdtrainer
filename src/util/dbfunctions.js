@@ -1,4 +1,4 @@
-import { sampleClassRef } from "../db";
+import { sampleClassRef, db } from "../db";
 
 // AllCalls Database functions
 export async function fetchAllCalls() {
@@ -8,6 +8,19 @@ export async function fetchAllCalls() {
         allCalls.push(doc.data().displayData);
     }));
     return allCalls;
+}
+
+export async function updateAllCalls(calls) {
+    var batch = db.batch();
+    var snapshot = await sampleClassRef.collection("AllCalls").get();
+    snapshot.docs.forEach((callDoc) => {
+        const prev = callDoc.data();
+        const call = calls.find((callIterator) => (callIterator.displayData.name === prev.displayData.name));
+        if (call) {
+            batch.update(callDoc.ref, {everUsed: (call.everUsed || prev.everUsed), displayData: call.displayData});
+        }
+    });
+    batch.commit();
 }
 
 // Collection Database functions
@@ -48,9 +61,15 @@ export async function fetchCollectionCalls(name) {
 }
 
 export async function setCollection(name, calls) {
-    var collection = await findCollection(name);
+    var collection = await fetchCollectionRef(name);
     if (collection) {
-        
+        var batch = db.batch();
+        var snapshot = await collection.collection("Calls").get();
+        snapshot.docs.forEach((callDoc) => {
+            const call = calls.find((callIterator) => (callIterator.displayData.name === callDoc.data().displayData.name));
+            batch.update(callDoc.ref, {used: call.used});
+        });
+        batch.commit();
     } else {
         const newCollection = sampleClassRef.collection("Collections").doc();
         newCollection.set({name: name});

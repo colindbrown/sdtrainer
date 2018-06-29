@@ -17,7 +17,7 @@ class CreateCollectionView extends React.Component {
         this.loadCollectionNames();
     }
 
-    async loadAllCalls() {
+    loadAllCalls = async () => {
         db.fetchAllCalls().then((allCalls) => {
             allCalls.sort((a,b) => this.compareCalls(a,b));
             this.setState({ callList: allCalls });
@@ -89,7 +89,7 @@ class CreateCollectionView extends React.Component {
                 this.showAlert("alert-warning", "A collection with that name already exists");
             } else {
                 const collectionCalls = this.state.collectionList.map( (call) => ({displayData: call, used: false}) );
-                db.setCollection(name, collectionCalls);
+                await db.setCollection(name, collectionCalls);
                 this.showAlert("alert-success", "Collection saved");
                 this.removeAll();
                 this.loadCollectionNames();

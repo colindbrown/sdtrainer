@@ -34,12 +34,12 @@ class RunCollectionView extends React.Component {
 
     finishCollection(e) {
         e.preventDefault();
-        //Get ref to AllCalls
-        //create batch write for each
-        //for each call in collectionCalls
-        // get doc in AllCalls, update in batch
-        // get doc in Collection, update in batch
-        //commit batch writes
+        var dbCollectionCalls = this.state.collectionCalls.map((call) => ({displayData: {name: call.name, group: call.group}, used: call.disabled}));
+        db.setCollection(this.state.activeCollection, dbCollectionCalls);
+        dbCollectionCalls = dbCollectionCalls.map((call) => ({displayData: call.displayData, everUsed: call.used}));
+        db.updateAllCalls(dbCollectionCalls);
+        this.setState({activeCollection: "", collectionCalls: []});
+        this.showAlert("alert-success", "Collection saved");
     }
 
     compareCalls(a,b) {
