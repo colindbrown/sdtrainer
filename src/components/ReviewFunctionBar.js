@@ -48,7 +48,7 @@ class ReviewFunctionBar extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button className={` btn btn-secondary`} onClick={this.props.exportSelection}>Export current selection</button>
+                <button className={` btn btn-secondary`} data-toggle="modal" data-target="#exampleModalCenter" >Export current selection</button>
             </nav>
         )
     }

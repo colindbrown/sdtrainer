@@ -2,24 +2,26 @@ import React from "react";
 import ReviewFunctionBar from "./ReviewFunctionBar";
 import * as db from "../util/dbfunctions";
 import List from "./List";
+import Modal from "./Modal";
 
 class ReviewClassView extends React.Component {
 
     state = {
         alerts: [],
-        calls: [],
+        selectedCalls: [],
         collectionNames: []
     }
 
     componentDidMount() {
         this.loadAllCalls();
         this.loadCollectionNames();
+
     }
 
     loadAllCalls = async () => {
         db.fetchAllCalls().then((allCalls) => {
             allCalls.sort((a, b) => this.compareCalls(a, b));
-            this.setState({ calls: allCalls });
+            this.setState({ selectedCalls: allCalls });
         });
     }
 
@@ -50,10 +52,6 @@ class ReviewClassView extends React.Component {
         }
     }
 
-    exportSelection = () => {
-        console.log("Export");
-    }
-
     selectSortMethod = (sort) => {
         console.log(`Selected Sort: ${sort}`);
     }
@@ -79,16 +77,16 @@ class ReviewClassView extends React.Component {
         );
         return (
             <div>
+                <Modal calls={this.state.selectedCalls}/>
                 <ReviewFunctionBar
                     collectionNames={this.state.collectionNames}
                     selectSortMethod={(sort) => this.selectSortMethod(sort)}
                     selectActiveCollection={(collection) => this.selectActiveCollection(collection)}
                     selectActiveGroup={(group) => this.selectActiveGroup(group)}
-                    exportSelection={() => this.exportSelection()}
                 />
                 {alerts}
                 <div className="row">
-                    <List size="col-md-12" calls={this.state.calls} onClick={(name) => this.showCall(name)} />
+                    <List size="col-md-12" calls={this.state.selectedCalls} onClick={(name) => this.showCall(name)} />
                 </div>
             </div>
         )
