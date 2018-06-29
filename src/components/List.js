@@ -7,7 +7,8 @@ class List extends React.Component {
      static propTypes = {
         calls: PropTypes.arrayOf(PropTypes.shape({
             name: PropTypes.string,
-            group: PropTypes.number
+            group: PropTypes.number,
+            disabled: PropTypes.bool
         })),
         onClick: PropTypes.func,
         size: PropTypes.string
