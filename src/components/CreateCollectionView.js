@@ -1,6 +1,6 @@
 import React from "react";
 import List from "./List";
-import { sampleClassRef } from "../db";
+import * as db from "../util/dbfunctions";
 import CreateFunctionBar from "./CreateFunctionBar";
 
 class CreateCollectionView extends React.Component {
@@ -13,30 +13,19 @@ class CreateCollectionView extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchAllCalls();
-        this.fetchCollectionNames();
+        this.loadAllCalls();
+        this.loadCollectionNames();
     }
 
-    fetchAllCalls() {
-        sampleClassRef.collection("AllCalls").get().then((snapshot) => {
-            const allCalls = [];
-            snapshot.forEach(((doc) => {
-                allCalls.push(doc.data().displayData);
-            }));
+    async loadAllCalls() {
+        db.fetchAllCalls().then((allCalls) => {
             allCalls.sort((a,b) => this.compareCalls(a,b));
             this.setState({ callList: allCalls });
         });
     }
 
-    fetchCollectionNames() {
-        sampleClassRef.collection("Collections").get().then((snapshot) => {
-            var collectionNames = [];
-            snapshot.forEach(((doc) => {
-                collectionNames.push(doc.data().name);
-            }));
-            this.setState({collectionNames});
-
-        });
+    async loadCollectionNames() {
+        db.fetchCollectionNames().then((collectionNames) => {this.setState({collectionNames})});
     }
 
     compareCalls(a,b) {
@@ -76,14 +65,11 @@ class CreateCollectionView extends React.Component {
         console.log("Add all used");
     }
 
-    addCollection = (name) => {
-        const collectionsRef = sampleClassRef.collection("Collections");
-        collectionsRef.where("name", "==", name).get().then((colSnapshot) => {
-            collectionsRef.doc(colSnapshot.docs[0].id).collection("Calls").get().then((snapshot) => {
-                snapshot.forEach(((doc) => {
-                    this.moveCall(doc.data().displayData.name, "collectionList");
-                }));
-            });
+    async addCollection(name) {
+        db.fetchCollectionCalls(name).then((collectionCalls) => {
+            collectionCalls.forEach(((call) => {
+                this.moveCall(call.name, "collectionList");
+            }));
         });
     }
 
@@ -92,32 +78,23 @@ class CreateCollectionView extends React.Component {
         collectionList.forEach((call) => this.moveCall(call.name, "callList"));
     }
 
-    saveCollection = async (name) => {
+    async saveNewCollection(name) {
         if (!name) {
             this.showAlert("alert-warning", "Please name your collection");
         } else if (this.state.collectionList.length === 0) {
             this.showAlert("alert-warning", "Please add some calls to your collection");
         } else {
-            await sampleClassRef.collection("Collections").where("name", "==", name).get().then((snapshot) => {
-                if (snapshot.size > 0) {
-                    this.showAlert("alert-warning", "A collection with that name already exists");
-                } else {
-                    const newCollection = sampleClassRef.collection("Collections").doc()
-                    newCollection.set({
-                        name: name
-                    })
-                    this.state.collectionList.forEach((call) => {
-                        newCollection.collection("Calls").add({
-                            displayData: call,
-                            used: false
-                        })
-                    })
-                    this.showAlert("alert-success", "Collection saved");
-                    this.removeAll();
-                    this.fetchCollectionNames();
-                    return true;
-                }
-            })
+            const collection = await db.findCollection(name);
+            if (collection) {
+                this.showAlert("alert-warning", "A collection with that name already exists");
+            } else {
+                const collectionCalls = this.state.collectionList.map( (call) => ({displayData: call, used: false}) );
+                db.setCollection(name, collectionCalls);
+                this.showAlert("alert-success", "Collection saved");
+                this.removeAll();
+                this.loadCollectionNames();
+                return true;
+            }
         }
         return false;
     }
@@ -147,7 +124,7 @@ class CreateCollectionView extends React.Component {
                 <CreateFunctionBar 
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
-                    saveCollection={(name) => this.saveCollection(name)}
+                    saveNewCollection={(name) => this.saveNewCollection(name)}
                     addCollection={(name) => this.addCollection(name)}
                     collectionNames={this.state.collectionNames}
                 />

@@ -1,6 +1,6 @@
 import React from "react";
 
-class CreateFunctionBar extends React.Component {
+class RunFunctionBar extends React.Component {
 
     render() {
         const activeCollection = this.props.activeCollection || "Select collection";
@@ -50,4 +50,4 @@ class CreateFunctionBar extends React.Component {
 
 }
 
-export default CreateFunctionBar;
+export default RunFunctionBar;

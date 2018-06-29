@@ -12,7 +12,7 @@ class CreateFunctionBar extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const result = this.props.saveCollection(this.state.newCollectionName);
+        const result = this.props.saveNewCollection(this.state.newCollectionName);
         if (result) {
             this.setState({ newCollectionName: ""});
         };

@@ -1,6 +1,6 @@
 import React from "react";
 import List from "./List";
-import { sampleClassRef } from "../db";
+import * as db from "../util/dbfunctions";
 import RunFunctionBar from "./RunFunctionBar";
 
 class RunCollectionView extends React.Component {
@@ -14,38 +14,32 @@ class RunCollectionView extends React.Component {
 
 
     componentDidMount() {
-        this.fetchCollectionNames();
+        this.loadCollectionNames();
     }
 
-    addCollection = (name) => {
-        const collectionsRef = sampleClassRef.collection("Collections");
-        collectionsRef.where("name", "==", name).get().then((colSnapshot) => {
-            collectionsRef.doc(colSnapshot.docs[0].id).collection("Calls").get().then((snapshot) => {
-                var collectionCalls = []
-                snapshot.forEach(((doc) => {
-                    const call = doc.data().displayData;
-                    call["disabled"] = false;
-                    collectionCalls.push(call);
-                }));
-                collectionCalls.sort((a,b) => this.compareCalls(a,b));
-                this.setState({collectionCalls: collectionCalls, activeCollection: name});
-            });
-        });
-    }
-
-    fetchCollectionNames() {
-        sampleClassRef.collection("Collections").get().then((snapshot) => {
-            var collectionNames = [];
-            snapshot.forEach(((doc) => {
-                collectionNames.push(doc.data().name);
+    // redo async
+    async loadCollection(name) {
+        db.fetchCollectionCalls(name).then((collectionCalls) => {
+            collectionCalls.forEach(((call) => {
+                call["disabled"] = false;
             }));
-            this.setState({collectionNames});
+            collectionCalls.sort((a,b) => this.compareCalls(a,b));
+            this.setState({collectionCalls: collectionCalls, activeCollection: name});
         });
+    }
+
+    async loadCollectionNames() {
+        db.fetchCollectionNames().then((collectionNames) => {this.setState({collectionNames})});
     }
 
     finishCollection(e) {
         e.preventDefault();
-        console.log("finish Collection");
+        //Get ref to AllCalls
+        //create batch write for each
+        //for each call in collectionCalls
+        // get doc in AllCalls, update in batch
+        // get doc in Collection, update in batch
+        //commit batch writes
     }
 
     compareCalls(a,b) {
@@ -79,7 +73,7 @@ class RunCollectionView extends React.Component {
     }
 
     selectActiveCollection = (name) => {
-        this.addCollection(name);
+        this.loadCollection(name);
     }
 
     selectSortMethod = (sort) => {
