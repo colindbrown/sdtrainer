@@ -17,32 +17,31 @@ class RunCollectionView extends React.Component {
         this.loadCollectionNames();
     }
 
-    // redo async
     async loadCollection(name) {
         db.fetchCollectionCalls(name).then((collectionCalls) => {
             collectionCalls.forEach(((call) => {
                 call["disabled"] = false;
             }));
-            collectionCalls.sort((a,b) => this.compareCalls(a,b));
-            this.setState({collectionCalls: collectionCalls, activeCollection: name});
+            collectionCalls.sort((a, b) => this.compareCalls(a, b));
+            this.setState({ collectionCalls: collectionCalls, activeCollection: name });
         });
     }
 
     async loadCollectionNames() {
-        db.fetchCollectionNames().then((collectionNames) => {this.setState({collectionNames})});
+        db.fetchCollectionNames().then((collectionNames) => { this.setState({ collectionNames }) });
     }
 
     finishCollection(e) {
         e.preventDefault();
-        var dbCollectionCalls = this.state.collectionCalls.map((call) => ({displayData: {name: call.name, group: call.group}, used: call.disabled}));
+        var dbCollectionCalls = this.state.collectionCalls.map((call) => ({ displayData: { name: call.name, group: call.group }, used: call.disabled }));
         db.setCollection(this.state.activeCollection, dbCollectionCalls);
-        dbCollectionCalls = dbCollectionCalls.map((call) => ({displayData: call.displayData, everUsed: call.used}));
+        dbCollectionCalls = dbCollectionCalls.map((call) => ({ displayData: call.displayData, everUsed: call.used }));
         db.updateAllCalls(dbCollectionCalls);
-        this.setState({activeCollection: "", collectionCalls: []});
+        this.setState({ activeCollection: "", collectionCalls: [] });
         this.showAlert("alert-success", "Collection saved");
     }
 
-    compareCalls(a,b) {
+    compareCalls(a, b) {
         if (a.name < b.name) {
             return -1;
         } else if (a.name > b.name) {
@@ -59,12 +58,12 @@ class RunCollectionView extends React.Component {
             const call = collectionCalls[index];
             call.disabled = !call.disabled;
             collectionCalls[index] = call;
-            this.setState({collectionCalls});
+            this.setState({ collectionCalls });
         }
     }
 
     showAlert(type, text) {
-        const alerts = [{type: type, text: text}];
+        const alerts = [{ type: type, text: text }];
         this.setState({ alerts });
     }
 
@@ -85,7 +84,7 @@ class RunCollectionView extends React.Component {
     }
 
     render() {
-        const alerts = this.state.alerts.map((alert) => 
+        const alerts = this.state.alerts.map((alert) =>
             <div className={`alert ${alert.type} m-2`} role="alert" key={alert.text}>
                 <span className="mr-auto">
                     {alert.text}
@@ -97,7 +96,7 @@ class RunCollectionView extends React.Component {
         );
         return (
             <div>
-                <RunFunctionBar 
+                <RunFunctionBar
                     finishCollection={(e) => this.finishCollection(e)}
                     collectionNames={this.state.collectionNames}
                     activeCollection={this.state.activeCollection}
@@ -106,7 +105,7 @@ class RunCollectionView extends React.Component {
                     selectActiveCollection={(collection) => this.selectActiveCollection(collection)}
                     selectSortMethod={(sort) => this.selectSortMethod(sort)}
                     selectActiveGroup={(group) => this.selectActiveGroup(group)}
-                    />
+                />
                 {alerts}
                 <div className="row">
                     <List size="col-md-12" calls={this.state.collectionCalls} onClick={(name) => this.toggleCall(name)} />

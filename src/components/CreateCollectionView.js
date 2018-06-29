@@ -19,16 +19,16 @@ class CreateCollectionView extends React.Component {
 
     loadAllCalls = async () => {
         db.fetchAllCalls().then((allCalls) => {
-            allCalls.sort((a,b) => this.compareCalls(a,b));
+            allCalls.sort((a, b) => this.compareCalls(a, b));
             this.setState({ callList: allCalls });
         });
     }
 
     async loadCollectionNames() {
-        db.fetchCollectionNames().then((collectionNames) => {this.setState({collectionNames})});
+        db.fetchCollectionNames().then((collectionNames) => { this.setState({ collectionNames }) });
     }
 
-    compareCalls(a,b) {
+    compareCalls(a, b) {
         if (a.name < b.name) {
             return -1;
         } else if (a.name > b.name) {
@@ -52,12 +52,12 @@ class CreateCollectionView extends React.Component {
             const index = collectionList.findIndex((call) => call.name === name);
             if (index >= 0) {
                 callList.push(collectionList[index]);
-                collectionList.splice(index,1);
+                collectionList.splice(index, 1);
             }
         }
-        callList.sort((a,b) => this.compareCalls(a,b));
-        collectionList.sort((a,b) => this.compareCalls(a,b));
-        this.setState({callList, collectionList});
+        callList.sort((a, b) => this.compareCalls(a, b));
+        collectionList.sort((a, b) => this.compareCalls(a, b));
+        this.setState({ callList, collectionList });
     }
 
     addAllUsed = (e) => {
@@ -88,7 +88,7 @@ class CreateCollectionView extends React.Component {
             if (collection) {
                 this.showAlert("alert-warning", "A collection with that name already exists");
             } else {
-                const collectionCalls = this.state.collectionList.map( (call) => ({displayData: call, used: false}) );
+                const collectionCalls = this.state.collectionList.map((call) => ({ displayData: call, used: false }));
                 await db.setCollection(name, collectionCalls);
                 this.showAlert("alert-success", "Collection saved");
                 this.removeAll();
@@ -100,7 +100,7 @@ class CreateCollectionView extends React.Component {
     }
 
     showAlert(type, text) {
-        const alerts = [{type: type, text: text}];
+        const alerts = [{ type: type, text: text }];
         this.setState({ alerts });
     }
 
@@ -109,7 +109,7 @@ class CreateCollectionView extends React.Component {
     }
 
     render() {
-        const alerts = this.state.alerts.map((alert) => 
+        const alerts = this.state.alerts.map((alert) =>
             <div className={`alert ${alert.type} m-2`} role="alert" key={alert.text}>
                 <span className="mr-auto">
                     {alert.text}
@@ -121,7 +121,7 @@ class CreateCollectionView extends React.Component {
         );
         return (
             <div>
-                <CreateFunctionBar 
+                <CreateFunctionBar
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
                     saveNewCollection={(name) => this.saveNewCollection(name)}

@@ -17,7 +17,7 @@ export async function updateAllCalls(calls) {
         const prev = callDoc.data();
         const call = calls.find((callIterator) => (callIterator.displayData.name === prev.displayData.name));
         if (call) {
-            batch.update(callDoc.ref, {everUsed: (call.everUsed || prev.everUsed), displayData: call.displayData});
+            batch.update(callDoc.ref, { everUsed: (call.everUsed || prev.everUsed), displayData: call.displayData });
         }
     });
     batch.commit();
@@ -67,12 +67,12 @@ export async function setCollection(name, calls) {
         var snapshot = await collection.collection("Calls").get();
         snapshot.docs.forEach((callDoc) => {
             const call = calls.find((callIterator) => (callIterator.displayData.name === callDoc.data().displayData.name));
-            batch.update(callDoc.ref, {used: call.used});
+            batch.update(callDoc.ref, { used: call.used });
         });
         batch.commit();
     } else {
         const newCollection = sampleClassRef.collection("Collections").doc();
-        newCollection.set({name: name});
+        newCollection.set({ name: name });
         calls.forEach((call) => newCollection.collection("Calls").add(call));
     }
 }
