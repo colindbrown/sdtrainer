@@ -12,6 +12,8 @@ class RunFunctionBar extends React.Component {
         const collectionListItems = this.props.collectionNames.map((name) => 
             <button className="dropdown-item" key={name} onClick={() => this.props.selectActiveCollection(name)}>{name}</button>
         );
+        const disableFunctions = (!this.props.activeCollection) ? "disabled" : "";
+
         return (
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
@@ -25,7 +27,7 @@ class RunFunctionBar extends React.Component {
                     </div>
                 </div>
                 <div className="dropdown mr-2">
-                    <button className={` btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button className={`${disableFunctions} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {sortBy}
                     </button>
                     <div className="dropdown-menu">
@@ -35,7 +37,7 @@ class RunFunctionBar extends React.Component {
                     </div>
                 </div>
                 <div className="dropdown mr-2">
-                    <button className={` btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button className={`${disableFunctions} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {activeGroup}
                     </button>
                     <div className="dropdown-menu">
@@ -43,7 +45,7 @@ class RunFunctionBar extends React.Component {
                     </div>
                 </div>
             </div>
-            <button className="btn btn-secondary" onClick={this.props.finishCollection}>Finish running collection</button>
+            <button className={`${disableFunctions} btn btn-secondary`} onClick={this.props.finishCollection}>Finish running collection</button>
            </nav>
         )
     }
