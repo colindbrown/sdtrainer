@@ -66,6 +66,11 @@ class ReviewClassView extends React.Component {
         }
     }
 
+    resetFilters() {
+        this.setState({ activeFilter: {}});
+        this.loadAllCalls();
+    }
+
     selectSortMethod = (sort) => {
         console.log(`Selected Sort: ${sort}`);
     }
@@ -107,6 +112,7 @@ class ReviewClassView extends React.Component {
                     selectActiveCollection={(collection) => this.selectActiveCollection(collection)}
                     selectActiveGroup={(group) => this.selectActiveGroup(group)}
                     exportSelection={() => {this.exportSelection()}}
+                    resetFilters={() => this.resetFilters()}
                 />
                 {alerts}
                 <div className="row">

@@ -47,6 +47,7 @@ class ReviewFunctionBar extends React.Component {
                         <div className="dropdown-menu">
                         </div>
                     </div>
+                    <button className={`${this.props.activeFilter.name ? "" : "disabled"} btn btn-secondary`} href="#" onClick={this.props.resetFilters}>Reset filters</button>
                 </div>
                 <button className={` btn btn-secondary`} data-toggle="modal" data-target="#exportModal" onClick={this.props.exportSelection} >Export current selection</button>
             </nav>
