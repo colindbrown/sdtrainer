@@ -9,7 +9,9 @@ class ReviewClassView extends React.Component {
     state = {
         alerts: [],
         selectedCalls: [],
-        collectionNames: []
+        collectionNames: [],
+        activeFilter: {},
+        modalData: {}
     }
 
     componentDidMount() {
@@ -29,8 +31,20 @@ class ReviewClassView extends React.Component {
         db.fetchCollectionNames().then((collectionNames) => { this.setState({ collectionNames }) });
     }
 
-    showCall(name) {
-        console.log(name);
+    async loadCollection(name) {
+        db.fetchCollectionCalls(name).then((collectionCalls) => {
+            collectionCalls.forEach(((call) => {
+                call["disabled"] = false;
+            }));
+            collectionCalls.sort((a, b) => this.compareCalls(a, b));
+            this.setState({ selectedCalls: collectionCalls, activeFilter: {type: "collection", name: name} });
+        });
+    }
+
+    async showCall(name) {
+        db.fetchCall(name).then((call) => {
+            this.setState({modalData: {title: call.displayData.name, body: call.uses || "This call has never been used"}})
+        })
     }
 
     showAlert(type, text) {
@@ -57,11 +71,19 @@ class ReviewClassView extends React.Component {
     }
 
     selectActiveCollection = (name) => {
-        console.log(`Selected Collection: ${name}`);
+        this.loadCollection(name);
     }
 
     selectActiveGroup = (group) => {
         console.log(`Selected Group: ${group}`);
+    }
+
+    exportSelection() {
+        var text = "";
+        this.state.selectedCalls.forEach(((call) => {
+            text = text + "\n" + call.name;
+        }));
+        this.setState({modalData: {title: "Selected Calls", body: text.slice(1)}});
     }
 
     render() {
@@ -77,12 +99,14 @@ class ReviewClassView extends React.Component {
         );
         return (
             <div>
-                <Modal calls={this.state.selectedCalls}/>
+                <Modal data={this.state.modalData}/>
                 <ReviewFunctionBar
                     collectionNames={this.state.collectionNames}
+                    activeFilter={this.state.activeFilter}
                     selectSortMethod={(sort) => this.selectSortMethod(sort)}
                     selectActiveCollection={(collection) => this.selectActiveCollection(collection)}
                     selectActiveGroup={(group) => this.selectActiveGroup(group)}
+                    exportSelection={() => {this.exportSelection()}}
                 />
                 {alerts}
                 <div className="row">

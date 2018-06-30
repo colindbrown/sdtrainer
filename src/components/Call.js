@@ -13,7 +13,7 @@ class Call extends React.Component {
     render() {
         const disabled = this.props.disabled ? "list-group-item-dark" : "btn btn-outline-secondary";
         return (
-            <li className={`list-group-item ${disabled}`} onClick={this.props.onClick}>{this.props.name}</li>
+            <li data-toggle="modal" data-target="#exportModal" className={`list-group-item ${disabled}`} onClick={this.props.onClick}>{this.props.name}</li>
         )
     }
 

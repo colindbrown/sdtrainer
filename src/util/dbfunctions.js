@@ -23,6 +23,11 @@ export async function updateAllCalls(calls) {
     batch.commit();
 }
 
+export async function fetchCall(name) {
+    const snapshot = await sampleClassRef.collection("AllCalls").where("displayData.name", "==", name).get();
+    return snapshot.docs[0].data();
+}
+
 // Collection Database functions
 // return collection (a DocumentSnapshot) if it exists, undefined if it doesnt
 export async function findCollection(name) {
