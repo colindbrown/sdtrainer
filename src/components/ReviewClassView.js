@@ -43,7 +43,17 @@ class ReviewClassView extends React.Component {
 
     async showCall(name) {
         db.fetchCall(name).then((call) => {
-            this.setState({modalData: {title: call.displayData.name, body: call.uses || "This call has never been used"}})
+            var body = "";
+            if (call.uses) {
+                body = "Uses:"
+                call.uses.forEach((timestamp) => {
+                    const date = new Date(timestamp);
+                    body = body + `\n ${date.toDateString()}`;
+                })
+            } else {
+                body = "This call has never been used";
+            }
+            this.setState({modalData: {title: call.displayData.name, body: body}})
         })
     }
 

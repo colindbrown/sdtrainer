@@ -33,9 +33,9 @@ class RunCollectionView extends React.Component {
 
     finishCollection(e) {
         e.preventDefault();
-        var dbCollectionCalls = this.state.collectionCalls.map((call) => ({ displayData: { name: call.name, group: call.group }, used: call.disabled }));
+        var dbCollectionCalls = this.state.collectionCalls.map((call) => ({ displayData: { name: call.name, group: call.group }, used: call.disabled, timestamp: call.timestamp }));
         db.setCollection(this.state.activeCollection, dbCollectionCalls);
-        dbCollectionCalls = dbCollectionCalls.map((call) => ({ displayData: call.displayData, everUsed: call.used }));
+        dbCollectionCalls = dbCollectionCalls.map((call) => ({ displayData: call.displayData, everUsed: call.used, uses: [call.timestamp] }));
         db.updateAllCalls(dbCollectionCalls);
         this.setState({ activeCollection: "", collectionCalls: [] });
         this.showAlert("alert-success", "Collection saved");
@@ -57,6 +57,7 @@ class RunCollectionView extends React.Component {
         if (index >= 0) {
             const call = collectionCalls[index];
             call.disabled = !call.disabled;
+            call.timestamp = Date.now();
             collectionCalls[index] = call;
             this.setState({ collectionCalls });
         }

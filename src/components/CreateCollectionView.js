@@ -2,6 +2,7 @@ import React from "react";
 import List from "./List";
 import * as db from "../util/dbfunctions";
 import CreateFunctionBar from "./CreateFunctionBar";
+import firebase from "firebase";
 
 class CreateCollectionView extends React.Component {
 
@@ -88,7 +89,7 @@ class CreateCollectionView extends React.Component {
             if (collection) {
                 this.showAlert("alert-warning", "A collection with that name already exists");
             } else {
-                const collectionCalls = this.state.collectionList.map((call) => ({ displayData: call, used: false }));
+                const collectionCalls = this.state.collectionList.map((call) => ({ displayData: call, used: false, timestamp: firebase.ServerValue.TIMESTAMP }));
                 await db.setCollection(name, collectionCalls);
                 this.showAlert("alert-success", "Collection saved");
                 this.removeAll();
