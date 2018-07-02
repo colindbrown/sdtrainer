@@ -20,7 +20,8 @@ class RunCollectionView extends React.Component {
     async loadCollection(name) {
         db.fetchCollectionCalls(name).then((collectionCalls) => {
             collectionCalls.forEach(((call) => {
-                call["disabled"] = false;
+                call.disabled = false;
+                call.timestamp = Date.now();
             }));
             collectionCalls.sort((a, b) => this.compareCalls(a, b));
             this.setState({ collectionCalls: collectionCalls, activeCollection: name });
