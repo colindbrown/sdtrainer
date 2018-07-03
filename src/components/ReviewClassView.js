@@ -32,17 +32,15 @@ class ReviewClassView extends React.Component {
     }
 
     async loadCollection(name) {
-        db.fetchCollectionCalls(name).then((collectionCalls) => {
-            collectionCalls.forEach(((call) => {
-                call["disabled"] = false;
-            }));
-            collectionCalls.sort((a, b) => this.compareCalls(a, b));
-            this.setState({ selectedCalls: collectionCalls, activeFilter: {type: "collection", name: name} });
+        db.fetchCollectionCalls(name).then(async (collectionCalls) => {
+            const displayData = await db.displayData(collectionCalls);
+            displayData.sort((a, b) => this.compareCalls(a, b));
+            this.setState({ selectedCalls: displayData, activeFilter: {type: "collection", name: name} });
         });
     }
 
     async showCall(name) {
-        db.fetchCall(name).then((call) => {
+        db.fetchCallHistory(name).then((call) => {
             var body = "";
             if (call.uses) {
                 body = "Uses:"
@@ -53,7 +51,7 @@ class ReviewClassView extends React.Component {
             } else {
                 body = "This call has never been used";
             }
-            this.setState({modalData: {title: call.displayData.name, body: body}})
+            this.setState({modalData: {title: call.name, body: body}})
         })
     }
 

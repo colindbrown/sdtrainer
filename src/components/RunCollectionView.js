@@ -18,10 +18,12 @@ class RunCollectionView extends React.Component {
     }
 
     async loadCollection(name) {
-        db.fetchCollectionCalls(name).then((collectionCalls) => {
+        db.fetchCollectionCalls(name).then( async (collectionCalls) => {
+            const displayData = await db.displayData(collectionCalls);
             collectionCalls.forEach(((call) => {
                 call.disabled = false;
                 call.timestamp = Date.now();
+                call.group = displayData.find((iterator) => (iterator.name === call.name)).group;
             }));
             collectionCalls.sort((a, b) => this.compareCalls(a, b));
             this.setState({ collectionCalls: collectionCalls, activeCollection: name });
@@ -34,10 +36,10 @@ class RunCollectionView extends React.Component {
 
     finishCollection(e) {
         e.preventDefault();
-        var dbCollectionCalls = this.state.collectionCalls.map((call) => ({ displayData: { name: call.name, group: call.group }, used: call.disabled, timestamp: call.timestamp }));
-        db.setCollection(this.state.activeCollection, dbCollectionCalls);
-        dbCollectionCalls = dbCollectionCalls.map((call) => ({ displayData: call.displayData, everUsed: call.used, uses: [call.timestamp] }));
-        db.updateAllCalls(dbCollectionCalls);
+        const collectionUpdate = this.state.collectionCalls.map((call) => ({ name: call.name, used: call.disabled, timestamp: call.timestamp}));
+        db.setCollection(this.state.activeCollection, collectionUpdate);
+        const historyUpdate = this.state.collectionCalls.map((call) => ({ name: call.name, everUsed: call.disabled, uses: [call.timestamp] }));
+        db.updateHistory(historyUpdate);
         this.setState({ activeCollection: "", collectionCalls: [] });
         this.showAlert("alert-success", "Collection saved");
     }
@@ -99,7 +101,6 @@ class RunCollectionView extends React.Component {
         return (
             <div>
                 <RunFunctionBar
-                    finishCollection={(e) => this.finishCollection(e)}
                     collectionNames={this.state.collectionNames}
                     activeCollection={this.state.activeCollection}
                     sortBy={this.state.sortBy}
@@ -107,6 +108,7 @@ class RunCollectionView extends React.Component {
                     selectActiveCollection={(collection) => this.selectActiveCollection(collection)}
                     selectSortMethod={(sort) => this.selectSortMethod(sort)}
                     selectActiveGroup={(group) => this.selectActiveGroup(group)}
+                    finishCollection={(e) => this.finishCollection(e)}
                 />
                 {alerts}
                 <div className="row">

@@ -12,12 +12,14 @@ class CreateCollectionView extends React.Component {
         collectionNames: []
     }
 
+    // Lifecycle methods
     componentDidMount() {
         this.loadAllCalls();
         this.loadCollectionNames();
     }
 
-    loadAllCalls = async () => {
+    // Async methods
+    async loadAllCalls() {
         db.fetchAllCalls().then((allCalls) => {
             allCalls.sort((a, b) => this.compareCalls(a, b));
             this.setState({ callList: allCalls });
@@ -28,6 +30,37 @@ class CreateCollectionView extends React.Component {
         db.fetchCollectionNames().then((collectionNames) => { this.setState({ collectionNames }) });
     }
 
+    async addCollection(name) {
+        db.fetchCollectionCalls(name).then(async (collectionCalls) => {
+            const displayData = await db.displayData(collectionCalls);
+            displayData.forEach(((call) => {
+                this.moveCall(call.name, "collectionList");
+            }));
+        });
+    }
+
+    async saveNewCollection(name) {
+        if (!name) {
+            this.showAlert("alert-warning", "Please name your collection");
+        } else if (this.state.collectionList.length === 0) {
+            this.showAlert("alert-warning", "Please add some calls to your collection");
+        } else {
+            const collection = await db.fetchCollectionRef(name);
+            if (collection) {
+                this.showAlert("alert-warning", "A collection with that name already exists");
+            } else {
+                const collectionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
+                await db.setCollection(name, collectionCalls);
+                this.showAlert("alert-success", "Collection saved");
+                this.removeAll();
+                this.loadCollectionNames();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Helper methods
     compareCalls(a, b) {
         if (a.name < b.name) {
             return -1;
@@ -60,45 +93,6 @@ class CreateCollectionView extends React.Component {
         this.setState({ callList, collectionList });
     }
 
-    addAllUsed = (e) => {
-        e.preventDefault();
-        console.log("Add all used");
-    }
-
-    async addCollection(name) {
-        db.fetchCollectionCalls(name).then((collectionCalls) => {
-            collectionCalls.forEach(((call) => {
-                this.moveCall(call.name, "collectionList");
-            }));
-        });
-    }
-
-    removeAll = () => {
-        const collectionList = this.state.collectionList.slice(0);
-        collectionList.forEach((call) => this.moveCall(call.name, "callList"));
-    }
-
-    async saveNewCollection(name) {
-        if (!name) {
-            this.showAlert("alert-warning", "Please name your collection");
-        } else if (this.state.collectionList.length === 0) {
-            this.showAlert("alert-warning", "Please add some calls to your collection");
-        } else {
-            const collection = await db.findCollection(name);
-            if (collection) {
-                this.showAlert("alert-warning", "A collection with that name already exists");
-            } else {
-                const collectionCalls = this.state.collectionList.map((call) => ({ displayData: call, used: false, timestamp: Date.now() }));
-                await db.setCollection(name, collectionCalls);
-                this.showAlert("alert-success", "Collection saved");
-                this.removeAll();
-                this.loadCollectionNames();
-                return true;
-            }
-        }
-        return false;
-    }
-
     showAlert(type, text) {
         const alerts = [{ type: type, text: text }];
         this.setState({ alerts });
@@ -106,6 +100,17 @@ class CreateCollectionView extends React.Component {
 
     clearAlerts = () => {
         this.setState({ alerts: [] });
+    }
+
+    // Props methods
+    addAllUsed = (e) => {
+        e.preventDefault();
+        console.log("Add all used");
+    }
+
+    removeAll = () => {
+        const collectionList = this.state.collectionList.slice(0);
+        collectionList.forEach((call) => this.moveCall(call.name, "callList"));
     }
 
     render() {

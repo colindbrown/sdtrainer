@@ -13,6 +13,4 @@ firebase.initializeApp(config);
 
 const db = firebase.firestore();
 
-const sampleClassRef = db.collection("Users").doc("Test").collection("Classes").doc("Sample");
-
-export { db, sampleClassRef };
+export { db };
