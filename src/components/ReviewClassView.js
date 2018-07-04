@@ -81,14 +81,14 @@ class ReviewClassView extends React.Component {
 
     selectFilter = async (filter) => {
         switch (filter) {
-        case 'used':
+        case 'Used':
             db.fetchByEverUsed(true).then(async (calls) => {
                 const displayData = await db.displayData(calls);
                 displayData.sort((a, b) => this.compareCalls(a, b));
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: filter} });
             })
             break;
-        case 'unused':
+        case 'Unused':
             db.fetchByEverUsed(false).then(async (calls) => {
                 const displayData = await db.displayData(calls);
                 displayData.sort((a, b) => this.compareCalls(a, b));
