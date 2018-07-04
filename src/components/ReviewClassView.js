@@ -23,7 +23,7 @@ class ReviewClassView extends React.Component {
     loadAllCalls = async () => {
         db.fetchAllCalls().then((allCalls) => {
             allCalls.sort((a, b) => this.compareCalls(a, b));
-            this.setState({ selectedCalls: allCalls });
+            this.setState({ selectedCalls: allCalls, activeFilter: {} });
         });
     }
 
@@ -42,7 +42,7 @@ class ReviewClassView extends React.Component {
     async showCall(name) {
         db.fetchCallHistory(name).then((call) => {
             var body = "";
-            if (call.uses) {
+            if (call.uses.length > 0) {
                 body = "Uses:"
                 call.uses.forEach((timestamp) => {
                     const date = new Date(timestamp);
@@ -79,16 +79,41 @@ class ReviewClassView extends React.Component {
         this.loadAllCalls();
     }
 
-    selectSortMethod = (sort) => {
-        console.log(`Selected Sort: ${sort}`);
-    }
-
-    selectActiveCollection = (name) => {
-        this.loadCollection(name);
-    }
-
-    selectActiveGroup = (group) => {
-        console.log(`Selected Group: ${group}`);
+    selectFilter = async (type, name) => {
+        switch (type) {
+        case 'Used':
+            db.fetchByEverUsed(true).then(async (calls) => {
+                const displayData = await db.displayData(calls);
+                displayData.sort((a, b) => this.compareCalls(a, b));
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+            })
+            break;
+        case 'Unused':
+            db.fetchByEverUsed(false).then(async (calls) => {
+                const displayData = await db.displayData(calls);
+                displayData.sort((a, b) => this.compareCalls(a, b));
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+            })
+            break;
+        case "New":
+            db.fetchNew().then(async (calls) => {
+                const displayData = await db.displayData(calls);
+                displayData.sort((a, b) => this.compareCalls(a, b));
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+            })
+            break;
+        case "collection":
+            this.loadCollection(name);
+            break;
+        case "group":
+            db.fetchByGroup(name).then((displayData) => {
+                displayData.sort((a, b) => this.compareCalls(a, b));
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "group", name: "Group " + name} });
+            });
+            break;
+        default:
+            console.log(`Selected filter: ${type + name}`);
+        }
     }
 
     exportSelection() {
@@ -116,9 +141,7 @@ class ReviewClassView extends React.Component {
                 <ReviewFunctionBar
                     collectionNames={this.state.collectionNames}
                     activeFilter={this.state.activeFilter}
-                    selectSortMethod={(sort) => this.selectSortMethod(sort)}
-                    selectActiveCollection={(collection) => this.selectActiveCollection(collection)}
-                    selectActiveGroup={(group) => this.selectActiveGroup(group)}
+                    selectFilter={(type, name) => this.selectFilter(type, name)}
                     exportSelection={() => {this.exportSelection()}}
                     resetFilters={() => this.resetFilters()}
                 />

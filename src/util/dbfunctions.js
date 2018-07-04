@@ -40,12 +40,37 @@ export async function fetchAllCalls() {
     return allCalls;
 }
 
+export async function fetchByGroup(group) {
+    const calls = [];
+    const snapshot = await AllCallsRef.where("group", "==", group).get();
+    snapshot.docs.forEach((callDoc) => {
+        calls.push(callDoc.data());
+    });
+    return calls;
+}
+
 // History methods
 
 // returns name, everUsed, and uses of a single call
 export async function fetchCallHistory(name) {
     const snapshot = await sampleClassRef.collection("History").where("name", "==", name).get();
     return snapshot.docs[0].data();
+}
+
+// returns all calls that have either been used or never been used
+export async function fetchByEverUsed(used) {
+    const calls = [];
+    const snapshot = await sampleClassRef.collection("History").where("everUsed", "==", used).get();
+    snapshot.docs.forEach((callDoc) => {
+        calls.push(callDoc.data());
+    });
+    return calls;
+}
+
+// returns all calls that have only been used once
+export async function fetchNew() {
+    var calls = await fetchByEverUsed(true);
+    return calls.filter((call) => (call.uses.length === 1))
 }
 
 // updates the everUsed and uses data for all provided calls
