@@ -42,7 +42,7 @@ class ReviewClassView extends React.Component {
     async showCall(name) {
         db.fetchCallHistory(name).then((call) => {
             var body = "";
-            if (call.uses) {
+            if (call.uses.length > 0) {
                 body = "Uses:"
                 call.uses.forEach((timestamp) => {
                     const date = new Date(timestamp);
@@ -90,6 +90,13 @@ class ReviewClassView extends React.Component {
             break;
         case 'Unused':
             db.fetchByEverUsed(false).then(async (calls) => {
+                const displayData = await db.displayData(calls);
+                displayData.sort((a, b) => this.compareCalls(a, b));
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+            })
+            break;
+        case "New":
+            db.fetchNew().then(async (calls) => {
                 const displayData = await db.displayData(calls);
                 displayData.sort((a, b) => this.compareCalls(a, b));
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });

@@ -67,6 +67,12 @@ export async function fetchByEverUsed(used) {
     return calls;
 }
 
+// returns all calls that have only been used once
+export async function fetchNew() {
+    var calls = await fetchByEverUsed(true);
+    return calls.filter((call) => (call.uses.length === 1))
+}
+
 // updates the everUsed and uses data for all provided calls
 export async function updateHistory(calls) {
     var batch = db.batch();
