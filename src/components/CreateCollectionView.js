@@ -103,9 +103,14 @@ class CreateCollectionView extends React.Component {
     }
 
     // Props methods
-    addAllUsed = (e) => {
+    addAllUsed = async (e) => {
         e.preventDefault();
-        console.log("Add all used");
+        db.fetchByEverUsed(true).then(async (calls) => {
+            const displayData = await db.displayData(calls);
+            displayData.forEach(((call) => {
+                this.moveCall(call.name, "collectionList");
+            }));
+        })
     }
 
     removeAll = () => {

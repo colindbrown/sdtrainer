@@ -48,6 +48,16 @@ export async function fetchCallHistory(name) {
     return snapshot.docs[0].data();
 }
 
+// returns all calls that have either been used or never been used
+export async function fetchByEverUsed(used) {
+    const calls = [];
+    const snapshot = await sampleClassRef.collection("History").where("everUsed", "==", used).get();
+    snapshot.docs.forEach((callDoc) => {
+        calls.push(callDoc.data());
+    });
+    return calls;
+}
+
 // updates the everUsed and uses data for all provided calls
 export async function updateHistory(calls) {
     var batch = db.batch();

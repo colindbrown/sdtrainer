@@ -23,7 +23,7 @@ class ReviewClassView extends React.Component {
     loadAllCalls = async () => {
         db.fetchAllCalls().then((allCalls) => {
             allCalls.sort((a, b) => this.compareCalls(a, b));
-            this.setState({ selectedCalls: allCalls });
+            this.setState({ selectedCalls: allCalls, activeFilter: {} });
         });
     }
 
@@ -79,8 +79,25 @@ class ReviewClassView extends React.Component {
         this.loadAllCalls();
     }
 
-    selectSortMethod = (sort) => {
-        console.log(`Selected Sort: ${sort}`);
+    selectFilter = async (filter) => {
+        switch (filter) {
+        case 'used':
+            db.fetchByEverUsed(true).then(async (calls) => {
+                const displayData = await db.displayData(calls);
+                displayData.sort((a, b) => this.compareCalls(a, b));
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: filter} });
+            })
+            break;
+        case 'unused':
+            db.fetchByEverUsed(false).then(async (calls) => {
+                const displayData = await db.displayData(calls);
+                displayData.sort((a, b) => this.compareCalls(a, b));
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: filter} });
+            })
+        break;
+        default:
+            console.log(`Selected filter: ${filter}`);
+        }
     }
 
     selectActiveCollection = (name) => {
@@ -116,7 +133,7 @@ class ReviewClassView extends React.Component {
                 <ReviewFunctionBar
                     collectionNames={this.state.collectionNames}
                     activeFilter={this.state.activeFilter}
-                    selectSortMethod={(sort) => this.selectSortMethod(sort)}
+                    selectFilter={(sort) => this.selectFilter(sort)}
                     selectActiveCollection={(collection) => this.selectActiveCollection(collection)}
                     selectActiveGroup={(group) => this.selectActiveGroup(group)}
                     exportSelection={() => {this.exportSelection()}}
