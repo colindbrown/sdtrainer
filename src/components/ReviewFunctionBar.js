@@ -4,10 +4,10 @@ class ReviewFunctionBar extends React.Component {
 
     render() {
         const collectionListItems = this.props.collectionNames.map((name) =>
-            <button className="dropdown-item" key={name} onClick={() => this.props.selectActiveCollection(name)}>{name}</button>
+            <button className="dropdown-item" key={name} onClick={() => this.props.selectFilter("collection", name)}>{name}</button>
         );
         const groupButtons = [...Array(7).keys()].map((number) =>
-            <button className="dropdown-item" key={number} onClick={() => this.props.selectActiveGroup(number)}>Group {number + 1}</button>
+            <button className="dropdown-item" key={number} onClick={() => this.props.selectFilter("group", number)}>Group {number + 1}</button>
         );
         const filter = this.props.activeFilter;
         return (
@@ -19,9 +19,9 @@ class ReviewFunctionBar extends React.Component {
                             {filter.type === "filter" ? filter.name : "Filter"}
                         </button>
                         <div className="dropdown-menu">
-                            <button className="dropdown-item" key={"used"} onClick={() => this.props.selectFilter("Used")}>Used</button>
-                            <button className="dropdown-item" key={"unused"} onClick={() => this.props.selectFilter("Unused")}>Unused</button>
-                            <button className="dropdown-item" key={"new"} onClick={() => this.props.selectFilter("New")}>New</button>
+                            <button className="dropdown-item" key={"used"} onClick={() => this.props.selectFilter("Used", "")}>Used</button>
+                            <button className="dropdown-item" key={"unused"} onClick={() => this.props.selectFilter("Unused", "")}>Unused</button>
+                            <button className="dropdown-item" key={"new"} onClick={() => this.props.selectFilter("New", "")}>New</button>
                         </div>
                     </div>
                     <div className="dropdown mr-2">

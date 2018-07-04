@@ -40,6 +40,15 @@ export async function fetchAllCalls() {
     return allCalls;
 }
 
+export async function fetchByGroup(group) {
+    const calls = [];
+    const snapshot = await AllCallsRef.where("group", "==", group).get();
+    snapshot.docs.forEach((callDoc) => {
+        calls.push(callDoc.data());
+    });
+    return calls;
+}
+
 // History methods
 
 // returns name, everUsed, and uses of a single call

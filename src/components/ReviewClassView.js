@@ -79,33 +79,34 @@ class ReviewClassView extends React.Component {
         this.loadAllCalls();
     }
 
-    selectFilter = async (filter) => {
-        switch (filter) {
+    selectFilter = async (type, name) => {
+        switch (type) {
         case 'Used':
             db.fetchByEverUsed(true).then(async (calls) => {
                 const displayData = await db.displayData(calls);
                 displayData.sort((a, b) => this.compareCalls(a, b));
-                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: filter} });
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
             })
             break;
         case 'Unused':
             db.fetchByEverUsed(false).then(async (calls) => {
                 const displayData = await db.displayData(calls);
                 displayData.sort((a, b) => this.compareCalls(a, b));
-                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: filter} });
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
             })
-        break;
+            break;
+        case "collection":
+            this.loadCollection(name);
+            break;
+        case "group":
+            db.fetchByGroup(name).then((displayData) => {
+                displayData.sort((a, b) => this.compareCalls(a, b));
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "group", name: "Group " + name} });
+            });
+            break;
         default:
-            console.log(`Selected filter: ${filter}`);
+            console.log(`Selected filter: ${type + name}`);
         }
-    }
-
-    selectActiveCollection = (name) => {
-        this.loadCollection(name);
-    }
-
-    selectActiveGroup = (group) => {
-        console.log(`Selected Group: ${group}`);
     }
 
     exportSelection() {
@@ -133,9 +134,7 @@ class ReviewClassView extends React.Component {
                 <ReviewFunctionBar
                     collectionNames={this.state.collectionNames}
                     activeFilter={this.state.activeFilter}
-                    selectFilter={(sort) => this.selectFilter(sort)}
-                    selectActiveCollection={(collection) => this.selectActiveCollection(collection)}
-                    selectActiveGroup={(group) => this.selectActiveGroup(group)}
+                    selectFilter={(type, name) => this.selectFilter(type, name)}
                     exportSelection={() => {this.exportSelection()}}
                     resetFilters={() => this.resetFilters()}
                 />
