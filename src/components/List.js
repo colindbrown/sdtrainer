@@ -6,28 +6,54 @@ class List extends React.Component {
     render() {
         const listItems = this.props.calls.map(call => <Call {...call} key={call.name} onClick={() => this.props.onClick(call.name)} />);
         while (listItems.length % 11 !== 0) {
-            listItems.push(<Call disabled={true} name="~" group={0} key={listItems.length % 11} onClick={() => console.log("pushed")} />)
+            listItems.push(<Call empty={true} name="~" group={0} key={listItems.length % 11} />)
         }
         const id = this.props.id || "listCarousel";
         return (
 
             <div id={id} className={`carousel slide ${this.props.size}`} data-wrap="false" data-interval="false">
-                <div className="col-md-1"></div>
-                <div className="carousel-inner">
+                <div className="carousel-inner container">
                     <div className="carousel-item active">
-                    <ul className={`list-group`}>
-                        {listItems}
-                    </ul>
+                        <div className="row no-gutters">
+                            <div className="col-6">
+                                <ul className={`list-group btn-group-vertical`}>
+                                    {listItems}
+                                </ul>
+                            </div>
+                            <div className="col-6">
+                                <ul className={`list-group btn-group-vertical`}>
+                                    {listItems}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div className="carousel-item">
-                    <ul className={`list-group`}>
-                        {listItems}
-                    </ul>
+                        <div className="row no-gutters">
+                            <div className="col-6">
+                                <ul className={`list-group btn-group-vertical`}>
+                                    {listItems}
+                                </ul>
+                            </div>
+                            <div className="col-6">
+                                <ul className={`list-group btn-group-vertical`}>
+                                    {listItems}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div className="carousel-item">
-                    <ul className={`list-group`}>
-                        {listItems}
-                    </ul>
+                        <div className="row no-gutters">
+                            <div className="col-6">
+                                <ul className={`list-group btn-group-vertical`}>
+                                    {listItems}
+                                </ul>
+                            </div>
+                            <div className="col-6">
+                                <ul className={`list-group btn-group-vertical`}>
+                                    {listItems}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <a className="carousel-control-prev btn" href={`#${id}`} role="button" data-slide="prev">
