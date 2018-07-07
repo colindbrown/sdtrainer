@@ -34,3 +34,14 @@ span.empty {
 .carousel-item ul {
   margin: 0px;
 }
+
+.carousel {
+  margin-top: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.list-group-item {
+  height: 60px;
+  padding-top: 15px;
+}

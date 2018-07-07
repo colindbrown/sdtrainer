@@ -140,8 +140,8 @@ class CreateCollectionView extends React.Component {
                 />
                 {alerts}
                 <div className="row">
-                    <List size="col-md-6" id="callList" calls={this.state.callList} onClick={(name) => this.moveCall(name, "collectionList")} />
-                    <List size="col-md-6" id="collectionList" calls={this.state.collectionList} onClick={(name) => this.moveCall(name, "callList")} />
+                    <List size="col-md-6" id="callList" columns={2} calls={this.state.callList} onClick={(name) => this.moveCall(name, "collectionList")} />
+                    <List size="col-md-6" id="collectionList" columns={2} calls={this.state.collectionList} onClick={(name) => this.moveCall(name, "callList")} />
                 </div>
             </div>
         )

@@ -112,7 +112,7 @@ class RunCollectionView extends React.Component {
                 />
                 {alerts}
                 <div className="row">
-                    <List size="col-md-12" calls={this.state.collectionCalls} onClick={(name) => this.toggleCall(name)} />
+                    <List size="col-md-12" id="runList" columns={4} calls={this.state.collectionCalls} onClick={(name) => this.toggleCall(name)} />
                 </div>
             </div>
         )

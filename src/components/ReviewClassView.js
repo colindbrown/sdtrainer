@@ -147,7 +147,7 @@ class ReviewClassView extends React.Component {
                 />
                 {alerts}
                 <div className="row">
-                    <List size="col-md-12" calls={this.state.selectedCalls} onClick={(name) => this.showCall(name)} />
+                    <List size="col-md-12" id="reviewList" columns={4} calls={this.state.selectedCalls} onClick={(name) => this.showCall(name)} />
                 </div>
             </div>
         )
