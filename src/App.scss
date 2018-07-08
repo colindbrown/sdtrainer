@@ -1,0 +1,152 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+span.empty {
+  opacity: 0;
+}
+
+.carousel-item ul {
+  margin: 0px;
+}
+
+.carousel-item {
+  border: 1px solid darkgrey;
+  border-radius: 5px;
+}
+
+.carousel {
+  margin-top: 35px;
+  padding-left: 75px;
+  padding-right: 75px;
+}
+
+.list-group-item {
+  height: 60px;
+  padding-top: 5%;
+}
+
+
+.carousel-control-prev, .carousel-control-next{
+  width: 50px;
+  height: 80%;
+  margin-bottom: auto;
+  margin-top: auto;
+
+}
+
+.carousel-control-prev {
+  left: 25px;
+
+}
+
+.carousel-control-next {
+  right: 25px;
+}
+
+.call {
+  box-sizing: border-box;
+  color: #666;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background: #fefefe;
+
+  .call:hover {
+    background: #fefefe;
+    color: #666;
+  }
+
+}
+
+.call-empty {
+  border: 1px solid #eee;
+  background: #fff;
+  &:hover {
+    background: #fff;
+  }
+}
+
+.group-0 {
+  box-shadow: inset 0px -1px 9px 1px #ccc;
+
+  &:hover {
+    border: 1px solid #ccc;
+  }
+}
+
+.group-1 {
+  box-shadow: inset 0px -1px 9px 1px rgba(226, 60, 60, 0.979);
+
+  &:hover {
+    border: 1px solid rgba(226, 60, 60, 0.979);
+  }
+}
+
+.group-2 {
+  box-shadow: inset 0px -1px 9px 1px rgb(226, 216, 67);
+
+  &:hover {
+    border: 1px solid rgb(226, 216, 67);
+  }
+}
+
+.group-3 {
+  box-shadow: inset 0px -1px 9px 1px rgb(98, 224, 98);
+
+  &:hover {
+    border: 1px solid rgb(98, 224, 98);
+  }
+}
+
+.group-4 {
+  box-shadow: inset 0px -1px 9px 1px rgb(79, 233, 217);
+
+  &:hover {
+    border: 1px solid rgb(79, 233, 217);
+  }
+}
+
+.group-5 {
+  box-shadow: inset 0px -1px 9px 1px rgb(62, 60, 201);
+
+  &:hover {
+    border: 1px solid rgb(62, 60, 201);
+  }
+}
+
+.group-6 {
+  box-shadow: inset 0px -1px 9px 1px rgb(156, 106, 236);
+
+  &:hover {
+    border: 1px solid rgb(156, 106, 236);
+  }
+}
+
+.call-disabled {
+  background: #ddd;
+  box-shadow: inset 0px -1px 9px 1px #999;
+}

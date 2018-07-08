@@ -7,7 +7,7 @@ class ReviewFunctionBar extends React.Component {
             <button className="dropdown-item" key={name} onClick={() => this.props.selectFilter("collection", name)}>{name}</button>
         );
         const groupButtons = [...Array(7).keys()].map((number) =>
-            <button className="dropdown-item" key={number} onClick={() => this.props.selectFilter("group", number)}>Group {number + 1}</button>
+            <button className="dropdown-item" key={number} onClick={() => this.props.selectFilter("group", number)}>Group {number}</button>
         );
         const filter = this.props.activeFilter;
         return (
