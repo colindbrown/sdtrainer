@@ -1,0 +1,142 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+span.empty {
+  opacity: 0;
+}
+
+.carousel-item ul {
+  margin: 0px;
+}
+
+.carousel-item {
+  border: 1px solid darkgrey;
+  border-radius: 5px;
+}
+
+.carousel {
+  margin-top: 35px;
+  padding-left: 75px;
+  padding-right: 75px;
+}
+
+.list-group-item {
+  height: 60px;
+  padding-top: 5%;
+}
+
+
+.carousel-control-prev, .carousel-control-next{
+  width: 50px;
+  height: 80%;
+  margin-bottom: auto;
+  margin-top: auto;
+
+}
+
+.carousel-control-prev {
+  left: 25px;
+
+}
+
+.carousel-control-next {
+  right: 25px;
+}
+
+.call {
+  box-sizing: border-box;
+  color: #666;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background: #fefefe;
+
+  .call:hover {
+    background: #fff;
+  }
+
+}
+
+.call-empty {
+  border: 1px solid #eee;
+  background: #fcfcfc;
+  &:hover {
+    background: #fcfcfc;
+  }
+}
+
+.group-0 {
+  box-shadow: inset 0px 0px 3px 0px #ccc;
+}
+
+.group-1 {
+  box-shadow: inset 0px 0px 5px 0px rgba(233, 165, 165, 0.979);
+
+  &:hover {
+    border: 1px solid rgba(233, 165, 165, 0.979);
+  }
+}
+
+.group-2 {
+  box-shadow: inset 0px 0px 5px 0px rgb(130, 130, 224);
+
+  &:hover {
+    border: 1px solid rgb(130, 130, 224);
+  }
+}
+
+.group-3 {
+  box-shadow: inset 0px 0px 5px 0px rgb(145, 224, 145);
+
+  &:hover {
+    border: 1px solid rgb(145, 224, 145);
+  }
+}
+
+.group-4 {
+  box-shadow: inset 0px 0px 5px 0px rgb(229, 224, 162);
+
+  &:hover {
+    border: 1px solid rgb(229, 224, 162);
+  }
+}
+
+.group-5 {
+  box-shadow: inset 0px 0px 5px 0px rgb(218, 187, 104);
+
+  &:hover {
+    border: 1px solid rgb(218, 187, 104);
+  }
+}
+
+.group-6 {
+  box-shadow: inset 0px 0px 5px 0px rgb(193, 165, 238);
+
+  &:hover {
+    border: 1px solid rgb(193, 165, 238);
+  }
+}
