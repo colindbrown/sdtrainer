@@ -30,11 +30,11 @@ class List extends React.Component {
                 <div className="carousel-inner container">
                     {pages}
                 </div>
-                <a className="carousel-control-prev btn" href={`#${id}`} role="button" data-slide="prev">
+                <a className="carousel-control-prev btn btn-secondary" href={`#${id}`} role="button" data-slide="prev">
                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span className="sr-only">Previous</span>
                 </a>
-                <a className="btn carousel-control-next" href={`#${id}`} role="button" data-slide="next">
+                <a className="btn btn-secondary carousel-control-next" href={`#${id}`} role="button" data-slide="next">
                     <span className="carousel-control-next-icon" aria-hidden="true"></span>
                     <span className="sr-only">Next</span>
                 </a>
