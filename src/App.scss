@@ -76,67 +76,77 @@ span.empty {
   background: #fefefe;
 
   .call:hover {
-    background: #fff;
+    background: #fefefe;
+    color: #666;
   }
 
 }
 
 .call-empty {
   border: 1px solid #eee;
-  background: #fcfcfc;
+  background: #fff;
   &:hover {
-    background: #fcfcfc;
+    background: #fff;
   }
 }
 
 .group-0 {
-  box-shadow: inset 0px 0px 3px 0px #ccc;
+  box-shadow: inset 0px -1px 9px 1px #ccc;
+
+  &:hover {
+    border: 1px solid #ccc;
+  }
 }
 
 .group-1 {
-  box-shadow: inset 0px 0px 5px 0px rgba(233, 165, 165, 0.979);
+  box-shadow: inset 0px -1px 9px 1px rgba(226, 60, 60, 0.979);
 
   &:hover {
-    border: 1px solid rgba(233, 165, 165, 0.979);
+    border: 1px solid rgba(226, 60, 60, 0.979);
   }
 }
 
 .group-2 {
-  box-shadow: inset 0px 0px 5px 0px rgb(130, 130, 224);
+  box-shadow: inset 0px -1px 9px 1px rgb(226, 216, 67);
 
   &:hover {
-    border: 1px solid rgb(130, 130, 224);
+    border: 1px solid rgb(226, 216, 67);
   }
 }
 
 .group-3 {
-  box-shadow: inset 0px 0px 5px 0px rgb(145, 224, 145);
+  box-shadow: inset 0px -1px 9px 1px rgb(98, 224, 98);
 
   &:hover {
-    border: 1px solid rgb(145, 224, 145);
+    border: 1px solid rgb(98, 224, 98);
   }
 }
 
 .group-4 {
-  box-shadow: inset 0px 0px 5px 0px rgb(229, 224, 162);
+  box-shadow: inset 0px -1px 9px 1px rgb(79, 233, 217);
 
   &:hover {
-    border: 1px solid rgb(229, 224, 162);
+    border: 1px solid rgb(79, 233, 217);
   }
 }
 
 .group-5 {
-  box-shadow: inset 0px 0px 5px 0px rgb(218, 187, 104);
+  box-shadow: inset 0px -1px 9px 1px rgb(62, 60, 201);
 
   &:hover {
-    border: 1px solid rgb(218, 187, 104);
+    border: 1px solid rgb(62, 60, 201);
   }
 }
 
 .group-6 {
-  box-shadow: inset 0px 0px 5px 0px rgb(193, 165, 238);
+  box-shadow: inset 0px -1px 9px 1px rgb(156, 106, 236);
 
   &:hover {
-    border: 1px solid rgb(193, 165, 238);
+    border: 1px solid rgb(156, 106, 236);
   }
+}
+
+.call-disabled {
+  background: #ddd;
+  box-shadow: inset 0px -1px 9px 1px #999;
 }

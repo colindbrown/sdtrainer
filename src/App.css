@@ -60,43 +60,50 @@ span.empty {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   background: #fefefe; }
   .call .call:hover {
-    background: #fff; }
+    background: #fefefe;
+    color: #666; }
 
 .call-empty {
   border: 1px solid #eee;
-  background: #fcfcfc; }
+  background: #fff; }
   .call-empty:hover {
-    background: #fcfcfc; }
+    background: #fff; }
 
 .group-0 {
-  box-shadow: inset 0px 0px 3px 0px #ccc; }
+  box-shadow: inset 0px -1px 9px 1px #ccc; }
+  .group-0:hover {
+    border: 1px solid #ccc; }
 
 .group-1 {
-  box-shadow: inset 0px 0px 5px 0px rgba(233, 165, 165, 0.979); }
+  box-shadow: inset 0px -1px 9px 1px rgba(226, 60, 60, 0.979); }
   .group-1:hover {
-    border: 1px solid rgba(233, 165, 165, 0.979); }
+    border: 1px solid rgba(226, 60, 60, 0.979); }
 
 .group-2 {
-  box-shadow: inset 0px 0px 5px 0px #8282e0; }
+  box-shadow: inset 0px -1px 9px 1px #e2d843; }
   .group-2:hover {
-    border: 1px solid #8282e0; }
+    border: 1px solid #e2d843; }
 
 .group-3 {
-  box-shadow: inset 0px 0px 5px 0px #91e091; }
+  box-shadow: inset 0px -1px 9px 1px #62e062; }
   .group-3:hover {
-    border: 1px solid #91e091; }
+    border: 1px solid #62e062; }
 
 .group-4 {
-  box-shadow: inset 0px 0px 5px 0px #e5e0a2; }
+  box-shadow: inset 0px -1px 9px 1px #4fe9d9; }
   .group-4:hover {
-    border: 1px solid #e5e0a2; }
+    border: 1px solid #4fe9d9; }
 
 .group-5 {
-  box-shadow: inset 0px 0px 5px 0px #dabb68; }
+  box-shadow: inset 0px -1px 9px 1px #3e3cc9; }
   .group-5:hover {
-    border: 1px solid #dabb68; }
+    border: 1px solid #3e3cc9; }
 
 .group-6 {
-  box-shadow: inset 0px 0px 5px 0px #c1a5ee; }
+  box-shadow: inset 0px -1px 9px 1px #9c6aec; }
   .group-6:hover {
-    border: 1px solid #c1a5ee; }
+    border: 1px solid #9c6aec; }
+
+.call-disabled {
+  background: #ddd;
+  box-shadow: inset 0px -1px 9px 1px #999; }
