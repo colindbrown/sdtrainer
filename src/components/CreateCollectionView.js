@@ -1,5 +1,6 @@
 import React from "react";
 import List from "./List";
+import Alerts from "./Alerts";
 import * as db from "../util/dbfunctions";
 import CreateFunctionBar from "./CreateFunctionBar";
 
@@ -119,16 +120,6 @@ class CreateCollectionView extends React.Component {
     }
 
     render() {
-        const alerts = this.state.alerts.map((alert) =>
-            <div className={`alert ${alert.type} m-2`} role="alert" key={alert.text}>
-                <span className="mr-auto">
-                    {alert.text}
-                </span>
-                <button type="button" className="close" aria-label="Close" onClick={this.clearAlerts}>
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        );
         return (
             <div>
                 <CreateFunctionBar
@@ -138,7 +129,7 @@ class CreateCollectionView extends React.Component {
                     addCollection={(name) => this.addCollection(name)}
                     collectionNames={this.state.collectionNames}
                 />
-                {alerts}
+                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
                     <List size="col-md-6" id="callList" columns={2} calls={this.state.callList} onClick={(name) => this.moveCall(name, "collectionList")} />
                     <List size="col-md-6" id="collectionList" columns={2} calls={this.state.collectionList} onClick={(name) => this.moveCall(name, "callList")} />

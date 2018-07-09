@@ -3,6 +3,7 @@ import ReviewFunctionBar from "./ReviewFunctionBar";
 import * as db from "../util/dbfunctions";
 import List from "./List";
 import Modal from "./Modal";
+import Alerts from "./Alerts";
 
 class ReviewClassView extends React.Component {
 
@@ -118,23 +119,17 @@ class ReviewClassView extends React.Component {
 
     exportSelection() {
         var text = "";
-        this.state.selectedCalls.forEach(((call) => {
-            text = text + "\n" + call.name;
-        }));
+        if (this.state.selectedCalls.length > 0) {
+            this.state.selectedCalls.forEach(((call) => {
+                text = text + "\n" + call.name;
+            }));
+        } else {
+            text = " Please select some calls";
+        }
         this.setState({modalData: {title: "Selected Calls", body: text.slice(1)}});
     }
 
     render() {
-        const alerts = this.state.alerts.map((alert) =>
-            <div className={`alert ${alert.type} m-2`} role="alert" key={alert.text}>
-                <span className="mr-auto">
-                    {alert.text}
-                </span>
-                <button type="button" className="close" aria-label="Close" onClick={this.clearAlerts}>
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        );
         return (
             <div>
                 <Modal data={this.state.modalData}/>
@@ -145,7 +140,7 @@ class ReviewClassView extends React.Component {
                     exportSelection={() => {this.exportSelection()}}
                     resetFilters={() => this.resetFilters()}
                 />
-                {alerts}
+                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
                     <List size="col-md-12" id="reviewList" columns={4} calls={this.state.selectedCalls} onClick={(name) => this.showCall(name)} />
                 </div>

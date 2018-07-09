@@ -18,7 +18,8 @@ export async function displayData(calls) {
 // Class methods
 export async function createNewClass(name) {
     const docRef = await ClassesRef.add({
-        name: name
+        name: name,
+        createdAt: Date.now()
     })
     const allCalls = await fetchAllCalls();
     allCalls.forEach((call) => {
