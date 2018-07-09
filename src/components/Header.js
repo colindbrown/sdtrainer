@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import squareLogo from "../img/squares.png";
+import squareLogo from "../img/logo.PNG";
 
 const Header = ({activeClass}) => (
   <header>
