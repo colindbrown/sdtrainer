@@ -113,11 +113,15 @@ span.empty {
 
 .class-card {
   margin-top: 25px;
-  margin-bottom: 25px; }
+  margin-bottom: 25px;
+  height: 250px; }
 
 .class-card-title {
   height: 50px;
   padding-top: 10px; }
+
+.class-card-button {
+  margin-top: 15px; }
 
 .below-navbar {
   margin-top: 60px; }
