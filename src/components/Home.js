@@ -3,6 +3,7 @@ import ClassCard from "./ClassCard";
 import * as db from "../util/dbfunctions";
 import AddClassCard from './AddClassCard';
 import Alerts from "./Alerts";
+import { NavLink } from "react-router-dom";
 
 
 class Home extends React.Component {
@@ -31,20 +32,39 @@ class Home extends React.Component {
     }
 
     render() {
-        const classCards = this.state.classes.map((classData) => <ClassCard key={classData.name} {...classData} updateActiveClass={(name) => this.props.updateActiveClass(name)} /> );
+        const activeClass = this.props.activeClass;
+        const classCards = this.state.classes.map((classData) => <ClassCard 
+            key={classData.name} 
+            {...classData} 
+            activeClass={activeClass} 
+            updateActiveClass={(name) => this.props.updateActiveClass(name)} /> 
+        );
         classCards.push(<AddClassCard 
             key="addClassCard" 
             updateActiveClass={(name) => this.props.updateActiveClass(name)}
             showAlert={(type,text) => this.showAlert(type, text)} 
             clearAlerts={() => this.clearAlerts()}
             />)
+        var jumboContent;
+        if (activeClass.name) {
+            jumboContent = <div className="container">
+                <h1 className="jumbotron-heading">{activeClass.name}</h1>
+                <hr/>
+                <p className="lead text-muted">Completion statistics will go here</p>
+                <p className="lead text-muted">Collections info/sessions run here</p>
+                <hr/>
+                <NavLink className={`btn btn-info`} to={`/create`}>Create a Collection</NavLink>
+            </div>;
+        } else {
+            jumboContent = <div className="container">
+                <h1 className="jumbotron-heading">Choose a class to manage</h1>
+                <p className="lead text-muted">Select from the classes below or create a new one</p>
+            </div>;
+        }
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center class-jumbotron">
-                    <div className="container">
-                    <h1 className="jumbotron-heading">Choose a class to manage</h1>
-                    <p className="lead text-muted">Select from the classes below or create a new one</p>
-                    </div>
+                    {jumboContent}
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="album bg-light card-container">
