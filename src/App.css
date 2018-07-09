@@ -23,6 +23,9 @@
   to {
     transform: rotate(360deg); } }
 
+.main-bar {
+  background: #373842; }
+
 span.empty {
   opacity: 0; }
 
@@ -100,10 +103,36 @@ span.empty {
     border: 1px solid #3e3cc9; }
 
 .group-6 {
-  box-shadow: inset 0px -1px 9px 1px #9c6aec; }
+  box-shadow: inset 0px -1px 9px 1px #251938; }
   .group-6:hover {
-    border: 1px solid #9c6aec; }
+    border: 1px solid #251938; }
 
 .call-disabled {
   background: #ddd;
   box-shadow: inset 0px -1px 9px 1px #999; }
+
+.class-jumbotron {
+  margin-bottom: 15px; }
+
+.card-container {
+  margin-top: 10px;
+  height: 550px;
+  overflow-y: scroll; }
+
+.class-card {
+  margin-top: 13px;
+  margin-bottom: 12px;
+  height: 250px; }
+
+.class-card-title {
+  height: 50px;
+  padding-top: 10px; }
+
+.class-card-button {
+  margin-top: 15px; }
+
+.below-navbar {
+  margin-top: 20px; }
+
+hr {
+  margin: 20px; }

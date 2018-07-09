@@ -27,6 +27,10 @@
   to { transform: rotate(360deg); }
 }
 
+.main-bar {
+  background: rgb(55, 56, 66);
+}
+
 span.empty {
   opacity: 0;
 }
@@ -139,14 +143,47 @@ span.empty {
 }
 
 .group-6 {
-  box-shadow: inset 0px -1px 9px 1px rgb(156, 106, 236);
+  box-shadow: inset 0px -1px 9px 1px rgb(37, 25, 56);
 
   &:hover {
-    border: 1px solid rgb(156, 106, 236);
+    border: 1px solid rgb(37, 25, 56);
   }
 }
 
 .call-disabled {
   background: #ddd;
   box-shadow: inset 0px -1px 9px 1px #999;
+}
+
+.class-jumbotron {
+  margin-bottom: 15px;
+}
+
+.card-container {
+  margin-top: 10px;
+  height: 550px;
+  overflow-y: scroll;
+}
+
+.class-card {
+  margin-top: 13px;
+  margin-bottom: 12px;
+  height: 250px;
+}
+
+.class-card-title {
+  height: 50px;
+  padding-top: 10px;
+}
+
+.class-card-button {
+  margin-top: 15px;
+}
+
+.below-navbar {
+  margin-top: 20px;
+}
+
+hr {
+  margin: 20px;
 }

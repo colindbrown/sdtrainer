@@ -1,5 +1,6 @@
 import React from "react";
 import List from "./List";
+import Alerts from "./Alerts";
 import * as db from "../util/dbfunctions";
 import RunFunctionBar from "./RunFunctionBar";
 
@@ -88,16 +89,6 @@ class RunCollectionView extends React.Component {
     }
 
     render() {
-        const alerts = this.state.alerts.map((alert) =>
-            <div className={`alert ${alert.type} m-2`} role="alert" key={alert.text}>
-                <span className="mr-auto">
-                    {alert.text}
-                </span>
-                <button type="button" className="close" aria-label="Close" onClick={this.clearAlerts}>
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        );
         return (
             <div>
                 <RunFunctionBar
@@ -110,7 +101,7 @@ class RunCollectionView extends React.Component {
                     selectActiveGroup={(group) => this.selectActiveGroup(group)}
                     finishCollection={(e) => this.finishCollection(e)}
                 />
-                {alerts}
+                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
                     <List size="col-md-12" id="runList" columns={4} calls={this.state.collectionCalls} onClick={(name) => this.toggleCall(name)} />
                 </div>

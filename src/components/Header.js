@@ -1,10 +1,10 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import squareLogo from "../img/squares.png";
+import squareLogo from "../img/logo.PNG";
 
-const Header = () => (
+const Header = ({activeClass}) => (
   <header>
-    <nav className="navbar navbar-dark navbar-expand-lg bg-dark">
+    <nav className="navbar navbar-dark navbar-expand-lg main-bar sticky-top">
       <img
         src={squareLogo}
         width="30"
@@ -12,7 +12,7 @@ const Header = () => (
         className="d-inline-block align-top mr-2"
         alt=""
       />
-      <a className="navbar-brand" href="/">
+      <a className="navbar-brand ml-2" href="/">
         Square
       </a>
 
@@ -25,14 +25,17 @@ const Header = () => (
             <NavLinker
               relUrl="create"
               name="Create"
+              activeClass={activeClass}
             />
             <NavLinker
               relUrl="run"
               name="Run"
+              activeClass={activeClass}
             />
             <NavLinker
               relUrl="review"
               name="Review"
+              activeClass={activeClass}
             />
         </ul>
       </div>
@@ -40,14 +43,22 @@ const Header = () => (
   </header>
 );
 
-const NavLinker = ({ relUrl, name }) => {
-  return (
-    <li className="nav-item">
-      <NavLink className="nav-link" to={`/${relUrl}`}>
-        {name}
-      </NavLink>
-    </li>
-  );
+const NavLinker = ({ relUrl, name, activeClass }) => {
+  if (activeClass.name) {
+    return (
+      <li className="nav-item">
+        <NavLink className={`nav-link`} to={`/${relUrl}`}>
+          {name}
+        </NavLink>
+      </li>
+    )
+  } else {
+    return (
+      <li className="nav-item">
+        <a href="#" className="nav-link disabled">{name}</a>
+      </li>
+    )
+  }
 };
 
 export default Header;

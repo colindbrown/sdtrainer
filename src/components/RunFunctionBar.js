@@ -19,7 +19,7 @@ class RunFunctionBar extends React.Component {
 
                 <div className="navbar-nav mr-auto ml-2">
                     <div className="dropdown mr-2">
-                        <button className={` btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className={` btn btn-info dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {activeCollection}
                         </button>
                         <div className="dropdown-menu">
@@ -45,7 +45,7 @@ class RunFunctionBar extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button className={`${disableFunctions} btn btn-secondary`} onClick={this.props.finishCollection}>Finish running collection</button>
+                <button className={`${disableFunctions} btn btn-info`} onClick={this.props.finishCollection}>Finish running collection</button>
             </nav>
         )
     }
