@@ -1,9 +1,9 @@
 import { db } from "../db";
+import { AllCalls } from "./calls";
 
 
 // references
 var activeClassRef;
-const sampleClassRef = db.collection("Users").doc("updated").collection("Classes").doc("p7EqFLm39vsfTUaKZLtm")
 const AllCallsRef = db.collection("AllCalls");
 const ClassesRef = db.collection("Users").doc("updated").collection("Classes");
 
@@ -60,6 +60,21 @@ export async function checkClass(name) {
 
 
 // AllCalls methods
+
+// adds all calls to the database
+export async function addAllCalls() {
+    Object.keys(AllCalls).forEach((category) => {
+        Object.keys(AllCalls[category]).forEach((group) => {
+            AllCalls[category][group].forEach((name) => {
+                AllCallsRef.add({
+                    name: name,
+                    group: parseInt(group),
+                    category: category
+                })
+            })
+        })
+    })
+}
 
 // returns displayData of all calls
 export async function fetchAllCalls() {
