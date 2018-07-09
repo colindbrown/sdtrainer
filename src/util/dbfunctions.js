@@ -2,8 +2,10 @@ import { db } from "../db";
 
 
 // references
+var activeClassRef;
 const sampleClassRef = db.collection("Users").doc("updated").collection("Classes").doc("p7EqFLm39vsfTUaKZLtm")
 const AllCallsRef = db.collection("AllCalls");
+const ClassesRef = db.collection("Users").doc("updated").collection("Classes");
 
 // General methods
 
@@ -15,7 +17,7 @@ export async function displayData(calls) {
 
 // Class methods
 export async function createNewClass(name) {
-    const docRef = await db.collection("Users").doc("updated").collection("Classes").add({
+    const docRef = await ClassesRef.add({
         name: name
     })
     const allCalls = await fetchAllCalls();
@@ -27,6 +29,24 @@ export async function createNewClass(name) {
         })
     })
 }
+
+// sets the active class, returns the class
+export async function setActiveClass(name) {
+    const snapshot = await ClassesRef.where("name", "==", name).get();
+    activeClassRef = snapshot.docs[0].ref;
+    return snapshot.docs[0].data();
+}
+
+// gets the data of all classes
+export async function fetchClassData() {
+    const snapshot = await ClassesRef.get();
+    var classes = [];
+    snapshot.forEach(((doc) => {
+        classes.push(doc.data());
+    }));
+    return classes;
+}
+
 
 // AllCalls methods
 
@@ -40,6 +60,7 @@ export async function fetchAllCalls() {
     return allCalls;
 }
 
+// returns displayData of all calls with a specific group
 export async function fetchByGroup(group) {
     const calls = [];
     const snapshot = await AllCallsRef.where("group", "==", group).get();
@@ -53,14 +74,14 @@ export async function fetchByGroup(group) {
 
 // returns name, everUsed, and uses of a single call
 export async function fetchCallHistory(name) {
-    const snapshot = await sampleClassRef.collection("History").where("name", "==", name).get();
+    const snapshot = await activeClassRef.collection("History").where("name", "==", name).get();
     return snapshot.docs[0].data();
 }
 
 // returns all calls that have either been used or never been used
 export async function fetchByEverUsed(used) {
     const calls = [];
-    const snapshot = await sampleClassRef.collection("History").where("everUsed", "==", used).get();
+    const snapshot = await activeClassRef.collection("History").where("everUsed", "==", used).get();
     snapshot.docs.forEach((callDoc) => {
         calls.push(callDoc.data());
     });
@@ -76,7 +97,7 @@ export async function fetchNew() {
 // updates the everUsed and uses data for all provided calls
 export async function updateHistory(calls) {
     var batch = db.batch();
-    var snapshot = await sampleClassRef.collection("History").get();
+    var snapshot = await activeClassRef.collection("History").get();
     snapshot.docs.forEach((callDoc) => {
         const prev = callDoc.data();
         const call = calls.find((callIterator) => (callIterator.name === prev.name));
@@ -92,7 +113,7 @@ export async function updateHistory(calls) {
 
 // returns an array of all collection names
 export async function fetchCollectionNames() {
-    const snapshot = await sampleClassRef.collection("Collections").get();
+    const snapshot = await activeClassRef.collection("Collections").get();
     var collectionNames = [];
     snapshot.forEach(((doc) => {
         collectionNames.push(doc.data().name);
@@ -102,7 +123,7 @@ export async function fetchCollectionNames() {
 
 // return collection (a DocumentSnapshot) if it exists, undefined if it doesnt
 export async function fetchCollectionRef(name) {
-    const collectionsRef = sampleClassRef.collection("Collections")
+    const collectionsRef = activeClassRef.collection("Collections")
     const snapshot = await collectionsRef.where("name", "==", name).get();
     if (snapshot.size === 0) {
         return undefined;
@@ -135,7 +156,7 @@ export async function setCollection(name, calls) {
         });
         batch.commit();
     } else {
-        const newCollection = sampleClassRef.collection("Collections").doc();
+        const newCollection = activeClassRef.collection("Collections").doc();
         newCollection.set({ name: name });
         calls.forEach((call) => newCollection.collection("Calls").add(call));
     }

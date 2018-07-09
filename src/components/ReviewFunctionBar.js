@@ -49,7 +49,7 @@ class ReviewFunctionBar extends React.Component {
                     </div>
                     <button className={`${filter.name ? "" : "disabled"} btn btn-secondary`} href="#" onClick={this.props.resetFilters}>Reset filters</button>
                 </div>
-                <button className={` btn btn-secondary`} data-toggle="modal" data-target="#exportModal" onClick={this.props.exportSelection} >Export current selection</button>
+                <button className={` btn btn-info`} data-toggle="modal" data-target="#exportModal" onClick={this.props.exportSelection} >Export current selection</button>
             </nav>
         )
     }

@@ -45,7 +45,7 @@ class RunFunctionBar extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button className={`${disableFunctions} btn btn-secondary`} onClick={this.props.finishCollection}>Finish running collection</button>
+                <button className={`${disableFunctions} btn btn-info`} onClick={this.props.finishCollection}>Finish running collection</button>
             </nav>
         )
     }

@@ -2,9 +2,9 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import squareLogo from "../img/squares.png";
 
-const Header = () => (
+const Header = ({activeClass}) => (
   <header>
-    <nav className="navbar navbar-dark navbar-expand-lg bg-dark">
+    <nav className="navbar navbar-dark navbar-expand-lg main-bar">
       <img
         src={squareLogo}
         width="30"
@@ -12,7 +12,7 @@ const Header = () => (
         className="d-inline-block align-top mr-2"
         alt=""
       />
-      <a className="navbar-brand" href="/">
+      <a className="navbar-brand ml-2" href="/">
         Square
       </a>
 
@@ -25,14 +25,17 @@ const Header = () => (
             <NavLinker
               relUrl="create"
               name="Create"
+              activeClass={activeClass}
             />
             <NavLinker
               relUrl="run"
               name="Run"
+              activeClass={activeClass}
             />
             <NavLinker
               relUrl="review"
               name="Review"
+              activeClass={activeClass}
             />
         </ul>
       </div>
@@ -40,10 +43,11 @@ const Header = () => (
   </header>
 );
 
-const NavLinker = ({ relUrl, name }) => {
+const NavLinker = ({ relUrl, name, activeClass }) => {
+  const active = activeClass.name ? "" : "disabled";
   return (
     <li className="nav-item">
-      <NavLink className="nav-link" to={`/${relUrl}`}>
+      <NavLink className={`nav-link ${active}`} to={activeClass.name ? `/${relUrl}` : '/'}>
         {name}
       </NavLink>
     </li>

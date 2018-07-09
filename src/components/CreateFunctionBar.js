@@ -48,7 +48,7 @@ class CreateFunctionBar extends React.Component {
                 </div>
                 <form className="form-inline" onSubmit={this.handleSubmit}>
                     <input className="form-control mr-sm-2" placeholder="Name Collection" value={this.state.newCollectionName} onChange={this.handleChange} />
-                    <button className="btn btn-sm btn-secondary my-2 my-sm-0" type="submit">Save Collection</button>
+                    <button className="btn btn-info my-2 my-sm-0" type="submit">Save Collection</button>
                 </form>
 
             </nav>
