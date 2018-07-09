@@ -1,5 +1,4 @@
 import React from "react";
-import Alerts from "./Alerts";
 import * as db from "../util/dbfunctions";
 
 class AddClassCard extends React.Component {
@@ -17,11 +16,11 @@ class AddClassCard extends React.Component {
         const name = this.state.newClassName;
 
         if (!name) {
-            this.showAlert("alert-warning", "Please name your class");
+            this.props.showAlert("alert-warning", "Please name your class");
         } else {
             const classData = await db.checkClass(name);
             if (classData) {
-                this.showAlert("alert-warning", "A class with that name already exists");
+                this.props.showAlert("alert-warning", "A class with that name already exists");
             } else {
                 db.createNewClass(this.state.newClassName).then(() => {
                     this.props.updateActiveClass(this.state.newClassName);
@@ -29,15 +28,6 @@ class AddClassCard extends React.Component {
                 });
             }
         }
-    }
-
-    showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
-    }
-
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
     }
 
     render() {

@@ -111,9 +111,17 @@ span.empty {
   background: #ddd;
   box-shadow: inset 0px -1px 9px 1px #999; }
 
+.class-jumbotron {
+  margin-bottom: 15px; }
+
+.card-container {
+  margin-top: 10px;
+  height: 550px;
+  overflow-y: scroll; }
+
 .class-card {
-  margin-top: 25px;
-  margin-bottom: 25px;
+  margin-top: 13px;
+  margin-bottom: 12px;
   height: 250px; }
 
 .class-card-title {
@@ -124,7 +132,7 @@ span.empty {
   margin-top: 15px; }
 
 .below-navbar {
-  margin-top: 60px; }
+  margin-top: 20px; }
 
 hr {
   margin: 20px; }
