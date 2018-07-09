@@ -4,7 +4,7 @@ import squareLogo from "../img/squares.png";
 
 const Header = ({activeClass}) => (
   <header>
-    <nav className="navbar navbar-dark navbar-expand-lg main-bar">
+    <nav className="navbar navbar-dark navbar-expand-lg main-bar sticky-top">
       <img
         src={squareLogo}
         width="30"
@@ -44,14 +44,21 @@ const Header = ({activeClass}) => (
 );
 
 const NavLinker = ({ relUrl, name, activeClass }) => {
-  const active = activeClass.name ? "" : "disabled";
-  return (
-    <li className="nav-item">
-      <NavLink className={`nav-link ${active}`} to={activeClass.name ? `/${relUrl}` : '/'}>
-        {name}
-      </NavLink>
-    </li>
-  );
+  if (activeClass.name) {
+    return (
+      <li className="nav-item">
+        <NavLink className={`nav-link`} to={`/${relUrl}`}>
+          {name}
+        </NavLink>
+      </li>
+    )
+  } else {
+    return (
+      <li className="nav-item">
+        <a href="#" className="nav-link disabled">{name}</a>
+      </li>
+    )
+  }
 };
 
 export default Header;

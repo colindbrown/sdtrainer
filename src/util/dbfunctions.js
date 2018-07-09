@@ -47,6 +47,16 @@ export async function fetchClassData() {
     return classes;
 }
 
+// return class (a DocumentSnapshot) if it exists, undefined if it doesnt
+export async function checkClass(name) {
+    const snapshot = await ClassesRef.where("name", "==", name).get();
+    if (snapshot.size === 0) {
+        return undefined;
+    } else {
+        return snapshot.docs[0].data();
+    }
+}
+
 
 // AllCalls methods
 
