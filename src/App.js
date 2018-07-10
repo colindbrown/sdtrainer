@@ -14,16 +14,16 @@ class App extends Component {
 
   state = {
     activeClass: {},
-    userId: ""
+    activeUser: ""
   }
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        this.setState({userID: user.email});
+        this.setState({activeUser: user.email});
         db.setActiveUser(user.email);
       } else {
-        this.setState({userId: ""});
+        this.setState({activeUser: ""});
       }
     });
   }
@@ -55,7 +55,7 @@ class App extends Component {
     return (
       <HashRouter>
         <div className="App">
-          <Header activeClass={this.state.activeClass} />
+          <Header activeClass={this.state.activeClass} activeUser={this.state.user} />
           {routes}
         </div>
       </HashRouter>

@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import squareLogo from "../img/logo.PNG";
 
-const Header = ({activeClass}) => (
+const Header = ({activeClass, activeUser}) => (
   <header>
     <nav className="navbar navbar-dark navbar-expand-lg main-bar sticky-top">
       <img
@@ -13,13 +13,14 @@ const Header = ({activeClass}) => (
         alt=""
       />
       <a className="navbar-brand ml-2" href="/">
-        Square
+        {activeUser ? "Square" : ""}
       </a>
 
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>
-
+      
+      {activeUser ? 
       <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul className="navbar-nav">
             <NavLinker
@@ -39,6 +40,7 @@ const Header = ({activeClass}) => (
             />
         </ul>
       </div>
+      : ""}
     </nav>
   </header>
 );
