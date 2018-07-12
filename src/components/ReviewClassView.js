@@ -10,14 +10,14 @@ class ReviewClassView extends React.Component {
     state = {
         alerts: [],
         selectedCalls: [],
-        collectionNames: [],
+        sessionNames: [],
         activeFilter: {},
         modalData: {}
     }
 
     componentDidMount() {
         this.loadAllCalls();
-        this.loadCollectionNames();
+        this.loadSessionNames();
 
     }
 
@@ -28,15 +28,15 @@ class ReviewClassView extends React.Component {
         });
     }
 
-    async loadCollectionNames() {
-        db.fetchCollectionNames().then((collectionNames) => { this.setState({ collectionNames }) });
+    async loadSessionNames() {
+        db.fetchSessionNames().then((sessionNames) => { this.setState({ sessionNames }) });
     }
 
-    async loadCollection(name) {
-        db.fetchCollectionCalls(name).then(async (collectionCalls) => {
-            const displayData = await db.displayData(collectionCalls);
+    async loadSession(name) {
+        db.fetchSessionCalls(name).then(async (sessionCalls) => {
+            const displayData = await db.displayData(sessionCalls);
             displayData.sort((a, b) => this.compareCalls(a, b));
-            this.setState({ selectedCalls: displayData, activeFilter: {type: "collection", name: name} });
+            this.setState({ selectedCalls: displayData, activeFilter: {type: "session", name: name} });
         });
     }
 
@@ -103,8 +103,8 @@ class ReviewClassView extends React.Component {
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
             })
             break;
-        case "collection":
-            this.loadCollection(name);
+        case "session":
+            this.loadSession(name);
             break;
         case "group":
             db.fetchByGroup(name).then((displayData) => {
@@ -134,7 +134,7 @@ class ReviewClassView extends React.Component {
             <div>
                 <Modal data={this.state.modalData}/>
                 <ReviewFunctionBar
-                    collectionNames={this.state.collectionNames}
+                    sessionNames={this.state.sessionNames}
                     activeFilter={this.state.activeFilter}
                     selectFilter={(type, name) => this.selectFilter(type, name)}
                     exportSelection={() => {this.exportSelection()}}

@@ -51,9 +51,9 @@ class ClassManager extends React.Component {
                 <h1 className="jumbotron-heading">{activeClass.name}</h1>
                 <hr/>
                 <p className="lead text-muted">Completion statistics will go here</p>
-                <p className="lead text-muted">Collections info/sessions run here</p>
+                <p className="lead text-muted">Sessions info/sessions run here</p>
                 <hr/>
-                <NavLink className={`btn btn-info`} to={`/create`}>Create a Collection</NavLink>
+                <NavLink className={`btn btn-info`} to={`/create`}>Create a Session</NavLink>
             </div>;
         } else {
             jumboContent = <div className="container">

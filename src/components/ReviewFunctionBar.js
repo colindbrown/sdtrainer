@@ -3,8 +3,8 @@ import React from "react";
 class ReviewFunctionBar extends React.Component {
 
     render() {
-        const collectionListItems = this.props.collectionNames.map((name) =>
-            <button className="dropdown-item" key={name} onClick={() => this.props.selectFilter("collection", name)}>{name}</button>
+        const sessionListItems = this.props.sessionNames.map((name) =>
+            <button className="dropdown-item" key={name} onClick={() => this.props.selectFilter("session", name)}>{name}</button>
         );
         const groupButtons = [...Array(7).keys()].map((number) =>
             <button className="dropdown-item" key={number} onClick={() => this.props.selectFilter("group", number)}>Group {number}</button>
@@ -25,11 +25,11 @@ class ReviewFunctionBar extends React.Component {
                         </div>
                     </div>
                     <div className="dropdown mr-2">
-                        <button className={`${filter.type === "collection" ? "active" : ""} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {filter.type === "collection" ? filter.name : "Collections"}
+                        <button className={`${filter.type === "session" ? "active" : ""} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {filter.type === "session" ? filter.name : "Sessions"}
                         </button>
                         <div className="dropdown-menu">
-                            {collectionListItems}
+                            {sessionListItems}
                         </div>
                     </div>
                     <div className="dropdown mr-2">

@@ -153,22 +153,22 @@ export async function updateHistory(calls) {
     batch.commit();
 }
 
-// Collection methods
+// Session methods
 
-// returns an array of all collection names
-export async function fetchCollectionNames() {
-    const snapshot = await activeClassRef.collection("Collections").get();
-    var collectionNames = [];
+// returns an array of all session names
+export async function fetchSessionNames() {
+    const snapshot = await activeClassRef.collection("Sessions").get();
+    var sessionNames = [];
     snapshot.forEach(((doc) => {
-        collectionNames.push(doc.data().name);
+        sessionNames.push(doc.data().name);
     }));
-    return collectionNames;
+    return sessionNames;
 }
 
-// return collection (a DocumentSnapshot) if it exists, undefined if it doesnt
-export async function fetchCollectionRef(name) {
-    const collectionsRef = activeClassRef.collection("Collections")
-    const snapshot = await collectionsRef.where("name", "==", name).get();
+// return session (a DocumentSnapshot) if it exists, undefined if it doesnt
+export async function fetchSessionRef(name) {
+    const sessionsRef = activeClassRef.collection("Sessions")
+    const snapshot = await sessionsRef.where("name", "==", name).get();
     if (snapshot.size === 0) {
         return undefined;
     } else {
@@ -176,32 +176,32 @@ export async function fetchCollectionRef(name) {
     }
 }
 
-// return array of calls in a collection with name, used, and timestamp
-export async function fetchCollectionCalls(name) {
-    const collectionRef = await fetchCollectionRef(name);
-    const snapshot = await collectionRef.collection("Calls").get();
-    var collectionCalls = []
+// return array of calls in a session with name, used, and timestamp
+export async function fetchSessionCalls(name) {
+    const sessionRef = await fetchSessionRef(name);
+    const snapshot = await sessionRef.collection("Calls").get();
+    var sessionCalls = []
     snapshot.forEach(((doc) => {
         const call = doc.data();
-        collectionCalls.push(call);
+        sessionCalls.push(call);
     }));
-    return collectionCalls;
+    return sessionCalls;
 }
 
-// creates or updates a collection with the provided calls
-export async function setCollection(name, calls) {
-    var collection = await fetchCollectionRef(name);
-    if (collection) {
+// creates or updates a session with the provided calls
+export async function setSession(name, calls) {
+    var session = await fetchSessionRef(name);
+    if (session) {
         var batch = db.batch();
-        var snapshot = await collection.collection("Calls").get();
+        var snapshot = await session.collection("Calls").get();
         snapshot.docs.forEach((callDoc) => {
             const call = calls.find((callIterator) => (callIterator.name === callDoc.data().name));
             batch.update(callDoc.ref, { used: call.used, timestamp: call.timestamp });
         });
         batch.commit();
     } else {
-        const newCollection = activeClassRef.collection("Collections").doc();
-        newCollection.set({ name: name });
-        calls.forEach((call) => newCollection.collection("Calls").add(call));
+        const newSession = activeClassRef.collection("Sessions").doc();
+        newSession.set({ name: name });
+        calls.forEach((call) => newSession.collection("Calls").add(call));
     }
 }

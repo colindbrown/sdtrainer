@@ -3,8 +3,8 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import ClassManager from "./components/ClassManager";
 import { Route, HashRouter} from "react-router-dom";
-import CreateCollectionView from "./components/CreateCollectionView";
-import RunCollectionView from "./components/RunCollectionView";
+import CreateSessionView from "./components/CreateSessionView";
+import RunSessionView from "./components/RunSessionView";
 import ReviewClassView from "./components/ReviewClassView";
 import * as db from "./util/dbfunctions";
 import firebase from "firebase";
@@ -48,8 +48,8 @@ class App extends Component {
           <Route exact path="/" render={(routeProps) => (
             <ClassManager {...routeProps} activeClass={this.state.activeClass} updateActiveClass={(name) => this.updateActiveClass(name)} />
           )}/>
-          <Route path="/create" component={CreateCollectionView}/>
-          <Route path="/run" component={RunCollectionView}/>
+          <Route path="/create" component={CreateSessionView}/>
+          <Route path="/run" component={RunSessionView}/>
           <Route path="/review" component={ReviewClassView}/>
         </div>
     } else {
