@@ -5,7 +5,7 @@ import { AllCalls } from "./calls";
 // references
 var activeClassRef;
 const AllCallsRef = db.collection("AllCalls");
-const ClassesRef = db.collection("Users").doc("updated").collection("Classes");
+var ClassesRef;
 
 // General methods
 
@@ -13,6 +13,24 @@ const ClassesRef = db.collection("Users").doc("updated").collection("Classes");
 export async function displayData(calls) {
     const allCalls = await fetchAllCalls();
     return calls.map((call) => allCalls.find((iterator) => (call.name === iterator.name)));
+}
+
+export async function setActiveUser(email) {
+    const snapshot = await db.collection("Users").where("email", "==", email).get();
+    if (snapshot.size > 0) {
+        const activeUserId = snapshot.docs[0].id;
+        ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
+    } else {
+        const newUserRef = await createUser(email);
+        const activeUserId = newUserRef.id;
+        ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
+    }
+}
+
+export async function createUser(email) {
+    const newUserRef = db.collection("Users").doc();
+    newUserRef.set({email: email});
+    return newUserRef;
 }
 
 // Class methods

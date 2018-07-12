@@ -1,83 +1,33 @@
-import React from 'react';
-import ClassCard from "./ClassCard";
-import * as db from "../util/dbfunctions";
-import AddClassCard from './AddClassCard';
-import Alerts from "./Alerts";
-import { NavLink } from "react-router-dom";
-
+import React from "react";
+import FormModal from "./FormModal";
 
 class Home extends React.Component {
 
     state = {
-        classes: [],
-        alerts: []
+        modalSignIn: false
     }
 
-    componentDidMount() {
-        this.loadClasses();
-    }
-
-    loadClasses = async () => {
-        const classes = await db.fetchClassData();
-        this.setState({classes});
-    }
-
-    showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
-    }
-
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
+    switchModal(bool) {
+        this.setState({modalSignIn: bool});
     }
 
     render() {
-        const activeClass = this.props.activeClass;
-        const classCards = this.state.classes.map((classData) => <ClassCard 
-            key={classData.name} 
-            {...classData} 
-            activeClass={activeClass} 
-            updateActiveClass={(name) => this.props.updateActiveClass(name)} /> 
-        );
-        classCards.push(<AddClassCard 
-            key="addClassCard" 
-            updateActiveClass={(name) => this.props.updateActiveClass(name)}
-            showAlert={(type,text) => this.showAlert(type, text)} 
-            clearAlerts={() => this.clearAlerts()}
-            />)
-        var jumboContent;
-        if (activeClass.name) {
-            jumboContent = <div className="container">
-                <h1 className="jumbotron-heading">{activeClass.name}</h1>
-                <hr/>
-                <p className="lead text-muted">Completion statistics will go here</p>
-                <p className="lead text-muted">Collections info/sessions run here</p>
-                <hr/>
-                <NavLink className={`btn btn-info`} to={`/create`}>Create a Collection</NavLink>
-            </div>;
-        } else {
-            jumboContent = <div className="container">
-                <h1 className="jumbotron-heading">Choose a class to manage</h1>
-                <p className="lead text-muted">Select from the classes below or create a new one</p>
-            </div>;
-        }
         return (
-            <div className="container below-navbar">
-                <section className="jumbotron text-center class-jumbotron">
-                    {jumboContent}
-                </section>
-                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
-                <div className="album bg-light card-container">
-                    <div className="container">
-                        <div className="row">
-                            {classCards}
-                        </div>
-                    </div>
+            <div className="container d-flex align-content-center justify-content-center full-page">
+                <div className="jumbotron d-flex flex-column align-content-center justify-content-center home-jumbo">
+                    <h1 className="cover-heading font-weight-bold">Square</h1>
+                    <p className="lead mt-3">A teaching assistant for Square Dancing Callers</p>
+                    <p className="lead mt-5">
+                    <button data-toggle="modal" data-target="#formModal"className="btn btn-lg btn-info mr-2" onClick={() => this.switchModal(false)}>Create an account</button>
+                    <button data-toggle="modal" data-target="#formModal" className="btn btn-lg btn-secondary" onClick={() => this.switchModal(true)}>Sign in</button>
+                    </p>
                 </div>
+                <FormModal 
+                    signInForm={this.state.modalSignIn}
+                />
             </div>
         )
     }
-    
 }
 
 export default Home;

@@ -187,3 +187,49 @@ span.empty {
 hr {
   margin: 20px;
 }
+
+.home-jumbo {
+  height: 450px;
+  width: 700px;
+  margin: auto;
+}
+
+.full-page {
+  height: 90vh;
+  box-sizing: border-box;
+}
+
+.modal-form {
+  margin: 50px;
+}
+
+.vertical-alignment-helper {
+  display:table;
+  height: 100%;
+  width: 100%;
+  pointer-events:none;
+}
+.vertical-align-center {
+  display: table-cell;
+  vertical-align: middle;
+  pointer-events:none;
+}
+.modal-content {
+  width:inherit;
+  max-width:inherit; 
+  height:inherit;
+  margin: 0 auto;
+  pointer-events:all;
+}
+
+.modal-title {
+  margin-left: auto;
+  -webkit-transform: translateX(15px);
+  transform: translateX(15px)
+}
+
+.close-button {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
