@@ -18,10 +18,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setState({activeUser: user.email});
-        db.setActiveUser(user.email);
+        db.setActiveUser(user.email).then(() => {
+          this.setState({activeUser: user.email});
+        });
       } else {
         this.setState({activeUser: ""});
       }
@@ -36,7 +37,7 @@ class App extends Component {
 
   render() {
     var routes;
-    if (!this.state.userId) {
+    if (!this.state.activeUser) {
       routes = <Route path="/" component={Home} />;
     } else if (this.state.activeClass.name) {
       routes = <div>

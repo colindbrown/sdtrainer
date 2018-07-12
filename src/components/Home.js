@@ -22,7 +22,9 @@ class Home extends React.Component {
                     <button data-toggle="modal" data-target="#formModal" className="btn btn-lg btn-secondary" onClick={() => this.switchModal(true)}>Sign in</button>
                     </p>
                 </div>
-                <FormModal signIn={this.state.modalSignIn} />
+                <FormModal 
+                    signInForm={this.state.modalSignIn} 
+                />
             </div>
         )
     }
