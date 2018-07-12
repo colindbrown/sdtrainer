@@ -23,7 +23,7 @@ class Home extends React.Component {
                     </p>
                 </div>
                 <FormModal 
-                    signInForm={this.state.modalSignIn} 
+                    signInForm={this.state.modalSignIn}
                 />
             </div>
         )

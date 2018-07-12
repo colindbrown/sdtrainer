@@ -39,7 +39,7 @@ class CreateFunctionBar extends React.Component {
                     <div className="dropdown mr-2">
                         <button className={`${disableCollectionMenu} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Add previous collection
-                    </button>
+                        </button>
                         <div className="dropdown-menu">
                             {collectionListItems}
                         </div>

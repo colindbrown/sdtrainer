@@ -17,13 +17,12 @@ export async function displayData(calls) {
 
 export async function setActiveUser(email) {
     const snapshot = await db.collection("Users").where("email", "==", email).get();
-    if (snapshot.docs.length > 0) {
+    if (snapshot.size > 0) {
         const activeUserId = snapshot.docs[0].id;
         ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
     } else {
-        const newUserRef = createUser(email);
+        const newUserRef = await createUser(email);
         const activeUserId = newUserRef.id;
-        console.log(newUserRef)
         ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
     }
 }

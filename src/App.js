@@ -18,7 +18,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         db.setActiveUser(user.email).then(() => {
           this.setState({activeUser: user.email});
@@ -34,11 +34,15 @@ class App extends Component {
     this.setState({activeClass: classData});
   }
 
+  signOut = () => {
+    firebase.auth().signOut();
+  }
+
 
   render() {
     var routes;
     if (!this.state.activeUser) {
-      routes = <Route path="/" component={Home} />;
+      routes = <Route path="/" component={Home}/>
     } else if (this.state.activeClass.name) {
       routes = <div>
           <Route exact path="/" render={(routeProps) => (
@@ -56,7 +60,7 @@ class App extends Component {
     return (
       <HashRouter>
         <div className="App">
-          <Header activeClass={this.state.activeClass} activeUser={this.state.user} />
+          <Header activeClass={this.state.activeClass} activeUser={this.state.activeUser} signOut={() => this.signOut()}/>
           {routes}
         </div>
       </HashRouter>

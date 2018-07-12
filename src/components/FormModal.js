@@ -8,7 +8,15 @@ class FormModal extends React.Component {
     state = {
         email: "",
         password: "",
+        firstName: "",
+        lastName: "",
         alerts: []
+    }
+
+    componentWillUnmount() {
+        window.$('#formModal').modal('hide');
+        window.$('body').removeClass('modal-open');
+        window.$('.modal-backdrop').remove();
     }
 
     handleEmailChange = (e) => {
@@ -19,19 +27,46 @@ class FormModal extends React.Component {
         this.setState({ password: e.target.value });
     }
 
+    handleFirstNameChange = (e) => {
+        this.setState({ firstName: e.target.value });
+    }
+
+    handleLastNameChange = (e) => {
+        this.setState({ lastName: e.target.value });
+    }
+
+
     handleSubmit = async (e) => {
         e.preventDefault();
         const email = this.state.email;
         const password = this.state.password;
+        const firstName = this.state.firstName;
+        const lastName = this.state.lastName;
 
         if (!email || !password) {
-            console.log("alerts")
             this.showAlert("alert-warning", "Please enter your email and password");
         } else {
             if (this.props.signInForm) {
-                console.log("Sign In");
+                firebase.auth().signInWithEmailAndPassword(email, password)
+                    .catch((error) => {
+                    
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+
+                    if (errorCode === 'auth/invalid-email') {
+                        this.showAlert("alert-warning", 'That email is invalid');
+                    } else if (errorCode === "auth/user-disabled") {
+                        this.showAlert("alert-warning", "That email has been disabled");
+                    } else if (errorCode === "auth/user-not-found") {
+                        this.showAlert("alert-warning", "There is no user associated with that email");
+                    } else if (errorCode === "auth/wrong-password") {
+                        this.showAlert("alert-warning", "That password was incorrect");
+                    } else {
+                        this.showAlert("alert-warning", errorMessage);
+                        console.log(error);
+                    }
+                  });
             } else {
-                console.log("create user")
                 firebase.auth().createUserWithEmailAndPassword(email, password)
                     .catch((error) => {
                     var errorCode = error.code;
@@ -46,7 +81,9 @@ class FormModal extends React.Component {
                         this.showAlert("alert-warning", errorMessage);
                         console.log(error);
                     }
-                });
+                }).then((userCred) => {
+                    userCred.user.updateProfile({firstName: firstName, lastName: lastName})
+                })
             }
         }
     }
@@ -61,6 +98,16 @@ class FormModal extends React.Component {
     }
 
     render() {
+        const nameInput = this.props.signInForm ? "" : 
+            <div className="row form-group">
+                <div className="col">
+                    <input type="text" className="form-control" onChange={this.handleFirstNameChange} placeholder="First Name" />
+                </div>
+                <div className="col">
+                    <input type="text" className="form-control" onChange={this.handleLastNameChange} placeholder="Last Name" />
+                </div>
+            </div>;
+        
         const signIn = this.props.signInForm;
         return (
             <div className="modal fade" id="formModal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -75,12 +122,11 @@ class FormModal extends React.Component {
                             </div>
                             <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                             <form className="modal-form" onSubmit={this.handleSubmit}>
+                                {nameInput}
                                 <div className="form-group">
-                                    <label>Email address</label>
-                                    <input type="email" className="form-control" onChange={this.handleEmailChange} placeholder="Enter email" />
+                                    <input type="email" className="form-control" onChange={this.handleEmailChange} placeholder="Email Address" />
                                 </div>
                                 <div className="form-group">
-                                    <label>Password</label>
                                     <input type="password" className="form-control" onChange={this.handlePasswordChange} placeholder="Password" />
                                 </div>
                                 <button type="submit" className="btn btn-info">Submit</button>
