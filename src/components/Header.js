@@ -12,9 +12,10 @@ const Header = ({activeClass, activeUser, signOut}) => (
         className="d-inline-block align-top mr-2"
         alt=""
       />
-      <a className="navbar-brand ml-2" href="/">
+
+      <NavLink className={`navbar-brand ml-2`} to={`/`}>
         {activeUser ? "Square" : ""}
-      </a>
+      </NavLink>
 
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>

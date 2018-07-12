@@ -6,7 +6,7 @@ class Modal extends React.Component {
         const {title, body} = {...this.props.data};
         return (
             <div className="modal fade" id="exportModal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="vertical-alignment-helper">
+                <div className="vertical-alignment-helper">
                     <div className="modal-dialog modal-dialog-centered vertical-align-center" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
