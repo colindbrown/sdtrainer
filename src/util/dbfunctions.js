@@ -15,21 +15,21 @@ export async function displayData(calls) {
     return calls.map((call) => allCalls.find((iterator) => (call.name === iterator.name)));
 }
 
-export async function setActiveUser(email) {
-    const snapshot = await db.collection("Users").where("email", "==", email).get();
+export async function setActiveUser(user) {
+    const snapshot = await db.collection("Users").where("email", "==", user.email).get();
     if (snapshot.size > 0) {
         const activeUserId = snapshot.docs[0].id;
         ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
     } else {
-        const newUserRef = await createUser(email);
+        const newUserRef = await createUser(user.email);
         const activeUserId = newUserRef.id;
         ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
     }
 }
 
-export async function createUser(email) {
+export async function createUser(user) {
     const newUserRef = db.collection("Users").doc();
-    newUserRef.set({email: email});
+    newUserRef.set({email: user.email});
     return newUserRef;
 }
 

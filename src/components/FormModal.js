@@ -81,7 +81,7 @@ class FormModal extends React.Component {
                         console.log(error);
                     }
                 }).then((userCred) => {
-                    userCred.user.updateProfile({firstName: firstName, lastName: lastName})
+                    userCred.user.updateProfile({displayName: `${firstName} ${lastName}`})
                 })
             }
         }

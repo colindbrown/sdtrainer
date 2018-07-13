@@ -1,6 +1,6 @@
 import React from "react";
 
-class CreateFunctionBar extends React.Component {
+class PlanFunctionBar extends React.Component {
 
     state = {
         newSessionName: ""
@@ -48,7 +48,7 @@ class CreateFunctionBar extends React.Component {
                 </div>
                 <form className="form-inline" onSubmit={this.handleSubmit}>
                     <input className="form-control mr-sm-2" placeholder="Name Session" value={this.state.newSessionName} onChange={this.handleChange} />
-                    <button className="btn btn-info my-2 my-sm-0" type="submit">Save Session</button>
+                    <button className="btn btn-info my-2 my-sm-0" type="submit">Save Session Plan</button>
                 </form>
 
             </nav>
@@ -57,4 +57,4 @@ class CreateFunctionBar extends React.Component {
 
 }
 
-export default CreateFunctionBar;
+export default PlanFunctionBar;

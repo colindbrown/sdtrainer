@@ -2,9 +2,9 @@ import React from "react";
 import List from "./List";
 import Alerts from "./Alerts";
 import * as db from "../util/dbfunctions";
-import CreateFunctionBar from "./CreateFunctionBar";
+import PlanFunctionBar from "./PlanFunctionBar";
 
-class CreateSessionView extends React.Component {
+class PlanSessionView extends React.Component {
 
     state = {
         callList: [],
@@ -122,7 +122,7 @@ class CreateSessionView extends React.Component {
     render() {
         return (
             <div>
-                <CreateFunctionBar
+                <PlanFunctionBar
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
                     saveNewSession={(name) => this.saveNewSession(name)}
@@ -140,4 +140,4 @@ class CreateSessionView extends React.Component {
 
 }
 
-export default CreateSessionView;
+export default PlanSessionView;
