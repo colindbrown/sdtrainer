@@ -3,7 +3,7 @@ import React from "react";
 class RunFunctionBar extends React.Component {
 
     render() {
-        const activeSession = this.props.activeSession || "Select session";
+        const activeSession = this.props.activeSession || "Select session plan";
         const sortBy = this.props.sortBy || "Sort by";
         const activeGroup = this.props.activeGroup || "Groups";
         const groupButtons = [...Array(7).keys()].map((number) =>

@@ -21,7 +21,7 @@ export async function setActiveUser(user) {
         const activeUserId = snapshot.docs[0].id;
         ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
     } else {
-        const newUserRef = await createUser(user.email);
+        const newUserRef = await createUser(user);
         const activeUserId = newUserRef.id;
         ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
     }
@@ -165,6 +165,23 @@ export async function fetchSessionNames() {
     return sessionNames;
 }
 
+export async function fetchUnfinishedSessionNames() {
+    const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", false).get();
+    var sessionNames = [];
+    snapshot.forEach(((doc) => {
+        sessionNames.push(doc.data().name);
+    }));
+    return sessionNames;
+}
+export async function fetchFinishedSessionNames() {
+    const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", true).get();
+    var sessionNames = [];
+    snapshot.forEach(((doc) => {
+        sessionNames.push(doc.data().name);
+    }));
+    return sessionNames;
+}
+
 // return session (a DocumentSnapshot) if it exists, undefined if it doesnt
 export async function fetchSessionRef(name) {
     const sessionsRef = activeClassRef.collection("Sessions")
@@ -198,10 +215,11 @@ export async function setSession(name, calls) {
             const call = calls.find((callIterator) => (callIterator.name === callDoc.data().name));
             batch.update(callDoc.ref, { used: call.used, timestamp: call.timestamp });
         });
+        batch.update(session, { finished: true, finishedAt: Date.now() })
         batch.commit();
     } else {
         const newSession = activeClassRef.collection("Sessions").doc();
-        newSession.set({ name: name });
+        newSession.set({ name: name, createdAt: Date.now(), finished: false });
         calls.forEach((call) => newSession.collection("Calls").add(call));
     }
 }

@@ -32,7 +32,7 @@ class RunSessionView extends React.Component {
     }
 
     async loadSessionNames() {
-        db.fetchSessionNames().then((sessionNames) => { this.setState({ sessionNames }) });
+        db.fetchUnfinishedSessionNames().then((sessionNames) => { this.setState({ sessionNames }) });
     }
 
     finishSession(e) {
