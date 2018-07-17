@@ -1,7 +1,7 @@
 import React from "react";
 import Alerts from "./Alerts";
 import firebase from "firebase";
-import * as db from "./util/dbfunctions";
+import * as db from "../util/dbfunctions";
 
 class FormModal extends React.Component {
 
