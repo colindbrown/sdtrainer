@@ -269,8 +269,8 @@ export async function setTemplate(name, calls) {
         // modify templates
         console.log("")
     } else {
-        const newTemplate = activeClassRef.collection("Templates").doc();
-        newTemplate.set({ name: name, createdAt: Date.now(), finished: false });
+        const newTemplate = TemplatesRef.doc();
+        newTemplate.set({ name: name, createdAt: Date.now() });
         calls.forEach((call) => newTemplate.collection("Calls").add(call));
     }
 }
