@@ -1,6 +1,7 @@
 import React from "react";
 import Alerts from "./Alerts";
 import firebase from "firebase";
+import * as db from "./util/dbfunctions";
 
 class FormModal extends React.Component {
 
@@ -81,7 +82,8 @@ class FormModal extends React.Component {
                         console.log(error);
                     }
                 }).then((userCred) => {
-                    userCred.user.updateProfile({displayName: `${firstName} ${lastName}`})
+                    userCred.user.updateProfile({displayName: `${firstName} ${lastName}`});
+                    db.createUser(userCred.user);
                 })
             }
         }

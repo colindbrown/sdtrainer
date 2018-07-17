@@ -19,6 +19,7 @@ export async function displayData(calls) {
 export async function setActiveUser(user) {
     const snapshot = await db.collection("Users").where("email", "==", user.email).get();
     var activeUserId;
+    console.log(snapshot.docs);
     if (snapshot.size > 0) {
         activeUserId = snapshot.docs[0].id;
     } else {
@@ -30,6 +31,8 @@ export async function setActiveUser(user) {
 }
 
 export async function createUser(user) {
+    console.log("New User")
+    console.log(user)
     const newUserRef = db.collection("Users").doc();
     newUserRef.set({email: user.email});
     return newUserRef;
