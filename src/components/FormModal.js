@@ -114,7 +114,7 @@ class FormModal extends React.Component {
                     <div className="modal-dialog vertical-align-center" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">{signIn ? "Sign In" : "Create an account"}</h5>
+                                <h5 className="modal-title form-modal-title">{signIn ? "Sign In" : "Create an account"}</h5>
                                 <button type="button close-button" className="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>

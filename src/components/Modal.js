@@ -9,8 +9,8 @@ class Modal extends React.Component {
                 <div className="vertical-alignment-helper">
                     <div className="modal-dialog modal-dialog-centered vertical-align-center" role="document">
                         <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLongTitle">{title}</h5>
+                            <div className="modal-header d-flex justify-content-center">
+                                <h4 className="modal-title" id="exampleModalLongTitle">{title}</h4>
                             </div>
                             <pre className="modal-body">
                                 {body}

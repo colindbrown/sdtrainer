@@ -50,7 +50,7 @@ class PlanFunctionBar extends React.Component {
                     <button className="btn btn-secondary mr-2" href="#" onClick={this.props.addAllUsed}>Add all used calls</button>
                     <div className="dropdown mr-2">
                         <button className={`${disableSessionMenu} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Add previous session
+                            Add session
                         </button>
                         <div className="dropdown-menu">
                             {sessionListItems}
