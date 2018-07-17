@@ -3,16 +3,16 @@ import React from "react";
 class RunFunctionBar extends React.Component {
 
     render() {
-        const activeCollection = this.props.activeCollection || "Select collection";
+        const activeSession = this.props.activeSession || "Select session plan";
         const sortBy = this.props.sortBy || "Sort by";
         const activeGroup = this.props.activeGroup || "Groups";
         const groupButtons = [...Array(7).keys()].map((number) =>
             <button className="dropdown-item" key={number} onClick={() => this.props.selectActiveGroup(number)}>Group {number + 1}</button>
         );
-        const collectionListItems = this.props.collectionNames.map((name) =>
-            <button className="dropdown-item" key={name} onClick={() => this.props.selectActiveCollection(name)}>{name}</button>
+        const sessionListItems = this.props.sessionNames.map((name) =>
+            <button className="dropdown-item" key={name} onClick={() => this.props.selectActiveSession(name)}>{name}</button>
         );
-        const disableFunctions = (!this.props.activeCollection) ? "disabled" : "";
+        const disableFunctions = (!this.props.activeSession) ? "disabled" : "";
 
         return (
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
@@ -20,10 +20,10 @@ class RunFunctionBar extends React.Component {
                 <div className="navbar-nav mr-auto ml-2">
                     <div className="dropdown mr-2">
                         <button className={` btn btn-info dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {activeCollection}
+                            {activeSession}
                         </button>
                         <div className="dropdown-menu">
-                            {collectionListItems}
+                            {sessionListItems}
                         </div>
                     </div>
                     <div className="dropdown mr-2">
@@ -45,7 +45,7 @@ class RunFunctionBar extends React.Component {
                         </div>
                     </div>
                 </div>
-                <button className={`${disableFunctions} btn btn-info`} onClick={this.props.finishCollection}>Finish running collection</button>
+                <button className={`${disableFunctions} btn btn-info`} onClick={this.props.finishSession}>Finish running session</button>
             </nav>
         )
     }

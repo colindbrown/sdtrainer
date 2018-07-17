@@ -6,6 +6,7 @@ import { AllCalls } from "./calls";
 var activeClassRef;
 const AllCallsRef = db.collection("AllCalls");
 var ClassesRef;
+var TemplatesRef;
 
 // General methods
 
@@ -15,21 +16,22 @@ export async function displayData(calls) {
     return calls.map((call) => allCalls.find((iterator) => (call.name === iterator.name)));
 }
 
-export async function setActiveUser(email) {
-    const snapshot = await db.collection("Users").where("email", "==", email).get();
+export async function setActiveUser(user) {
+    const snapshot = await db.collection("Users").where("email", "==", user.email).get();
+    var activeUserId;
     if (snapshot.size > 0) {
-        const activeUserId = snapshot.docs[0].id;
-        ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
+        activeUserId = snapshot.docs[0].id;
     } else {
-        const newUserRef = await createUser(email);
-        const activeUserId = newUserRef.id;
-        ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
+        const newUserRef = await createUser(user);
+        activeUserId = newUserRef.id;
     }
+    ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
+    TemplatesRef = db.collection("Users").doc(activeUserId).collection("Templates");
 }
 
-export async function createUser(email) {
+export async function createUser(user) {
     const newUserRef = db.collection("Users").doc();
-    newUserRef.set({email: email});
+    newUserRef.set({email: user.email});
     return newUserRef;
 }
 
@@ -153,22 +155,42 @@ export async function updateHistory(calls) {
     batch.commit();
 }
 
-// Collection methods
+// Session methods
 
-// returns an array of all collection names
-export async function fetchCollectionNames() {
-    const snapshot = await activeClassRef.collection("Collections").get();
-    var collectionNames = [];
+// returns an array of all session names
+export async function fetchSessionNames() {
+    const snapshot = await activeClassRef.collection("Sessions").get();
+    var sessionNames = [];
     snapshot.forEach(((doc) => {
-        collectionNames.push(doc.data().name);
+        sessionNames.push(doc.data().name);
     }));
-    return collectionNames;
+    return sessionNames;
 }
 
-// return collection (a DocumentSnapshot) if it exists, undefined if it doesnt
-export async function fetchCollectionRef(name) {
-    const collectionsRef = activeClassRef.collection("Collections")
-    const snapshot = await collectionsRef.where("name", "==", name).get();
+// returns an array of the names of all unfinished sessions
+export async function fetchUnfinishedSessionNames() {
+    const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", false).get();
+    var sessionNames = [];
+    snapshot.forEach(((doc) => {
+        sessionNames.push(doc.data().name);
+    }));
+    return sessionNames;
+}
+
+// returns an array of the names of all finished sessions
+export async function fetchFinishedSessionNames() {
+    const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", true).get();
+    var sessionNames = [];
+    snapshot.forEach(((doc) => {
+        sessionNames.push(doc.data().name);
+    }));
+    return sessionNames;
+}
+
+// return session (a DocumentSnapshot) if it exists, undefined if it doesnt
+export async function fetchSessionRef(name) {
+    const sessionsRef = activeClassRef.collection("Sessions")
+    const snapshot = await sessionsRef.where("name", "==", name).get();
     if (snapshot.size === 0) {
         return undefined;
     } else {
@@ -176,32 +198,79 @@ export async function fetchCollectionRef(name) {
     }
 }
 
-// return array of calls in a collection with name, used, and timestamp
-export async function fetchCollectionCalls(name) {
-    const collectionRef = await fetchCollectionRef(name);
-    const snapshot = await collectionRef.collection("Calls").get();
-    var collectionCalls = []
+// return array of calls in a session with name, used, and timestamp
+export async function fetchSessionCalls(name) {
+    const sessionRef = await fetchSessionRef(name);
+    const snapshot = await sessionRef.collection("Calls").get();
+    var sessionCalls = []
     snapshot.forEach(((doc) => {
         const call = doc.data();
-        collectionCalls.push(call);
+        sessionCalls.push(call);
     }));
-    return collectionCalls;
+    return sessionCalls;
 }
 
-// creates or updates a collection with the provided calls
-export async function setCollection(name, calls) {
-    var collection = await fetchCollectionRef(name);
-    if (collection) {
+// creates or updates a session with the provided calls
+export async function setSession(name, calls) {
+    var session = await fetchSessionRef(name);
+    if (session) {
         var batch = db.batch();
-        var snapshot = await collection.collection("Calls").get();
+        var snapshot = await session.collection("Calls").get();
         snapshot.docs.forEach((callDoc) => {
             const call = calls.find((callIterator) => (callIterator.name === callDoc.data().name));
             batch.update(callDoc.ref, { used: call.used, timestamp: call.timestamp });
         });
+        batch.update(session, { finished: true, finishedAt: Date.now() })
         batch.commit();
     } else {
-        const newCollection = activeClassRef.collection("Collections").doc();
-        newCollection.set({ name: name });
-        calls.forEach((call) => newCollection.collection("Calls").add(call));
+        const newSession = activeClassRef.collection("Sessions").doc();
+        newSession.set({ name: name, createdAt: Date.now(), finished: false });
+        calls.forEach((call) => newSession.collection("Calls").add(call));
+    }
+}
+
+// Template methods
+// returns an array of all Template names
+export async function fetchTemplateNames() {
+    const snapshot = await TemplatesRef.get();
+    var templateNames = [];
+    snapshot.forEach(((doc) => {
+        templateNames.push(doc.data().name);
+    }));
+    return templateNames;
+}
+
+// return template (a DocumentSnapshot) if it exists, undefined if it doesnt
+export async function fetchTemplateRef(name) {
+    const snapshot = await TemplatesRef.where("name", "==", name).get();
+    if (snapshot.size === 0) {
+        return undefined;
+    } else {
+        return snapshot.docs[0].ref;
+    }
+}
+
+// return array of calls in a template with names
+export async function fetchTemplateCalls(name) {
+    const templateRef = await fetchTemplateRef(name);
+    const snapshot = await templateRef.collection("Calls").get();
+    var templateCalls = []
+    snapshot.forEach(((doc) => {
+        const call = doc.data();
+        templateCalls.push(call);
+    }));
+    return templateCalls;
+}
+
+// creates or updates a template with the provided calls
+export async function setTemplate(name, calls) {
+    var template = await fetchTemplateRef(name);
+    if (template) {
+        // modify templates
+        console.log("")
+    } else {
+        const newTemplate = activeClassRef.collection("Templates").doc();
+        newTemplate.set({ name: name, createdAt: Date.now(), finished: false });
+        calls.forEach((call) => newTemplate.collection("Calls").add(call));
     }
 }

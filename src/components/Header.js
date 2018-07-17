@@ -25,26 +25,29 @@ const Header = ({activeClass, activeUser, signOut}) => (
       <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul className="navbar-nav">
             <NavLinker
-              relUrl="create"
-              name="Create"
-              activeClass={activeClass}
+              relUrl="templates"
+              name="Templates"
+              active={true}
+            />
+            <NavLinker
+              relUrl="plan"
+              name="Plan"
+              active={activeClass.name}
             />
             <NavLinker
               relUrl="run"
               name="Run"
-              activeClass={activeClass}
+              active={activeClass.name}
             />
             <NavLinker
               relUrl="review"
               name="Review"
-              activeClass={activeClass}
+              active={activeClass.name}
             />
         </ul>
-        <div className="dropdown">
-            <a className={`nav-item nav-link dropdown-toggle text-info`} href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Name
-            </a>
-            <div className="dropdown-menu">
+        <div className="nav-item dropdown">
+            <a className={`nav-item nav-link dropdown-toggle text-info`} href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+            <div className="dropdown-menu dropdown-menu-right">
             <button className="dropdown-item" onClick={() => signOut()}>Sign Out</button>
             </div>
         </div>
@@ -54,8 +57,8 @@ const Header = ({activeClass, activeUser, signOut}) => (
   </header>
 );
 
-const NavLinker = ({ relUrl, name, activeClass }) => {
-  if (activeClass.name) {
+const NavLinker = ({ relUrl, name, active }) => {
+  if (active) {
     return (
       <li className="nav-item">
         <NavLink className={`nav-link`} to={`/${relUrl}`}>

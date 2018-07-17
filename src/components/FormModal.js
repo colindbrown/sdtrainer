@@ -1,6 +1,5 @@
 import React from "react";
 import Alerts from "./Alerts";
-import * as db from "../util/dbfunctions";
 import firebase from "firebase";
 
 class FormModal extends React.Component {
@@ -82,7 +81,7 @@ class FormModal extends React.Component {
                         console.log(error);
                     }
                 }).then((userCred) => {
-                    userCred.user.updateProfile({firstName: firstName, lastName: lastName})
+                    userCred.user.updateProfile({displayName: `${firstName} ${lastName}`})
                 })
             }
         }
@@ -115,7 +114,7 @@ class FormModal extends React.Component {
                     <div className="modal-dialog vertical-align-center" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">{signIn ? "Sign In" : "Create an account"}</h5>
+                                <h5 className="modal-title form-modal-title">{signIn ? "Sign In" : "Create an account"}</h5>
                                 <button type="button close-button" className="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>

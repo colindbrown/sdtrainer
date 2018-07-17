@@ -222,7 +222,7 @@ hr {
   pointer-events:all;
 }
 
-.modal-title {
+.form-modal-title {
   margin-left: auto;
   -webkit-transform: translateX(15px);
   transform: translateX(15px)
@@ -232,4 +232,9 @@ hr {
   position: absolute;
   right: 15px;
   top: 15px;
+}
+
+.dropdown-menu-right { 
+  right: 0; 
+  left: auto; 
 }
