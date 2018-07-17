@@ -19,21 +19,14 @@ export async function displayData(calls) {
 export async function setActiveUser(user) {
     const snapshot = await db.collection("Users").where("email", "==", user.email).get();
     var activeUserId;
-    console.log(snapshot.docs);
     if (snapshot.size > 0) {
         activeUserId = snapshot.docs[0].id;
-    } else {
-        //const newUserRef = await createUser(user);
-        //activeUserId = newUserRef.id;
-        console.log("Would have created");
+        ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
+        TemplatesRef = db.collection("Users").doc(activeUserId).collection("Templates");
     }
-    ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
-    TemplatesRef = db.collection("Users").doc(activeUserId).collection("Templates");
 }
 
 export async function createUser(user) {
-    console.log("New User")
-    console.log(user)
     const newUserRef = db.collection("Users").doc();
     newUserRef.set({email: user.email});
     return newUserRef;
