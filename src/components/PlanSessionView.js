@@ -135,7 +135,6 @@ class PlanSessionView extends React.Component {
     }
 
     render() {
-        const templateNames = db.fetchTemplateNames()
         return (
             <div>
                 <PlanFunctionBar
