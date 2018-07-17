@@ -28,13 +28,25 @@ class PlanFunctionBar extends React.Component {
         const sessionListItems = this.props.sessionNames.map((name) =>
             <button className="dropdown-item" key={name} onClick={() => this.props.addSession(name)}>{name}</button>
         );
+        const templateListItems = this.props.templateNames.map((name) =>
+            <button className="dropdown-item" key={name} onClick={() => this.props.addTemplate(name)}>{name}</button>
+        );
 
         const disableSessionMenu = (this.props.sessionNames.length > 0) ? "" : "disabled";
+        const disableTemplateMenu = (this.props.templateNames.length > 0) ? "" : "disabled";
 
         return (
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
+                    <div className="dropdown mr-2">
+                        <button className={`${disableTemplateMenu} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Add template
+                        </button>
+                        <div className="dropdown-menu">
+                            {templateListItems}
+                        </div>
+                    </div>
                     <button className="btn btn-secondary mr-2" href="#" onClick={this.props.addAllUsed}>Add all used calls</button>
                     <div className="dropdown mr-2">
                         <button className={`${disableSessionMenu} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

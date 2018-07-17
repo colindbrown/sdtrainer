@@ -10,13 +10,15 @@ class PlanSessionView extends React.Component {
         callList: [],
         sessionList: [],
         alerts: [],
-        sessionNames: []
+        sessionNames: [],
+        templateNames: []
     }
 
     // Lifecycle methods
     componentDidMount() {
         this.loadAllCalls();
         this.loadSessionNames();
+        this.loadTemplateNames();
     }
 
     // Async methods
@@ -31,9 +33,22 @@ class PlanSessionView extends React.Component {
         db.fetchSessionNames().then((sessionNames) => { this.setState({ sessionNames }) });
     }
 
+    async loadTemplateNames() {
+        db.fetchTemplateNames().then((templateNames) => { this.setState({ templateNames }) });
+    }
+
     async addSession(name) {
         db.fetchSessionCalls(name).then(async (sessionCalls) => {
             const displayData = await db.displayData(sessionCalls);
+            displayData.forEach(((call) => {
+                this.moveCall(call.name, "sessionList");
+            }));
+        });
+    }
+
+    async addTemplate(name) {
+        db.fetchTemplateCalls(name).then(async (templateCalls) => {
+            const displayData = await db.displayData(templateCalls);
             displayData.forEach(((call) => {
                 this.moveCall(call.name, "sessionList");
             }));
@@ -120,6 +135,7 @@ class PlanSessionView extends React.Component {
     }
 
     render() {
+        const templateNames = db.fetchTemplateNames()
         return (
             <div>
                 <PlanFunctionBar
@@ -128,6 +144,8 @@ class PlanSessionView extends React.Component {
                     saveNewSession={(name) => this.saveNewSession(name)}
                     addSession={(name) => this.addSession(name)}
                     sessionNames={this.state.sessionNames}
+                    addTemplate={(name) => this.addTemplate(name)}
+                    templateNames={this.state.templateNames}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
