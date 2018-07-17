@@ -6,6 +6,7 @@ import { AllCalls } from "./calls";
 var activeClassRef;
 const AllCallsRef = db.collection("AllCalls");
 var ClassesRef;
+var TemplatesRef;
 
 // General methods
 
@@ -17,14 +18,15 @@ export async function displayData(calls) {
 
 export async function setActiveUser(user) {
     const snapshot = await db.collection("Users").where("email", "==", user.email).get();
+    var activeUserId;
     if (snapshot.size > 0) {
-        const activeUserId = snapshot.docs[0].id;
-        ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
+        activeUserId = snapshot.docs[0].id;
     } else {
         const newUserRef = await createUser(user);
-        const activeUserId = newUserRef.id;
-        ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
+        activeUserId = newUserRef.id;
     }
+    ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
+    TemplatesRef = db.collection("Users").doc(activeUserId).collection("Templates");
 }
 
 export async function createUser(user) {
@@ -165,6 +167,7 @@ export async function fetchSessionNames() {
     return sessionNames;
 }
 
+// returns an array of the names of all unfinished sessions
 export async function fetchUnfinishedSessionNames() {
     const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", false).get();
     var sessionNames = [];
@@ -173,6 +176,8 @@ export async function fetchUnfinishedSessionNames() {
     }));
     return sessionNames;
 }
+
+// returns an array of the names of all finished sessions
 export async function fetchFinishedSessionNames() {
     const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", true).get();
     var sessionNames = [];
@@ -221,5 +226,51 @@ export async function setSession(name, calls) {
         const newSession = activeClassRef.collection("Sessions").doc();
         newSession.set({ name: name, createdAt: Date.now(), finished: false });
         calls.forEach((call) => newSession.collection("Calls").add(call));
+    }
+}
+
+// Template methods
+// returns an array of all Template names
+export async function fetchTemplateNames() {
+    const snapshot = await TemplatesRef.get();
+    var templateNames = [];
+    snapshot.forEach(((doc) => {
+        templateNames.push(doc.data().name);
+    }));
+    return templateNames;
+}
+
+// return template (a DocumentSnapshot) if it exists, undefined if it doesnt
+export async function fetchTemplateRef(name) {
+    const snapshot = await TemplatesRef.where("name", "==", name).get();
+    if (snapshot.size === 0) {
+        return undefined;
+    } else {
+        return snapshot.docs[0].ref;
+    }
+}
+
+// return array of calls in a template with names
+export async function fetchTemplateCalls(name) {
+    const templateRef = await fetchTemplateRef(name);
+    const snapshot = await templateRef.collection("Calls").get();
+    var templateCalls = []
+    snapshot.forEach(((doc) => {
+        const call = doc.data();
+        templateCalls.push(call);
+    }));
+    return templateCalls;
+}
+
+// creates or updates a template with the provided calls
+export async function setTemplate(name, calls) {
+    var template = await fetchTemplateRef(name);
+    if (template) {
+        // modify templates
+        console.log("")
+    } else {
+        const newTemplate = activeClassRef.collection("Templates").doc();
+        newTemplate.set({ name: name, createdAt: Date.now(), finished: false });
+        calls.forEach((call) => newTemplate.collection("Calls").add(call));
     }
 }
