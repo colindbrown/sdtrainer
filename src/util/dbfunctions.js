@@ -21,12 +21,9 @@ export async function setActiveUser(user) {
     var activeUserId;
     if (snapshot.size > 0) {
         activeUserId = snapshot.docs[0].id;
-    } else {
-        const newUserRef = await createUser(user);
-        activeUserId = newUserRef.id;
+        ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
+        TemplatesRef = db.collection("Users").doc(activeUserId).collection("Templates");
     }
-    ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
-    TemplatesRef = db.collection("Users").doc(activeUserId).collection("Templates");
 }
 
 export async function createUser(user) {
