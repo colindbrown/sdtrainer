@@ -8,7 +8,7 @@ class PlanSessionView extends React.Component {
 
     state = {
         callList: [],
-        sessionList: [],
+        collectionList: [],
         alerts: [],
         sessionNames: [],
         templateNames: []
@@ -41,7 +41,7 @@ class PlanSessionView extends React.Component {
         db.fetchSessionCalls(name).then(async (sessionCalls) => {
             const displayData = await db.displayData(sessionCalls);
             displayData.forEach(((call) => {
-                this.moveCall(call.name, "sessionList");
+                this.moveCall(call.name, "collectionList");
             }));
         });
     }
@@ -50,7 +50,7 @@ class PlanSessionView extends React.Component {
         db.fetchTemplateCalls(name).then(async (templateCalls) => {
             const displayData = await db.displayData(templateCalls);
             displayData.forEach(((call) => {
-                this.moveCall(call.name, "sessionList");
+                this.moveCall(call.name, "collectionList");
             }));
         });
     }
@@ -58,18 +58,39 @@ class PlanSessionView extends React.Component {
     async saveNewSession(name) {
         if (!name) {
             this.showAlert("alert-warning", "Please name your session");
-        } else if (this.state.sessionList.length === 0) {
+        } else if (this.state.collectionList.length === 0) {
             this.showAlert("alert-warning", "Please add some calls to your session");
         } else {
             const session = await db.fetchSessionRef(name);
             if (session) {
                 this.showAlert("alert-warning", "A session with that name already exists");
             } else {
-                const sessionCalls = this.state.sessionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
+                const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
                 await db.setSession(name, sessionCalls);
                 this.showAlert("alert-success", "Session saved");
                 this.removeAll();
                 this.loadSessionNames();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    async saveNewTemplate(name) {
+        if (!name) {
+            this.showAlert("alert-warning", "Please name your template");
+        } else if (this.state.collectionList.length === 0) {
+            this.showAlert("alert-warning", "Please add some calls to your template");
+        } else {
+            const template = await db.fetchTemplateRef(name);
+            if (template) {
+                this.showAlert("alert-warning", "A template with that name already exists");
+            } else {
+                const templateCalls = this.state.collectionList.map((call) => ({ name: call.name }));
+                await db.setTemplate(name, templateCalls);
+                this.showAlert("alert-success", "Template saved");
+                this.removeAll();
+                this.loadTemplateNames();
                 return true;
             }
         }
@@ -89,24 +110,24 @@ class PlanSessionView extends React.Component {
 
     moveCall = (name, destination) => {
         var callList = this.state.callList;
-        var sessionList = this.state.sessionList;
+        var collectionList = this.state.collectionList;
 
-        if (destination === "sessionList") {
+        if (destination === "collectionList") {
             const index = callList.findIndex((call) => call.name === name);
             if (index >= 0) {
-                sessionList.push(callList[index]);
+                collectionList.push(callList[index]);
                 callList.splice(index, 1);
             }
         } else {
-            const index = sessionList.findIndex((call) => call.name === name);
+            const index = collectionList.findIndex((call) => call.name === name);
             if (index >= 0) {
-                callList.push(sessionList[index]);
-                sessionList.splice(index, 1);
+                callList.push(collectionList[index]);
+                collectionList.splice(index, 1);
             }
         }
         callList.sort((a, b) => this.compareCalls(a, b));
-        sessionList.sort((a, b) => this.compareCalls(a, b));
-        this.setState({ callList, sessionList });
+        collectionList.sort((a, b) => this.compareCalls(a, b));
+        this.setState({ callList, collectionList });
     }
 
     showAlert(type, text) {
@@ -124,14 +145,14 @@ class PlanSessionView extends React.Component {
         db.fetchByEverUsed(true).then(async (calls) => {
             const displayData = await db.displayData(calls);
             displayData.forEach(((call) => {
-                this.moveCall(call.name, "sessionList");
+                this.moveCall(call.name, "collectionList");
             }));
         })
     }
 
     removeAll = () => {
-        const sessionList = this.state.sessionList.slice(0);
-        sessionList.forEach((call) => this.moveCall(call.name, "callList"));
+        const collectionList = this.state.collectionList.slice(0);
+        collectionList.forEach((call) => this.moveCall(call.name, "callList"));
     }
 
     render() {
@@ -141,6 +162,7 @@ class PlanSessionView extends React.Component {
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
                     saveNewSession={(name) => this.saveNewSession(name)}
+                    saveNewTemplate={(name) => this.saveNewTemplate(name)}
                     addSession={(name) => this.addSession(name)}
                     sessionNames={this.state.sessionNames}
                     addTemplate={(name) => this.addTemplate(name)}
@@ -148,8 +170,8 @@ class PlanSessionView extends React.Component {
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-6" id="callList" columns={2} calls={this.state.callList} onClick={(name) => this.moveCall(name, "sessionList")} />
-                    <List size="col-md-6" id="sessionList" columns={2} calls={this.state.sessionList} onClick={(name) => this.moveCall(name, "callList")} />
+                    <List size="col-md-6" id="callList" columns={2} calls={this.state.callList} onClick={(name) => this.moveCall(name, "collectionList")} />
+                    <List size="col-md-6" id="collectionList" columns={2} calls={this.state.collectionList} onClick={(name) => this.moveCall(name, "callList")} />
                 </div>
             </div>
         )

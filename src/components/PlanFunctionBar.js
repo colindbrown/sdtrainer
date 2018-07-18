@@ -3,19 +3,26 @@ import React from "react";
 class PlanFunctionBar extends React.Component {
 
     state = {
-        newSessionName: ""
+        newCollectionName: ""
     }
 
     handleChange = (e) => {
-        this.setState({ newSessionName: e.target.value });
+        this.setState({ newCollectionName: e.target.value });
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-        const result = this.props.saveNewSession(this.state.newSessionName);
-        if (result) {
-            this.setState({ newSessionName: "" });
-        };
+    handleSubmit = (type) => {
+        if (type === "session") {
+            const result = this.props.saveNewSession(this.state.newCollectionName);
+            if (result) {
+                this.setState({ newCollectionName: "" });
+            };
+        } else {
+            const result = this.props.saveNewTemplate(this.state.newCollectionName);
+            if (result) {
+                this.setState({ newCollectionName: "" });
+            };
+        }
+        
     }
 
     handleRemove = (e) => {
@@ -58,9 +65,17 @@ class PlanFunctionBar extends React.Component {
                     </div>
                     <button className="btn btn-secondary" href="#" onClick={this.handleRemove}>Remove all</button>
                 </div>
-                <form className="form-inline" onSubmit={this.handleSubmit}>
-                    <input className="form-control mr-sm-2" placeholder="Name Session" value={this.state.newSessionName} onChange={this.handleChange} />
-                    <button className="btn btn-info my-2 my-sm-0" type="submit">Save Session Plan</button>
+                <form className="form-inline">
+                    <input className="form-control mr-sm-2" placeholder="Name" value={this.state.newCollectionName} onChange={this.handleChange} />
+                    <div className="dropdown mr-2">
+                        <button className={`btn btn-info dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Save As 
+                        </button>
+                        <div className="dropdown-menu dropdown-menu-right">
+                            <button className="dropdown-item" key={"session"} onClick={() => this.handleSubmit("session")}>Session Plan</button>
+                            <button className="dropdown-item" key={"template"} onClick={() => this.handleSubmit("template")}>Template</button>
+                        </div>
+                    </div>
                 </form>
 
             </nav>
