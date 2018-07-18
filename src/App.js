@@ -36,6 +36,10 @@ class App extends Component {
     this.setState({activeClass: classData});
   }
 
+  resetClass = () => {
+    this.setState({activeClass: {}});
+  }
+
   signOut = () => {
     firebase.auth().signOut();
   }
@@ -74,7 +78,7 @@ class App extends Component {
     return (
       <HashRouter>
         <div className="App">
-          <Header activeClass={this.state.activeClass} activeUser={this.state.activeUser} signOut={() => this.signOut()}/>
+          <Header activeClass={this.state.activeClass} activeUser={this.state.activeUser} signOut={() => this.signOut()} resetClass={() => this.resetClass()}/>
           {routes}
         </div>
       </HashRouter>
