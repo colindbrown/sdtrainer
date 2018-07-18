@@ -16,6 +16,14 @@ export async function displayData(calls) {
     return calls.map((call) => allCalls.find((iterator) => (call.name === iterator.name)));
 }
 
+export function namesArray(array) {
+    var namesArray = [];
+    array.forEach((element) => {
+        namesArray.push(element.name);
+    })
+    return namesArray
+}
+
 export async function setActiveUser(user) {
     const snapshot = await db.collection("Users").where("email", "==", user.email).get();
     var activeUserId;
@@ -153,8 +161,6 @@ export async function updateHistory(sessionName, calls) {
         const call = calls.find((callIterator) => (callIterator.name === prev.name));
         if (call) {
             const uses = call.everUsed ? prev.uses.concat([session.id]) : prev.uses;
-            console.log(uses);
-            console.log(session);
             batch.update(callDoc.ref, { everUsed: (call.everUsed || prev.everUsed), uses: uses, name: call.name });
         }
     });
@@ -171,6 +177,26 @@ export async function fetchSessionNames() {
         sessionNames.push(doc.data().name);
     }));
     return sessionNames;
+}
+
+// returns an array of all unfinished sessions
+export async function fetchUnfinishedSessions() {
+    const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", false).get();
+    var sessions = [];
+    snapshot.forEach(((doc) => {
+        sessions.push(doc.data());
+    }));
+    return sessions;
+}
+
+// returns an array of all finished sessions
+export async function fetchfinishedSessions() {
+    const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", true).get();
+    var sessions = [];
+    snapshot.forEach(((doc) => {
+        sessions.push(doc.data());
+    }));
+    return sessions;
 }
 
 // returns an array of the names of all unfinished sessions
@@ -297,7 +323,6 @@ export async function setTemplate(name, calls) {
     var template = await fetchTemplateRef(name);
     if (template) {
         // modify templates
-        console.log("")
     } else {
         const newTemplate = TemplatesRef.doc();
         newTemplate.set({ name: name, createdAt: Date.now() });

@@ -7,18 +7,19 @@ import { NavLink } from "react-router-dom";
 class ClassDashboard extends React.Component {
 
     state = {
-        templates: [],
-
-        alerts: []
+        alerts: [],
+        finishedSessions: [],
+        sessionPlans: []
     }
 
     componentDidMount() {
-        this.loadClasses();
+        this.loadSessions();
     }
 
-    loadClasses = async () => {
-        const classes = await db.fetchClassData();
-        this.setState({classes});
+    loadSessions = async () => {
+        const finished = await db.fetchfinishedSessions();
+        const plans = await db.fetchUnfinishedSessions();
+        this.setState({finishedSessions: finished, sessionPlans: plans});
     }
 
     showAlert(type, text) {
@@ -32,6 +33,16 @@ class ClassDashboard extends React.Component {
 
     render() {
         const activeClass = this.props.activeClass;
+        const finishedListItems = this.state.finishedSessions.map((session) => 
+            <li className="list-group-item" key={session.id}>
+                {session.name}
+            </li>
+        );
+        const unfinishedListItems = this.state.sessionPlans.map((session) => 
+            <li className="list-group-item" key={session.id}>
+                {session.name}
+            </li>
+        );
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center class-jumbotron">
@@ -47,26 +58,20 @@ class ClassDashboard extends React.Component {
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <section>
-
-                    <ul class="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="plans-tab" data-toggle="tab" href="#plans" role="tab" aria-controls="plans" aria-selected="true">Session Plans</a>
+                    <ul className="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
+                        <li className="nav-item">
+                            <a className="nav-link active" id="plans-tab" data-toggle="tab" href="#plans" role="tab" aria-controls="plans" aria-selected="true">Session Plans</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="completed-tab" data-toggle="tab" href="#completed" role="tab" aria-controls="completed" aria-selected="false">Completed Sessions</a>
+                        <li className="nav-item">
+                            <a className="nav-link" id="finished-tab" data-toggle="tab" href="#finished" role="tab" aria-controls="finished" aria-selected="false">Completed Sessions</a>
                         </li>
                     </ul>
-
-                    <div class="tab-content" id="myTabContent">
+                    <div className="tab-content" id="myTabContent">
                         <ul className="tab-pane fade show active list-group collections-list" id="plans" role="tabpanel" aria-labelledby="plans-tab">
-                            <li className="list-group-item">
-                                test
-                            </li>
+                            {unfinishedListItems}
                         </ul>
-                        <ul className="tab-pane fade list-group collections-list" id="completed" role="tabpanel" aria-labelledby="completed-tab">
-                            <li className="list-group-item">
-                                test
-                            </li>
+                        <ul className="tab-pane fade list-group collections-list" id="finished" role="tabpanel" aria-labelledby="finished-tab">
+                            {finishedListItems}
                         </ul>
                     </div>
                 </section>
