@@ -6,7 +6,7 @@ import Alerts from "./Alerts";
 import { NavLink } from "react-router-dom";
 
 
-class ClassManager extends React.Component {
+class UserDashboard extends React.Component {
 
     state = {
         classes: [],
@@ -122,4 +122,4 @@ class ClassManager extends React.Component {
     
 }
 
-export default ClassManager;
+export default UserDashboard;

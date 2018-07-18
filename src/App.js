@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Header from "./components/Header";
 import Home from "./components/Home";
-import ClassManager from "./components/ClassManager";
+import UserDashboard from "./components/UserDashboard";
 import { Switch, Route, HashRouter} from "react-router-dom";
 import PlanSessionView from "./components/PlanSessionView";
 import RunSessionView from "./components/RunSessionView";
@@ -47,7 +47,7 @@ class App extends Component {
     } else if (this.state.activeClass.name) {
       routes = <div>
           <Route exact path="/" render={(routeProps) => (
-            <ClassManager {...routeProps} 
+            <UserDashboard {...routeProps} 
               activeClass={this.state.activeClass} 
               activeUser={this.state.activeUser}
               updateActiveClass={(name) => this.updateActiveClass(name)} 
@@ -62,7 +62,7 @@ class App extends Component {
       routes = <Switch>
         <Route path="/templates" component={CreateTemplateView}/>
         <Route path="/" render={(routeProps) => (
-        <ClassManager {...routeProps} 
+        <UserDashboard {...routeProps} 
               activeClass={this.state.activeClass} 
               activeUser={this.state.activeUser}
               updateActiveClass={(name) => this.updateActiveClass(name)} 
