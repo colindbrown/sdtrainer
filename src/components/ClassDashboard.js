@@ -74,7 +74,7 @@ class ClassDashboard extends React.Component {
                             <a className="text-secondary nav-link active" id="plans-tab" data-toggle="tab" href="#plans" role="tab" aria-controls="plans" aria-selected="true">Session Plans</a>
                         </li>
                         <li className="nav-item">
-                            <a className="text-secondary nav-link" id="finished-tab" data-toggle="tab" href="#finished" role="tab" aria-controls="finished" aria-selected="false">Completed Sessions</a>
+                            <a className="text-secondary nav-link" id="finished-tab" data-toggle="tab" href="#finished" role="tab" aria-controls="finished" aria-selected="false">Finished Sessions</a>
                         </li>
                     </ul>
                     <div className="tab-content" id="myTabContent">
