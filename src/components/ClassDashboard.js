@@ -1,7 +1,5 @@
 import React from 'react';
-import ClassCard from "./ClassCard";
 import * as db from "../util/dbfunctions";
-import AddClassCard from './AddClassCard';
 import Alerts from "./Alerts";
 import { NavLink } from "react-router-dom";
 
@@ -9,7 +7,8 @@ import { NavLink } from "react-router-dom";
 class ClassDashboard extends React.Component {
 
     state = {
-        classes: [],
+        templates: [],
+
         alerts: []
     }
 
@@ -32,20 +31,7 @@ class ClassDashboard extends React.Component {
     }
 
     render() {
-        const firstName = this.props.activeUser.displayName.split(" ")[0];
         const activeClass = this.props.activeClass;
-        const classCards = this.state.classes.map((classData) => <ClassCard 
-            key={classData.name} 
-            {...classData} 
-            activeClass={activeClass} 
-            updateActiveClass={(name) => this.props.updateActiveClass(name)} /> 
-        );
-        classCards.push(<AddClassCard 
-            key="addClassCard" 
-            updateActiveClass={(name) => this.props.updateActiveClass(name)}
-            showAlert={(type,text) => this.showAlert(type, text)} 
-            clearAlerts={() => this.clearAlerts()}
-            />)
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center class-jumbotron">
@@ -61,22 +47,28 @@ class ClassDashboard extends React.Component {
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <section>
-                    <ul className="nav nav-tabs nav-fill row pills-row bg-light">
-                        <li className="nav-item">
-                            <a className="nav-link text-info">Templates</a>
+
+                    <ul class="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="plans-tab" data-toggle="tab" href="#plans" role="tab" aria-controls="plans" aria-selected="true">Session Plans</a>
                         </li>
-                        <li className="nav-item">
-                            <a className="nav-link text-secondary">Session Plans</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link text-secondary active">Sessions</a>
+                        <li class="nav-item">
+                            <a class="nav-link" id="completed-tab" data-toggle="tab" href="#completed" role="tab" aria-controls="completed" aria-selected="false">Completed Sessions</a>
                         </li>
                     </ul>
-                    <ul className="list-group collections-list">
-                        <li className="list-group-item">
-                            test
-                        </li>
-                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+                        <ul className="tab-pane fade show active list-group collections-list" id="plans" role="tabpanel" aria-labelledby="plans-tab">
+                            <li className="list-group-item">
+                                test
+                            </li>
+                        </ul>
+                        <ul className="tab-pane fade list-group collections-list" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+                            <li className="list-group-item">
+                                test
+                            </li>
+                        </ul>
+                    </div>
                 </section>
 
             </div>
