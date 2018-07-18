@@ -185,10 +185,17 @@ hr {
   border-radius: 5px 5px 0px 0px; }
 
 .collections-list {
-  height: 450px;
+  height: 400px;
   overflow-y: scroll;
   margin-right: 0px;
   margin-left: 0px;
   border: 1px solid #eee; }
   .collections-list .list-group-item {
     border-radius: 0px; }
+    .collections-list .list-group-item div {
+      margin-top: 4px; }
+
+.session-name {
+  position: absolute;
+  left: 15px;
+  top: 12px; }

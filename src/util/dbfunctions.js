@@ -285,6 +285,12 @@ export async function setSession(name, calls) {
     }
 }
 
+// deletes a session
+export async function deleteSession(name) {
+    const ref = await fetchSessionRef(name);
+    activeClassRef.collection("Sessions").doc(ref.id).delete();
+}
+
 // Template methods
 // returns an array of all Template names
 export async function fetchTemplateNames() {
