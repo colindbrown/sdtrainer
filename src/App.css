@@ -41,10 +41,6 @@ span.empty {
   padding-left: 75px;
   padding-right: 75px; }
 
-.list-group-item {
-  height: 60px;
-  padding-top: 5%; }
-
 .carousel-control-prev, .carousel-control-next {
   width: 50px;
   height: 80%;
@@ -61,7 +57,9 @@ span.empty {
   box-sizing: border-box;
   color: #666;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  background: #fefefe; }
+  background: #fefefe;
+  height: 60px;
+  padding-top: 5%; }
   .call .call:hover {
     background: #fefefe;
     color: #666; }
@@ -180,3 +178,17 @@ hr {
 .dropdown-menu-right {
   right: 0;
   left: auto; }
+
+.pills-row {
+  margin-right: 0px;
+  margin-left: 0px;
+  border-radius: 5px 5px 0px 0px; }
+
+.collections-list {
+  height: 450px;
+  overflow-y: scroll;
+  margin-right: 0px;
+  margin-left: 0px;
+  border: 1px solid #eee; }
+  .collections-list .list-group-item {
+    border-radius: 0px; }

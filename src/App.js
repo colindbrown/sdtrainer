@@ -55,7 +55,8 @@ class App extends Component {
             <ClassDashboard {...routeProps} 
               activeClass={this.state.activeClass} 
               activeUser={this.state.activeUser}
-              updateActiveClass={(name) => this.updateActiveClass(name)} 
+              updateActiveClass={(name) => this.updateActiveClass(name)}
+              resetClass={() => this.resetClass()} 
               />
           )}/>
           <Route path="/templates" component={CreateTemplateView}/>

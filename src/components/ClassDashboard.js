@@ -46,40 +46,39 @@ class ClassDashboard extends React.Component {
             showAlert={(type,text) => this.showAlert(type, text)} 
             clearAlerts={() => this.clearAlerts()}
             />)
-        var jumboContent;
-        if (activeClass.name) {
-            jumboContent = <div className="container">
-                <h1 className="jumbotron-heading">{activeClass.name}</h1>
-                <h1> Dashboard </h1>
-                <hr/>
-                <p className="lead text-muted">Completion statistics will go here</p>
-                <p className="lead text-muted">Sessions info/sessions run here</p>
-                <hr/>
-                <NavLink className={`btn btn-info mr-2`} to={`/plan`}>Plan a Session</NavLink>
-                <NavLink className={`btn btn-info`} to={`/templates`}>Create a Template</NavLink>
-            </div>;
-        } else {
-            jumboContent = <div className="container">
-                <h1 className="jumbotron-heading">Welcome {firstName}</h1>
-                <p className="lead text-muted">Choose a class to manage from the classes below or create a new one</p>
-                <hr/>
-                <p className="lead text-muted"> Or create a template to use in your classes</p>
-                <NavLink className={`btn btn-info`} to={`/templates`}>Create a Template</NavLink>
-            </div>;
-        }
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center class-jumbotron">
-                    {jumboContent}
+                    <div className="container">
+                        <h1 className="jumbotron-heading">{activeClass.name}</h1>
+                        <hr/>
+                        <p className="lead text-muted">Completion statistics will go here</p>
+                        <p className="lead text-muted">Sessions info/sessions run here</p>
+                        <hr/>
+                        <NavLink className={`btn btn-info mr-2`} to={`/plan`}>Plan a Session</NavLink>
+                        <NavLink className={`btn btn-secondary`} to={`/`} onClick={() => this.props.resetClass()}>Select another Class</NavLink>
+                    </div>
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
-                <div className="album bg-light card-container">
-                    <div className="container">
-                        <div className="row">
-                            {classCards}
-                        </div>
-                    </div>
-                </div>
+                <section>
+                    <ul className="nav nav-tabs nav-fill row pills-row bg-light">
+                        <li className="nav-item">
+                            <a className="nav-link text-info">Templates</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link text-secondary">Session Plans</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link text-secondary active">Sessions</a>
+                        </li>
+                    </ul>
+                    <ul className="list-group collections-list">
+                        <li className="list-group-item">
+                            test
+                        </li>
+                    </ul>
+                </section>
+
             </div>
         )
     }
