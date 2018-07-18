@@ -7,6 +7,7 @@ import PlanSessionView from "./components/PlanSessionView";
 import RunSessionView from "./components/RunSessionView";
 import ReviewClassView from "./components/ReviewClassView";
 import CreateTemplateView from "./components/CreateTemplateView";
+import ClassDashboard from "./components/ClassDashboard";
 import * as db from "./util/dbfunctions";
 import firebase from "firebase";
 import './App.css';
@@ -47,7 +48,7 @@ class App extends Component {
     } else if (this.state.activeClass.name) {
       routes = <div>
           <Route exact path="/" render={(routeProps) => (
-            <ClassManager {...routeProps} 
+            <ClassDashboard {...routeProps} 
               activeClass={this.state.activeClass} 
               activeUser={this.state.activeUser}
               updateActiveClass={(name) => this.updateActiveClass(name)} 
