@@ -36,7 +36,8 @@ export async function createUser(user) {
 export async function createNewClass(name) {
     const docRef = await ClassesRef.add({
         name: name,
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        sessions: 0
     })
     const allCalls = await fetchAllCalls();
     allCalls.forEach((call) => {
@@ -63,6 +64,11 @@ export async function fetchClassData() {
         classes.push(doc.data());
     }));
     return classes;
+}
+
+export async function getActiveClass() {
+    const snapshot = await ActiveClassRef.get();
+    return snapshot.docs[0].data();
 }
 
 // return class (a DocumentSnapshot) if it exists, undefined if it doesnt
@@ -221,7 +227,9 @@ export async function setSession(name, calls) {
         batch.commit();
     } else {
         const newSession = activeClassRef.collection("Sessions").doc();
-        newSession.set({ name: name, createdAt: Date.now(), finished: false });
+        const activeClass = await getActiveClass();
+        newSession.set({ name: name, createdAt: Date.now(), finished: false, id: activeClass.sessions });
+        activeClassRef.set({sessions: (activeClass.sessions + 1)})
         calls.forEach((call) => newSession.collection("Calls").add(call));
     }
 }
