@@ -270,6 +270,15 @@ export async function fetchTemplateNames() {
     return templateNames;
 }
 
+export async function fetchTemplates() {
+    const snapshot = await TemplatesRef.get();
+    var templates = [];
+    snapshot.forEach(((doc) => {
+        templates.push(doc.data());
+    }));
+    return templates;
+}
+
 // return template (a DocumentSnapshot) if it exists, undefined if it doesnt
 export async function fetchTemplateRef(name) {
     const snapshot = await TemplatesRef.where("name", "==", name).get();
@@ -303,4 +312,10 @@ export async function setTemplate(name, calls) {
         newTemplate.set({ name: name, createdAt: Date.now() });
         calls.forEach((call) => newTemplate.collection("Calls").add(call));
     }
+}
+
+// delete template
+export async function deleteTemplate(name) {
+    const templateRef = await fetchTemplateRef(name);
+    TemplatesRef.doc(templateRef.id).delete();
 }

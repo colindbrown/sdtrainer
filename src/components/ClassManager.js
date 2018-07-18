@@ -10,16 +10,31 @@ class ClassManager extends React.Component {
 
     state = {
         classes: [],
-        alerts: []
+        alerts: [],
+        templates: []
     }
 
     componentDidMount() {
         this.loadClasses();
+        this.loadTemplates();
     }
 
     loadClasses = async () => {
         const classes = await db.fetchClassData();
         this.setState({classes});
+    }
+
+    loadTemplates = async () => {
+        const templates = await db.fetchTemplates();
+        this.setState({templates});
+    }
+
+    deleteTemplate = async (name) => {
+        db.deleteTemplate(name).then(() => {
+            this.loadTemplates().then(() => {
+                this.showAlert("alert-success", "Template deleted");
+            })
+        });
     }
 
     showAlert(type, text) {
@@ -66,19 +81,41 @@ class ClassManager extends React.Component {
                 <NavLink className={`btn btn-info`} to={`/templates`}>Create a Template</NavLink>
             </div>;
         }
+        const templateListItems = this.state.templates.map((template) => 
+            <li className="list-group-item d-flex justify-content-end" key={template.name}>
+                <div className="list-item-name"><p><strong>{template.name}</strong></p></div>
+                <div className="mr-5">Created on {(new Date(template.createdAt)).toDateString()}</div>
+                <button className="btn btn-sm btn-danger" onClick={() => this.deleteTemplate(template.name)}>Delete</button>
+            </li>
+        );
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center class-jumbotron">
                     {jumboContent}
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
-                <div className="album bg-light card-container">
-                    <div className="container">
-                        <div className="row">
-                            {classCards}
+                <section>
+                    <ul className="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
+                        <li className="nav-item">
+                            <a className="text-secondary nav-link active" id="classes-tab" data-toggle="tab" href="#classes" role="tab" aria-controls="classes" aria-selected="true">Classes</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="text-secondary nav-link" id="templates-tab" data-toggle="tab" href="#templates" role="tab" aria-controls="templates" aria-selected="false">Templates</a>
+                        </li>
+                    </ul>
+                    <div className="tab-content" id="myTabContent">
+                        <div className="tab-pane fade show active album bg-light card-container" id="classes" role="tabpanel" aria-labelledby="classes-tab">
+                            <div className="container">
+                                <div className="row">
+                                    {classCards}
+                                </div>
+                            </div>
                         </div>
+                        <ul className="tab-pane fade list-group collections-list bg-light" id="templates" role="tabpanel" aria-labelledby="templates-tab">
+                            {templateListItems}
+                        </ul>
                     </div>
-                </div>
+                </section>
             </div>
         )
     }
