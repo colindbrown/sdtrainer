@@ -41,13 +41,15 @@ class ReviewClassView extends React.Component {
     }
 
     async showCall(name) {
-        db.fetchCallHistory(name).then((call) => {
+        db.fetchCallHistory(name).then(async (call) => {
+            const sessionData = await db.fetchAllSessions();
             var body = "";
             if (call.uses.length > 0) {
                 body = "Uses:"
-                call.uses.forEach((timestamp) => {
-                    const date = new Date(timestamp);
-                    body = body + `\n ${date.toDateString()}`;
+                call.uses.forEach((id) => {
+                    const session = sessionData.find((sessionIterator) => (sessionIterator.id === id));
+                    const date = new Date(session.finishedAt);
+                    body = body + `\n${session.name}: ${date.toDateString()}`;
                 })
             } else {
                 body = "This call has never been used";
