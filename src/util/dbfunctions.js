@@ -36,7 +36,8 @@ export async function createUser(user) {
 export async function createNewClass(name) {
     const docRef = await ClassesRef.add({
         name: name,
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        sessions: 0
     })
     const allCalls = await fetchAllCalls();
     allCalls.forEach((call) => {
@@ -63,6 +64,11 @@ export async function fetchClassData() {
         classes.push(doc.data());
     }));
     return classes;
+}
+
+export async function getActiveClass() {
+    const snapshot = await activeClassRef.get();
+    return snapshot.data();
 }
 
 // return class (a DocumentSnapshot) if it exists, undefined if it doesnt
@@ -138,14 +144,17 @@ export async function fetchNew() {
 }
 
 // updates the everUsed and uses data for all provided calls
-export async function updateHistory(calls) {
+export async function updateHistory(sessionName, calls) {
     var batch = db.batch();
     var snapshot = await activeClassRef.collection("History").get();
+    const session = await fetchSessionData(sessionName);
     snapshot.docs.forEach((callDoc) => {
         const prev = callDoc.data();
         const call = calls.find((callIterator) => (callIterator.name === prev.name));
         if (call) {
-            const uses = call.everUsed ? prev.uses.concat(call.uses) : prev.uses;
+            const uses = call.everUsed ? prev.uses.concat([session.id]) : prev.uses;
+            console.log(uses);
+            console.log(session);
             batch.update(callDoc.ref, { everUsed: (call.everUsed || prev.everUsed), uses: uses, name: call.name });
         }
     });
@@ -195,6 +204,28 @@ export async function fetchSessionRef(name) {
     }
 }
 
+// return session data for a specific session
+export async function fetchSessionData(name) {
+    const sessionsRef = activeClassRef.collection("Sessions")
+    const snapshot = await sessionsRef.where("name", "==", name).get();
+    if (snapshot.size === 0) {
+        return undefined;
+    } else {
+        return snapshot.docs[0].data();
+    }
+}
+
+// return session data for a specific session
+export async function fetchAllSessions(name) {
+    const sessionsRef = activeClassRef.collection("Sessions")
+    const snapshot = await sessionsRef.get();
+    var sessions = [];
+    snapshot.forEach((doc) => {
+        sessions.push(doc.data());
+    })
+    return sessions;
+}
+
 // return array of calls in a session with name, used, and timestamp
 export async function fetchSessionCalls(name) {
     const sessionRef = await fetchSessionRef(name);
@@ -221,7 +252,9 @@ export async function setSession(name, calls) {
         batch.commit();
     } else {
         const newSession = activeClassRef.collection("Sessions").doc();
-        newSession.set({ name: name, createdAt: Date.now(), finished: false });
+        const activeClass = await getActiveClass();
+        newSession.set({ name: name, createdAt: Date.now(), finished: false, id: activeClass.sessions });
+        activeClassRef.update({sessions: (activeClass.sessions + 1)});
         calls.forEach((call) => newSession.collection("Calls").add(call));
     }
 }
