@@ -2,9 +2,9 @@ import React from "react";
 import List from "./List";
 import Alerts from "./Alerts";
 import * as db from "../util/dbfunctions";
-import PlanFunctionBar from "./PlanFunctionBar";
+import CreateFunctionBar from "./CreateFunctionBar";
 
-class PlanSessionView extends React.Component {
+class CreateCollectionView extends React.Component {
 
     state = {
         callList: [],
@@ -160,7 +160,7 @@ class PlanSessionView extends React.Component {
     render() {
         return (
             <div>
-                <PlanFunctionBar
+                <CreateFunctionBar
                     activeClass={this.props.activeClass.name}
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
@@ -182,4 +182,4 @@ class PlanSessionView extends React.Component {
 
 }
 
-export default PlanSessionView;
+export default CreateCollectionView;

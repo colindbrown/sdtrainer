@@ -3,10 +3,9 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import UserDashboard from "./components/UserDashboard";
 import { Switch, Route, HashRouter} from "react-router-dom";
-import PlanSessionView from "./components/PlanSessionView";
+import CreateCollectionView from "./components/CreateCollectionView";
 import RunSessionView from "./components/RunSessionView";
 import ReviewClassView from "./components/ReviewClassView";
-import CreateTemplateView from "./components/CreateTemplateView";
 import * as db from "./util/dbfunctions";
 import firebase from "firebase";
 import './App.css';
@@ -47,8 +46,8 @@ class App extends Component {
     } else if (this.state.activeClass.name) {
       routes = <Switch>
           {/*<Route path="/class" component={ClassManager}/>*/}
-          <Route path="/plan" render={() => (
-            <PlanSessionView
+          <Route path="/create" render={() => (
+            <CreateCollectionView
               activeClass={this.state.activeClass} 
               />
           )}/>
@@ -65,8 +64,8 @@ class App extends Component {
     } else {
       routes = <Switch>
         {/*<Route path="/class" component={ClassManager}/>*/}
-        <Route path="/plan" render={() => (
-            <PlanSessionView
+        <Route path="/create" render={() => (
+            <CreateCollectionView
               activeClass={this.state.activeClass} 
               />
           )}/>

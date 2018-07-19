@@ -30,8 +30,8 @@ const Header = ({activeClass, activeUser, signOut}) => (
               name="Class"
             />
             <NavLinker
-              relUrl="plan"
-              name="Plan"
+              relUrl="create"
+              name="Create"
             />
             <NavLinker
               relUrl="run"
@@ -48,8 +48,8 @@ const Header = ({activeClass, activeUser, signOut}) => (
             name="Class"
           />
           <NavLinker
-            relUrl="plan"
-            name="Plan"
+            relUrl="create"
+            name="Create"
           />
           <li className="nav-item">
             <a className="nav-link disabled">Run</a>

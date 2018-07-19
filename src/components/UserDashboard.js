@@ -69,7 +69,7 @@ class UserDashboard extends React.Component {
                 <p className="lead text-muted">Completion statistics will go here</p>
                 <p className="lead text-muted">Sessions info/sessions run here</p>
                 <hr/>
-                <NavLink className={`btn btn-info mr-2`} to={`/plan`}>Plan a Session</NavLink>
+                <NavLink className={`btn btn-info mr-2`} to={`/create`}>Plan a Session</NavLink>
                 <NavLink className={`btn btn-info`} to={`/templates`}>Create a Template</NavLink>
             </div>;
         } else {
