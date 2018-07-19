@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import squareLogo from "../img/logo.PNG";
 
-const Header = ({activeClass, activeUser, signOut}) => (
+const Header = ({activeClass, activeUser, signOut, crumbs}) => (
   <header>
     <nav className="navbar navbar-dark navbar-expand-lg main-bar sticky-top">
       <img
@@ -13,10 +13,18 @@ const Header = ({activeClass, activeUser, signOut}) => (
         alt=""
       />
 
-      <NavLink className={`navbar-brand ml-2`} to={`/`}>
-        {activeUser ? "Square" : ""}
-      </NavLink>
 
+      <div className="nav-item">
+        <ol className="breadcrumb header-breadcrumbs">
+          <li className="breadcrumb-item large-crumb">
+            <NavLink className={`navbar-brand ml-2 mr-0`} to={`/`}>
+              {activeUser ? "Square" : ""}
+            </NavLink>
+          </li>
+          {crumbs.map((crumbMessage) => <li className="breadcrumb-item small-crumb text-info" aria-current="page">{crumbMessage}</li>)}
+        </ol>
+      </div>
+      
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>

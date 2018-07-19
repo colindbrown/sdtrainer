@@ -238,3 +238,14 @@ hr {
   right: 0; 
   left: auto; 
 }
+
+.header-breadcrumbs {
+  margin-bottom: 0px;
+  background: rgb(55, 56, 66);
+  padding: 0px;
+
+  .small-crumb {
+    padding-top: 9px;
+    padding-bottom: 6px;
+  }
+}

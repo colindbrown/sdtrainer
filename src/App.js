@@ -10,12 +10,14 @@ import CreateTemplateView from "./components/CreateTemplateView";
 import * as db from "./util/dbfunctions";
 import firebase from "firebase";
 import './App.css';
+import {withRouter} from "react-router";
 
 class App extends Component {
 
   state = {
     activeClass: {},
-    activeUser: ""
+    activeUser: "",
+    crumb: ""
   }
 
   componentDidMount() {
@@ -28,11 +30,34 @@ class App extends Component {
         this.setState({activeUser: ""});
       }
     });
+
+    this.unlisten = this.props.history.listen((location, action) => {
+      this.setCrumb(location);
+    });
   }
 
   updateActiveClass = async (name) => {
     const classData = await db.setActiveClass(name);
     this.setState({activeClass: classData});
+  }
+
+  setCrumb(location) {
+    var crumb;
+    switch (location.pathname) {
+      case "/create":
+        crumb = "Create a session plan or template";
+        break;
+      case "/run":
+        crumb = "Run a session";
+        break;
+      case "/review":
+        crumb = "Review and export calls";
+        break;
+      default:
+        crumb = "";
+        break;
+    }
+    this.setState({crumb});
   }
 
   signOut = () => {
@@ -70,10 +95,20 @@ class App extends Component {
       )}/>
       </Switch>
     }
+    var crumbs = [];
+    if (this.state.activeUser) {
+      crumbs.push(this.state.activeUser.displayName);
+    }
+    if (this.state.activeClass.name) {
+      crumbs.push(this.state.activeClass.name);
+    }
+    if (this.state.crumb) {
+      crumbs.push(this.state.crumb);
+    }
     return (
       <HashRouter>
         <div className="App">
-          <Header activeClass={this.state.activeClass} activeUser={this.state.activeUser} signOut={() => this.signOut()}/>
+          <Header activeClass={this.state.activeClass} crumbs={crumbs} activeUser={this.state.activeUser} signOut={() => this.signOut()}/>
           {routes}
         </div>
       </HashRouter>
@@ -81,4 +116,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);

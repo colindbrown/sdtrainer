@@ -180,3 +180,11 @@ hr {
 .dropdown-menu-right {
   right: 0;
   left: auto; }
+
+.header-breadcrumbs {
+  margin-bottom: 0px;
+  background: #373842;
+  padding: 0px; }
+  .header-breadcrumbs .small-crumb {
+    padding-top: 9px;
+    padding-bottom: 6px; }
