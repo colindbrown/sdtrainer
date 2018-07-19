@@ -18,7 +18,7 @@ class Call extends React.Component {
             <li 
             data-toggle="modal" 
             data-target={dataTarget} 
-            className={`btn list-group-flush list-group-item call ${styling} d-flex justify-content-center`} 
+            className={`btn list-group-item call ${styling} d-flex justify-content-center ${this.props.rounded}`} 
             onClick={this.props.onClick}>
                 <span className={`${this.props.empty ? "empty" : ""}`}>{name}</span>
             </li>

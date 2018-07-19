@@ -16,10 +16,11 @@ class Page extends React.Component {
                 </div>
             )
         }
+        
         return (
             <div className={`carousel-item ${this.props.active}`} >
-                <div className="row no-gutters">
-                    {columns}
+                <div className="row no-gutters d-flex flex-column page">
+                    {this.props.calls}
                 </div>
             </div>
         )
