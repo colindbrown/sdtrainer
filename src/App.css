@@ -37,13 +37,9 @@ span.empty {
   border-radius: 5px; }
 
 .carousel {
-  margin-top: 35px;
+  margin-top: 30px;
   padding-left: 75px;
   padding-right: 75px; }
-
-.list-group-item {
-  height: 60px;
-  padding-top: 5%; }
 
 .carousel-control-prev, .carousel-control-next {
   width: 50px;
@@ -92,32 +88,32 @@ span.empty {
     border: 1px solid #ccc; }
 
 .group-1 {
-  box-shadow: inset 0px 0px 9px 1px rgba(226, 60, 60, 0.979); }
+  box-shadow: inset 0px 0px 9px 2px rgba(226, 60, 60, 0.979); }
   .group-1:hover {
     border: 1px solid rgba(226, 60, 60, 0.979); }
 
 .group-2 {
-  box-shadow: inset 0px 0px 9px 1px #e2d843; }
+  box-shadow: inset 0px 0px 9px 2px #e2d843; }
   .group-2:hover {
     border: 1px solid #e2d843; }
 
 .group-3 {
-  box-shadow: inset 0px 0px 9px 1px #62e062; }
+  box-shadow: inset 0px 0px 9px 2px #62e062; }
   .group-3:hover {
     border: 1px solid #62e062; }
 
 .group-4 {
-  box-shadow: inset 0px 0px 9px 1px #4fe9d9; }
+  box-shadow: inset 0px 0px 9px 2px #4fe9d9; }
   .group-4:hover {
     border: 1px solid #4fe9d9; }
 
 .group-5 {
-  box-shadow: inset 0px 0px 9px 1px #3e3cc9; }
+  box-shadow: inset 0px 0px 9px 2px #3e3cc9; }
   .group-5:hover {
     border: 1px solid #3e3cc9; }
 
 .group-6 {
-  box-shadow: inset 0px 0px 9px 1px #251938; }
+  box-shadow: inset 0px 0px 9px 2px #251938; }
   .group-6:hover {
     border: 1px solid #251938; }
 
