@@ -60,7 +60,8 @@ span.empty {
   height: 65px;
   box-sizing: border-box;
   color: #666;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: 'Bree Serif';
+  font-size: 18px;
   background: #fefefe;
   margin-bottom: 0px;
   border: 1px solid #eee;
