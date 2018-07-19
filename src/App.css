@@ -65,6 +65,9 @@ span.empty {
   .call .call:hover {
     background: #fefefe;
     color: #666; }
+  .call span {
+    position: absolute;
+    top: 15px; }
 
 .call-empty {
   border: 1px solid #eee;
