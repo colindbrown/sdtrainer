@@ -21,30 +21,44 @@ const Header = ({activeClass, activeUser, signOut}) => (
         <span className="navbar-toggler-icon"></span>
       </button>
       
-      {activeUser ? 
+      {activeUser ?
       <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
+        {activeClass.name ? 
         <ul className="navbar-nav">
             <NavLinker
-              relUrl="templates"
-              name="Templates"
-              active={true}
+              relUrl="class"
+              name="Class"
             />
             <NavLinker
               relUrl="plan"
               name="Plan"
-              active={activeClass.name}
             />
             <NavLinker
               relUrl="run"
               name="Run"
-              active={activeClass.name}
             />
             <NavLinker
               relUrl="review"
               name="Review"
-              active={activeClass.name}
             />
+        </ul> :
+        <ul className="navbar-nav">
+          <NavLinker
+            relUrl="class"
+            name="Class"
+          />
+          <NavLinker
+            relUrl="plan"
+            name="Plan"
+          />
+          <li className="nav-item">
+            <a className="nav-link disabled">Run</a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link disabled">Review</a>
+          </li>
         </ul>
+        }
         <div className="nav-item dropdown">
             <a className={`nav-item nav-link dropdown-toggle text-info`} href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
             <div className="dropdown-menu dropdown-menu-right">
@@ -57,22 +71,14 @@ const Header = ({activeClass, activeUser, signOut}) => (
   </header>
 );
 
-const NavLinker = ({ relUrl, name, active }) => {
-  if (active) {
-    return (
-      <li className="nav-item">
-        <NavLink className={`nav-link`} to={`/${relUrl}`}>
-          {name}
-        </NavLink>
-      </li>
-    )
-  } else {
-    return (
-      <li className="nav-item">
-        <a href="#" className="nav-link disabled">{name}</a>
-      </li>
-    )
-  }
+const NavLinker = ({ relUrl, name}) => {
+  return (
+    <li className="nav-item">
+      <NavLink className={`nav-link`} to={`/${relUrl}`}>
+        {name}
+      </NavLink>
+    </li>
+  )
 };
 
 export default Header;

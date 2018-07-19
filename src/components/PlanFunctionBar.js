@@ -32,15 +32,24 @@ class PlanFunctionBar extends React.Component {
 
 
     render() {
-        const sessionListItems = this.props.sessionNames.map((name) =>
-            <button className="dropdown-item" key={name} onClick={() => this.props.addSession(name)}>{name}</button>
-        );
+        var sessionListItems = [];
+        if (this.props.activeClass) {
+            sessionListItems = this.props.sessionNames.map((name) =>
+                <button className="dropdown-item" key={name} onClick={() => this.props.addSession(name)}>{name}</button>
+            );
+        }
         const templateListItems = this.props.templateNames.map((name) =>
             <button className="dropdown-item" key={name} onClick={() => this.props.addTemplate(name)}>{name}</button>
         );
 
-        const disableSessionMenu = (this.props.sessionNames.length > 0) ? "" : "disabled";
+        const disableSessionMenu = (this.props.activeClass && (this.props.sessionNames.length > 0)) ? "" : "disabled";
+        const disableSaveSession = (this.props.activeClass) ? "" : "disabled";
         const disableTemplateMenu = (this.props.templateNames.length > 0) ? "" : "disabled";
+
+        const usedButton = this.props.activeClass ? 
+            <button className={`btn btn-secondary mr-2`} onClick={this.props.addAllUsed}>Add all used calls</button> :
+            <button className={`btn btn-secondary disabled mr-2`}>Add all used calls</button>;
+            
 
         return (
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
@@ -54,7 +63,7 @@ class PlanFunctionBar extends React.Component {
                             {templateListItems}
                         </div>
                     </div>
-                    <button className="btn btn-secondary mr-2" href="#" onClick={this.props.addAllUsed}>Add all used calls</button>
+                    {usedButton}
                     <div className="dropdown mr-2">
                         <button className={`${disableSessionMenu} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Add session
@@ -72,7 +81,7 @@ class PlanFunctionBar extends React.Component {
                             Save As 
                         </button>
                         <div className="dropdown-menu dropdown-menu-right">
-                            <button className="dropdown-item" key={"session"} onClick={() => this.handleSubmit("session")}>Session Plan</button>
+                            <button className={`${disableSaveSession} dropdown-item`} key={"session"} onClick={() => this.handleSubmit("session")}>Session Plan</button>
                             <button className="dropdown-item" key={"template"} onClick={() => this.handleSubmit("template")}>Template</button>
                         </div>
                     </div>

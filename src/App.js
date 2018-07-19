@@ -45,24 +45,33 @@ class App extends Component {
     if (!this.state.activeUser) {
       routes = <Route path="/" component={Home}/>
     } else if (this.state.activeClass.name) {
-      routes = <div>
-          <Route exact path="/" render={(routeProps) => (
-            <UserDashboard {...routeProps} 
+      routes = <Switch>
+          {/*<Route path="/class" component={ClassManager}/>*/}
+          <Route path="/plan" render={() => (
+            <PlanSessionView
+              activeClass={this.state.activeClass} 
+              />
+          )}/>
+          <Route path="/run" component={RunSessionView}/>
+          <Route path="/review" component={ReviewClassView}/>
+          <Route path="/" render={() => (
+            <UserDashboard
               activeClass={this.state.activeClass} 
               activeUser={this.state.activeUser}
               updateActiveClass={(name) => this.updateActiveClass(name)} 
               />
           )}/>
-          <Route path="/templates" component={CreateTemplateView}/>
-          <Route path="/plan" component={PlanSessionView}/>
-          <Route path="/run" component={RunSessionView}/>
-          <Route path="/review" component={ReviewClassView}/>
-        </div>
+        </Switch>
     } else {
       routes = <Switch>
-        <Route path="/templates" component={CreateTemplateView}/>
-        <Route path="/" render={(routeProps) => (
-        <UserDashboard {...routeProps} 
+        {/*<Route path="/class" component={ClassManager}/>*/}
+        <Route path="/plan" render={() => (
+            <PlanSessionView
+              activeClass={this.state.activeClass} 
+              />
+          )}/>
+        <Route path="/" render={() => (
+        <UserDashboard
               activeClass={this.state.activeClass} 
               activeUser={this.state.activeUser}
               updateActiveClass={(name) => this.updateActiveClass(name)} 

@@ -17,8 +17,10 @@ class PlanSessionView extends React.Component {
     // Lifecycle methods
     componentDidMount() {
         this.loadAllCalls();
-        this.loadSessionNames();
         this.loadTemplateNames();
+        if (this.props.activeClass.name) {
+            this.loadSessionNames();
+        }
     }
 
     // Async methods
@@ -159,6 +161,7 @@ class PlanSessionView extends React.Component {
         return (
             <div>
                 <PlanFunctionBar
+                    activeClass={this.props.activeClass.name}
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
                     saveNewSession={(name) => this.saveNewSession(name)}
