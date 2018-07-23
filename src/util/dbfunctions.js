@@ -13,7 +13,25 @@ var TemplatesRef;
 // takes an array of calls with names and returns an array of just names and groups
 export async function displayData(calls) {
     const allCalls = await fetchAllCalls();
-    return calls.map((call) => allCalls.find((iterator) => (call.name === iterator.name)));
+    const historySnapshot = await activeClassRef.collection("History").get();
+    const history = [];
+    historySnapshot.forEach(((doc) => {
+        history.push(doc.data());
+    }));
+    const sessions = await fetchAllSessions();
+
+    var callsData = [];
+    calls.forEach((call) => {
+        var callData = allCalls.find((iterator) => (call.name === iterator.name))
+        const callHistory = history.find((iterator) => (call.name === iterator.name));
+        callData.uses = callHistory.uses.length;
+        if (callData.uses) {
+            const session = sessions.find((sessionIterator) => (sessionIterator.id === callHistory.uses[callHistory.uses.length-1]));
+            callData.lastUsed = session.finishedAt;
+        }
+        callsData.push(callData);
+    })
+    return callsData;
 }
 
 export async function setActiveUser(user) {

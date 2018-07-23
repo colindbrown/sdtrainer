@@ -25,7 +25,9 @@ class PlanSessionView extends React.Component {
     // Async methods
     async loadAllCalls() {
         db.fetchAllCalls().then((allCalls) => {
-            this.setState({ callList: allCalls });
+            db.displayData(allCalls).then((displayData) => {
+                this.setState({ callList: displayData });
+            })
         });
     }
 
