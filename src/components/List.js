@@ -11,9 +11,6 @@ class List extends React.Component {
     componentDidMount() {
         if (this.props.sort) {
             switch (this.props.sort) {
-                case "userOrder":
-                    console.log("user order");
-                    break;
                 case "lastUsed":
                     console.log("last used");
                     break;
@@ -48,7 +45,7 @@ class List extends React.Component {
         const COLUMNSIZE = 13;
 
         const id = this.props.id || "listCarousel";
-        const sortedCalls = this.props.calls.sort(this.state.sort);
+        const sortedCalls = this.props.sort === "userOrder" ? this.props.calls : this.props.calls.sort(this.state.sort);
         const listItems = sortedCalls.map(call => <Call {...call} key={call.name} onClick={() => this.props.onClick(call.name)} />);
 
         while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
