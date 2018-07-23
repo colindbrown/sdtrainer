@@ -13,10 +13,10 @@ class List extends React.Component {
         if (this.props.sort) {
             switch (this.props.sort) {
                 case "lastUsed":
-                    console.log("last used");
+                    this.setState({sort: (a,b) => this.lastUsedSort(a,b)});
                     break;
                 case "numUses":
-                    console.log("number of uses");
+                    this.setState({sort: (a,b) => this.mostUsedSort(a,b)});
                     break;
                 case "group":
                     this.setState({sort: (a,b) => this.groupSort(a,b)});
@@ -47,7 +47,7 @@ class List extends React.Component {
         } else if (a.group > b.group) {
             return -1;
         } else {
-            return 0;
+            return this.alphabeticalSort(a,b);
         }
     }
 
@@ -58,6 +58,26 @@ class List extends React.Component {
             return -1;
         } else {
             return 1;
+        }
+    }
+
+    mostUsedSort(a, b) {
+        if (a.uses < b.uses) {
+            return 1;
+        } else if (a.uses > b.uses) {
+            return -1;
+        } else {
+            return this.alphabeticalSort(a,b);
+        }
+    }
+
+    lastUsedSort(a, b) {
+        if (a.lastUsed < b.lastUsed) {
+            return 1;
+        } else if (a.lastUsed > b.lastUsed) {
+            return -1;
+        } else {
+            return this.alphabeticalSort(a,b);
         }
     }
 

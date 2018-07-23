@@ -28,6 +28,8 @@ export async function displayData(calls) {
         if (callData.uses) {
             const session = sessions.find((sessionIterator) => (sessionIterator.id === callHistory.uses[callHistory.uses.length-1]));
             callData.lastUsed = session.finishedAt;
+        } else {
+            callData.lastUsed = 0;
         }
         callsData.push(callData);
     })

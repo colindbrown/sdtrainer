@@ -12,7 +12,7 @@ class PlanSessionView extends React.Component {
         alerts: [],
         sessionNames: [],
         templateNames: [],
-        sort: "plus/basic"
+        sort: "lastUsed"
     }
 
     // Lifecycle methods
