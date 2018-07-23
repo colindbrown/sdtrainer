@@ -21,7 +21,7 @@ class List extends React.Component {
                     this.setState({sort: (a,b) => this.groupSort(a,b)});
                     break;
                 case "plus/basic":
-                    console.log("plus basic split");
+                    this.setState({sort: (a,b) => this.plusBasicSort(a,b)});
                     break;
                 default:
                     this.setState({sort: (a,b) => this.alphabeticalSort(a,b)});
@@ -47,6 +47,16 @@ class List extends React.Component {
             return -1;
         } else {
             return 0;
+        }
+    }
+
+    plusBasicSort(a, b) {
+        if (a.category === b.category) {
+            return this.alphabeticalSort(a,b);
+        } else if (a.category === "plus") {
+            return -1;
+        } else {
+            return 1;
         }
     }
 
