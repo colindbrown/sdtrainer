@@ -11,7 +11,8 @@ class PlanSessionView extends React.Component {
         sessionList: [],
         alerts: [],
         sessionNames: [],
-        templateNames: []
+        templateNames: [],
+        sort: ""
     }
 
     // Lifecycle methods
@@ -134,8 +135,8 @@ class PlanSessionView extends React.Component {
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-6" id="callList" columns={2} calls={this.state.callList} onClick={(name) => this.moveCall(name, "sessionList")} />
-                    <List size="col-md-6" id="sessionList" columns={2} calls={this.state.sessionList} onClick={(name) => this.moveCall(name, "callList")} />
+                    <List size="col-md-6" id="callList" columns={2} calls={this.state.callList} sort={this.state.sort} onClick={(name) => this.moveCall(name, "sessionList")} />
+                    <List size="col-md-6" id="sessionList" columns={2} calls={this.state.sessionList} sort={this.state.sort} onClick={(name) => this.moveCall(name, "callList")} />
                 </div>
             </div>
         )

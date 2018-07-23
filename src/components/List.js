@@ -8,6 +8,31 @@ class List extends React.Component {
         sort: (a,b) => this.alphabeticalSort(a,b)
     }
 
+    componentDidMount() {
+        if (this.props.sort) {
+            switch (this.props.sort) {
+                case "userOrder":
+                    console.log("user order");
+                    break;
+                case "lastUsed":
+                    console.log("last used");
+                    break;
+                case "numUses":
+                    console.log("number of uses");
+                    break;
+                case "group":
+                    console.log("group order");
+                    break;
+                case "plus/basic":
+                    console.log("plus basic split");
+                    break;
+                default:
+                    this.setState({sort: (a,b) => this.alphabeticalSort(a,b)});
+                    break;
+            }
+        }
+    }
+
     alphabeticalSort(a, b) {
         if (a.name < b.name) {
             return -1;
