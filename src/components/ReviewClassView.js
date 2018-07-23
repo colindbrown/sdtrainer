@@ -21,10 +21,12 @@ class ReviewClassView extends React.Component {
         this.loadSessionNames();
 
     }
-
-    loadAllCalls = async () => {
+    
+    async loadAllCalls() {
         db.fetchAllCalls().then((allCalls) => {
-            this.setState({ selectedCalls: allCalls, activeFilter: {} });
+            db.displayData(allCalls).then((displayData) => {
+                this.setState({ selectedCalls: displayData, activeFilter: {} });
+            })
         });
     }
 
@@ -116,6 +118,10 @@ class ReviewClassView extends React.Component {
         this.setState({modalData: {title: "Selected Calls", body: text.slice(1)}});
     }
 
+    changeSort(sort) {
+        this.setState({sort});
+    }
+
     render() {
         return (
             <div>
@@ -126,6 +132,7 @@ class ReviewClassView extends React.Component {
                     selectFilter={(type, name) => this.selectFilter(type, name)}
                     exportSelection={() => {this.exportSelection()}}
                     resetFilters={() => this.resetFilters()}
+                    changeSort={(sort) => this.changeSort(sort)}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">

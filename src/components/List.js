@@ -1,35 +1,23 @@
 import React from "react";
 import Call from "./Call";
 import Page from "./Page";
-import * as db from "../util/dbfunctions";
 
 class List extends React.Component {
 
-    state = {
-        sort: (a,b) => this.alphabeticalSort(a,b)
-    }
-
-    componentDidMount() {
-        if (this.props.sort) {
-            switch (this.props.sort) {
-                case "lastUsed":
-                    this.setState({sort: (a,b) => this.lastUsedSort(a,b)});
-                    break;
-                case "numUses":
-                    this.setState({sort: (a,b) => this.mostUsedSort(a,b)});
-                    break;
-                case "group":
-                    this.setState({sort: (a,b) => this.groupSort(a,b)});
-                    break;
-                case "plus/basic":
-                    this.setState({sort: (a,b) => this.plusBasicSort(a,b)});
-                    break;
-                case "userPosition":
-                    this.setState({sort: (a,b) => this.userSort(a,b)});
-                default:
-                    this.setState({sort: (a,b) => this.alphabeticalSort(a,b)});
-                    break;
-            }
+    getSort() {
+        switch (this.props.sort) {
+            case "lastUsed":
+                return (a,b) => this.lastUsedSort(a,b);
+            case "numUses":
+                return (a,b) => this.mostUsedSort(a,b);
+            case "group":
+                return (a,b) => this.groupSort(a,b);
+            case "plus/basic":
+                return (a,b) => this.plusBasicSort(a,b);
+            case "userPosition":
+                return (a,b) => this.userSort(a,b);
+            default:
+                return (a,b) => this.alphabeticalSort(a,b);
         }
     }
 
@@ -96,9 +84,10 @@ class List extends React.Component {
     render() {
         const NUMCOLUMNS = this.props.columns;
         const COLUMNSIZE = 13;
+        const sort = this.getSort();
 
         const id = this.props.id || "listCarousel";
-        const sortedCalls = this.props.sort === "arrayOrder" ? this.props.calls : this.props.calls.sort(this.state.sort);
+        const sortedCalls = this.props.sort === "arrayOrder" ? this.props.calls : this.props.calls.sort(sort);
         const listItems = sortedCalls.map(call => <Call {...call} key={call.name} onClick={() => this.props.onClick(call.name)} />);
 
         while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {

@@ -12,7 +12,7 @@ class PlanSessionView extends React.Component {
         alerts: [],
         sessionNames: [],
         templateNames: [],
-        sort: "lastUsed"
+        sort: ""
     }
 
     // Lifecycle methods
@@ -123,6 +123,10 @@ class PlanSessionView extends React.Component {
         sessionList.forEach((call) => this.moveCall(call.name, "callList"));
     }
 
+    changeSort(sort) {
+        this.setState({sort});
+    }
+
     render() {
         return (
             <div>
@@ -134,6 +138,7 @@ class PlanSessionView extends React.Component {
                     sessionNames={this.state.sessionNames}
                     addTemplate={(name) => this.addTemplate(name)}
                     templateNames={this.state.templateNames}
+                    changeSort={(sort) => this.changeSort(sort)}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">

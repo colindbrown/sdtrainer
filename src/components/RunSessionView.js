@@ -11,7 +11,7 @@ class RunSessionView extends React.Component {
         alerts: [],
         sessionNames: [],
         activeSession: "",
-        sort: ""
+        sort: "userPosition"
     }
 
 
@@ -70,13 +70,10 @@ class RunSessionView extends React.Component {
         this.loadSession(name);
     }
 
-    selectSortMethod = (sort) => {
-        console.log(`Selected Sort: ${sort}`)
+    changeSort(sort) {
+        this.setState({sort});
     }
 
-    selectActiveGroup = (group) => {
-        console.log(`Selected Group: ${group}`)
-    }
 
     render() {
         return (
@@ -84,11 +81,8 @@ class RunSessionView extends React.Component {
                 <RunFunctionBar
                     sessionNames={this.state.sessionNames}
                     activeSession={this.state.activeSession}
-                    sortBy={this.state.sortBy}
-                    activeGroup={this.state.activeGroup}
                     selectActiveSession={(session) => this.selectActiveSession(session)}
-                    selectSortMethod={(sort) => this.selectSortMethod(sort)}
-                    selectActiveGroup={(group) => this.selectActiveGroup(group)}
+                    changeSort={(sort) => this.changeSort(sort)}
                     finishSession={(e) => this.finishSession(e)}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />

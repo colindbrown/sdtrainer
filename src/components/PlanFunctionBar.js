@@ -56,7 +56,19 @@ class PlanFunctionBar extends React.Component {
                             {sessionListItems}
                         </div>
                     </div>
-                    <button className="btn btn-secondary" href="#" onClick={this.handleRemove}>Remove all</button>
+                    <div className="dropdown mr-2">
+                        <button className={` btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sort by
+                        </button>
+                        <div className="dropdown-menu">
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("")}>Alphabetical</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("plus/basic")}>Plus/Basic</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("numUses")}>Most Used</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("lastUsed")}>Last Used</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("group")}>Group</button>
+                        </div>
+                    </div>
+                    <button className="btn btn-secondary" href="#" onClick={this.handleRemove}>Reset</button>
                 </div>
                 <form className="form-inline" onSubmit={this.handleSubmit}>
                     <input className="form-control mr-sm-2" placeholder="Name Session" value={this.state.newSessionName} onChange={this.handleChange} />

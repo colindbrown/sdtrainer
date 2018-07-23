@@ -4,11 +4,6 @@ class RunFunctionBar extends React.Component {
 
     render() {
         const activeSession = this.props.activeSession || "Select session plan";
-        const sortBy = this.props.sortBy || "Sort by";
-        const activeGroup = this.props.activeGroup || "Groups";
-        const groupButtons = [...Array(7).keys()].map((number) =>
-            <button className="dropdown-item" key={number} onClick={() => this.props.selectActiveGroup(number)}>Group {number + 1}</button>
-        );
         const sessionListItems = this.props.sessionNames.map((name) =>
             <button className="dropdown-item" key={name} onClick={() => this.props.selectActiveSession(name)}>{name}</button>
         );
@@ -27,21 +22,16 @@ class RunFunctionBar extends React.Component {
                         </div>
                     </div>
                     <div className="dropdown mr-2">
-                        <button className={`${disableFunctions} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {sortBy}
+                        <button className={` btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sort by
                         </button>
                         <div className="dropdown-menu">
-                            <button className="dropdown-item" key={"used"} onClick={() => this.props.selectSortMethod("Used")}>Used first</button>
-                            <button className="dropdown-item" key={"unused"} onClick={() => this.props.selectSortMethod("Unused")}>Unused first</button>
-                            <button className="dropdown-item" key={"new"} onClick={() => this.props.selectSortMethod("New")}>New first</button>
-                        </div>
-                    </div>
-                    <div className="dropdown mr-2">
-                        <button className={`${disableFunctions} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {activeGroup}
-                        </button>
-                        <div className="dropdown-menu">
-                            {groupButtons}
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("userPosition")}>User Order</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("")}>Alphabetical</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("plus/basic")}>Plus/Basic</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("numUses")}>Most Used</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("lastUsed")}>Last Used</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("group")}>Group</button>
                         </div>
                     </div>
                 </div>

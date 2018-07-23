@@ -274,9 +274,8 @@ export async function setSession(name, calls) {
         newSession.set({ name: name, createdAt: Date.now(), finished: false, id: activeClass.sessions });
         activeClassRef.update({sessions: (activeClass.sessions + 1)});
         for (var i = 0; i < calls.length; i++) {
-            newSession.collection("Calls").add(calls[i]).then((ref) => {
-                ref.update({position: i});
-            });
+            const ref = await newSession.collection("Calls").add(calls[i]);
+            ref.update({position: i});
         }
     }
 }
@@ -324,9 +323,8 @@ export async function setTemplate(name, calls) {
         const newTemplate = TemplatesRef.doc();
         newTemplate.set({ name: name, createdAt: Date.now() });
         for (var i = 0; i < calls.length; i++) {
-            newTemplate.collection("Calls").add(calls[i]).then((ref) => {
-                ref.update({position: i});
-            });
+            const ref = await newTemplate.collection("Calls").add(calls[i]);
+            ref.update({position: i});
         }
     }
 }
