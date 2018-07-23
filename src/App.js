@@ -15,7 +15,7 @@ class App extends Component {
 
   state = {
     activeClass: {},
-    activeUser: ""
+    activeUser: "loading"
   }
 
   componentDidMount() {
@@ -42,7 +42,9 @@ class App extends Component {
 
   render() {
     var routes;
-    if (!this.state.activeUser) {
+    if (this.state.activeUser === "loading") {
+      routes = <div className="centered loader"/>;
+    } else if (!this.state.activeUser) {
       routes = <Route path="/" component={Home}/>
     } else if (this.state.activeClass.name) {
       routes = <div>
