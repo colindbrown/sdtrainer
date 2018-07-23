@@ -24,7 +24,6 @@ class PlanSessionView extends React.Component {
     // Async methods
     async loadAllCalls() {
         db.fetchAllCalls().then((allCalls) => {
-            allCalls.sort((a, b) => this.compareCalls(a, b));
             this.setState({ callList: allCalls });
         });
     }
@@ -76,17 +75,6 @@ class PlanSessionView extends React.Component {
         return false;
     }
 
-    // Helper methods
-    compareCalls(a, b) {
-        if (a.name < b.name) {
-            return -1;
-        } else if (a.name > b.name) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
     moveCall = (name, destination) => {
         var callList = this.state.callList;
         var sessionList = this.state.sessionList;
@@ -104,8 +92,6 @@ class PlanSessionView extends React.Component {
                 sessionList.splice(index, 1);
             }
         }
-        callList.sort((a, b) => this.compareCalls(a, b));
-        sessionList.sort((a, b) => this.compareCalls(a, b));
         this.setState({ callList, sessionList });
     }
 

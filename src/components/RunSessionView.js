@@ -26,7 +26,6 @@ class RunSessionView extends React.Component {
                 call.timestamp = Date.now();
                 call.group = displayData.find((iterator) => (iterator.name === call.name)).group;
             }));
-            sessionCalls.sort((a, b) => this.compareCalls(a, b));
             this.setState({ sessionCalls: sessionCalls, activeSession: name });
         });
     }
@@ -43,16 +42,6 @@ class RunSessionView extends React.Component {
         db.updateHistory(this.state.activeSession, historyUpdate);
         this.setState({ activeSession: "", sessionCalls: [] });
         this.showAlert("alert-success", "Session saved");
-    }
-
-    compareCalls(a, b) {
-        if (a.name < b.name) {
-            return -1;
-        } else if (a.name > b.name) {
-            return 1;
-        } else {
-            return 0;
-        }
     }
 
     toggleCall(name) {

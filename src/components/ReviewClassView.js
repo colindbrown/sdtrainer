@@ -23,7 +23,6 @@ class ReviewClassView extends React.Component {
 
     loadAllCalls = async () => {
         db.fetchAllCalls().then((allCalls) => {
-            allCalls.sort((a, b) => this.compareCalls(a, b));
             this.setState({ selectedCalls: allCalls, activeFilter: {} });
         });
     }
@@ -35,7 +34,6 @@ class ReviewClassView extends React.Component {
     async loadSession(name) {
         db.fetchSessionCalls(name).then(async (sessionCalls) => {
             const displayData = await db.displayData(sessionCalls);
-            displayData.sort((a, b) => this.compareCalls(a, b));
             this.setState({ selectedCalls: displayData, activeFilter: {type: "session", name: name} });
         });
     }
@@ -67,16 +65,6 @@ class ReviewClassView extends React.Component {
         this.setState({ alerts: [] });
     }
 
-    compareCalls(a, b) {
-        if (a.name < b.name) {
-            return -1;
-        } else if (a.name > b.name) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
     resetFilters() {
         this.setState({ activeFilter: {}});
         this.loadAllCalls();
@@ -87,21 +75,18 @@ class ReviewClassView extends React.Component {
         case 'Used':
             db.fetchByEverUsed(true).then(async (calls) => {
                 const displayData = await db.displayData(calls);
-                displayData.sort((a, b) => this.compareCalls(a, b));
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
             })
             break;
         case 'Unused':
             db.fetchByEverUsed(false).then(async (calls) => {
                 const displayData = await db.displayData(calls);
-                displayData.sort((a, b) => this.compareCalls(a, b));
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
             })
             break;
         case "New":
             db.fetchNew().then(async (calls) => {
                 const displayData = await db.displayData(calls);
-                displayData.sort((a, b) => this.compareCalls(a, b));
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
             })
             break;
@@ -110,7 +95,6 @@ class ReviewClassView extends React.Component {
             break;
         case "group":
             db.fetchByGroup(name).then((displayData) => {
-                displayData.sort((a, b) => this.compareCalls(a, b));
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "group", name: "Group " + name} });
             });
             break;

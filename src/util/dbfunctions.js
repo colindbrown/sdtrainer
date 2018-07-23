@@ -153,8 +153,6 @@ export async function updateHistory(sessionName, calls) {
         const call = calls.find((callIterator) => (callIterator.name === prev.name));
         if (call) {
             const uses = call.everUsed ? prev.uses.concat([session.id]) : prev.uses;
-            console.log(uses);
-            console.log(session);
             batch.update(callDoc.ref, { everUsed: (call.everUsed || prev.everUsed), uses: uses, name: call.name });
         }
     });
