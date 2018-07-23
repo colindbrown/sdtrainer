@@ -7,6 +7,7 @@ import PlanSessionView from "./components/PlanSessionView";
 import RunSessionView from "./components/RunSessionView";
 import ReviewClassView from "./components/ReviewClassView";
 import CreateTemplateView from "./components/CreateTemplateView";
+import Loader from "./components/Loader";
 import * as db from "./util/dbfunctions";
 import firebase from "firebase";
 import './App.css';
@@ -43,7 +44,7 @@ class App extends Component {
   render() {
     var routes;
     if (this.state.activeUser === "loading") {
-      routes = <div className="centered loader"/>;
+      routes = <Loader/>;
     } else if (!this.state.activeUser) {
       routes = <Route path="/" component={Home}/>
     } else if (this.state.activeClass.name) {
