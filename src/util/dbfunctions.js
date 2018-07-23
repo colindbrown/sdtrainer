@@ -139,6 +139,16 @@ export async function fetchByGroup(group) {
     return calls;
 }
 
+// returns all calls in a given category
+export async function fetchByCategory(category) {
+    const calls = [];
+    const snapshot = await AllCallsRef.where("category", "==", category).get();
+    snapshot.docs.forEach((callDoc) => {
+        calls.push(callDoc.data());
+    });
+    return calls;
+}
+
 // History methods
 
 // returns name, everUsed, and uses of a single call

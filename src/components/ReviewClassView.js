@@ -93,6 +93,18 @@ class ReviewClassView extends React.Component {
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
             })
             break;
+        case "Basic":
+            db.fetchByCategory("basic").then(async (calls) => {
+                const displayData = await db.displayData(calls);
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+            })
+            break;
+        case "Plus":
+            db.fetchByCategory("plus").then(async (calls) => {
+                const displayData = await db.displayData(calls);
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+            })
+            break;
         case "session":
             this.loadSession(name);
             break;

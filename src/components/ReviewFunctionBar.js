@@ -22,6 +22,8 @@ class ReviewFunctionBar extends React.Component {
                             <button className="dropdown-item" key={"used"} onClick={() => this.props.selectFilter("Used", "")}>Used</button>
                             <button className="dropdown-item" key={"unused"} onClick={() => this.props.selectFilter("Unused", "")}>Unused</button>
                             <button className="dropdown-item" key={"new"} onClick={() => this.props.selectFilter("New", "")}>New</button>
+                            <button className="dropdown-item" key={"new"} onClick={() => this.props.selectFilter("Basic", "")}>Basic</button>
+                            <button className="dropdown-item" key={"new"} onClick={() => this.props.selectFilter("Plus", "")}>Plus</button>
                         </div>
                     </div>
                     <div className="dropdown mr-2">
