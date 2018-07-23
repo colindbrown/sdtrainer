@@ -18,7 +18,7 @@ class List extends React.Component {
                     console.log("number of uses");
                     break;
                 case "group":
-                    console.log("group order");
+                    this.setState({sort: (a,b) => this.groupSort(a,b)});
                     break;
                 case "plus/basic":
                     console.log("plus basic split");
@@ -35,6 +35,16 @@ class List extends React.Component {
             return -1;
         } else if (a.name > b.name) {
             return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    groupSort(a, b) {
+        if (a.group < b.group) {
+            return 1;
+        } else if (a.group > b.group) {
+            return -1;
         } else {
             return 0;
         }
