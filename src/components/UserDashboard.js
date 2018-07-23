@@ -78,7 +78,7 @@ class UserDashboard extends React.Component {
                 <p className="lead text-muted">Choose a class to manage from the classes below or create a new one</p>
                 <hr/>
                 <p className="lead text-muted"> Or create a template to use in your classes</p>
-                <NavLink className={`btn btn-info`} to={`/templates`}>Create a Template</NavLink>
+                <NavLink className={`btn btn-info`} to={`/create`}>Create a Template</NavLink>
             </div>;
         }
         const templateListItems = this.state.templates.map((template) => 

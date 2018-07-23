@@ -113,9 +113,10 @@ span.empty {
   margin-bottom: 15px; }
 
 .card-container {
-  margin-top: 10px;
+  margin-top: 0;
   height: 550px;
-  overflow-y: scroll; }
+  overflow-y: scroll;
+  border: 1px solid #eee; }
 
 .class-card {
   margin-top: 13px;

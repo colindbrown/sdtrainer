@@ -156,9 +156,10 @@ span.empty {
 }
 
 .card-container {
-  margin-top: 10px;
+  margin-top: 0;
   height: 550px;
   overflow-y: scroll;
+  border: 1px solid #eee;
 }
 
 .class-card {
