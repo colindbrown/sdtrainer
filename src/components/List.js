@@ -24,6 +24,8 @@ class List extends React.Component {
                 case "plus/basic":
                     this.setState({sort: (a,b) => this.plusBasicSort(a,b)});
                     break;
+                case "userPosition":
+                    this.setState({sort: (a,b) => this.userSort(a,b)});
                 default:
                     this.setState({sort: (a,b) => this.alphabeticalSort(a,b)});
                     break;
@@ -81,12 +83,22 @@ class List extends React.Component {
         }
     }
 
+    userSort(a, b) {
+        if (a.position < b.position) {
+            return 1;
+        } else if (a.position > b.position) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
     render() {
         const NUMCOLUMNS = this.props.columns;
         const COLUMNSIZE = 13;
 
         const id = this.props.id || "listCarousel";
-        const sortedCalls = this.props.sort === "userOrder" ? this.props.calls : this.props.calls.sort(this.state.sort);
+        const sortedCalls = this.props.sort === "arrayOrder" ? this.props.calls : this.props.calls.sort(this.state.sort);
         const listItems = sortedCalls.map(call => <Call {...call} key={call.name} onClick={() => this.props.onClick(call.name)} />);
 
         while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {

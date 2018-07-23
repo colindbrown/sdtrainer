@@ -273,7 +273,11 @@ export async function setSession(name, calls) {
         const activeClass = await getActiveClass();
         newSession.set({ name: name, createdAt: Date.now(), finished: false, id: activeClass.sessions });
         activeClassRef.update({sessions: (activeClass.sessions + 1)});
-        calls.forEach((call) => newSession.collection("Calls").add(call));
+        for (var i = 0; i < calls.length; i++) {
+            newSession.collection("Calls").add(calls[i]).then((ref) => {
+                ref.update({position: i});
+            });
+        }
     }
 }
 
@@ -319,6 +323,10 @@ export async function setTemplate(name, calls) {
     } else {
         const newTemplate = TemplatesRef.doc();
         newTemplate.set({ name: name, createdAt: Date.now() });
-        calls.forEach((call) => newTemplate.collection("Calls").add(call));
+        for (var i = 0; i < calls.length; i++) {
+            newTemplate.collection("Calls").add(calls[i]).then((ref) => {
+                ref.update({position: i});
+            });
+        }
     }
 }
