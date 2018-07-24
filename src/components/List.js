@@ -1,6 +1,7 @@
 import React from "react";
 import Call from "./Call";
 import Page from "./Page";
+import Placeholder from "./Placeholder";
 
 class List extends React.Component {
 
@@ -24,10 +25,8 @@ class List extends React.Component {
                 />
             );
         }
-        const placeholder = this.props.calls.length ? "" :
-            <div className="jumbotron placeholder">
-            Hello
-            </div>;
+        const placeholder = !this.props.calls.length && this.props.placeholderContent ? <Placeholder content={this.props.placeholderContent} /> : "";
+
         return (
 
             <div id={id} className={`carousel slide ${this.props.size}`} data-wrap="false" data-interval="false">

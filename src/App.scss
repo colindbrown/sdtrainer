@@ -272,7 +272,12 @@ hr {
   position: absolute;
   top: 50%;
   left: 50%;
-  height: 150px;
-  width: 300px;
-  margin: -75px 0 0 -150px;
+  height: 250px;
+  width: 400px;
+  margin: -125px 0 0 -200px;
+  padding: 40px 50px;
+
+  h6 {
+    line-height: 1.6;
+  }
 }

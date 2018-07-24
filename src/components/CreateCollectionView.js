@@ -173,8 +173,21 @@ class CreateCollectionView extends React.Component {
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-6" id="callList" columns={2} calls={this.state.callList} onClick={(name) => this.moveCall(name, "collectionList")} />
-                    <List size="col-md-6" id="collectionList" columns={2} calls={this.state.collectionList} onClick={(name) => this.moveCall(name, "callList")} />
+                    <List 
+                        size="col-md-6" 
+                        id="callList" 
+                        columns={2} 
+                        calls={this.state.callList}
+                        onClick={(name) => this.moveCall(name, "collectionList")} 
+                    />
+                    <List 
+                        size="col-md-6" 
+                        id="collectionList" 
+                        columns={2} 
+                        calls={this.state.collectionList} 
+                        placeholderContent={{title: "Create a Collection", text: "Add calls from the list to the left, or use the function bar to add a number of calls at once"}}
+                        onClick={(name) => this.moveCall(name, "callList")} 
+                    />
                 </div>
             </div>
         )
