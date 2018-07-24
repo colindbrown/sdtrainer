@@ -290,7 +290,7 @@ export async function setSession(name, calls) {
         batch.update(session, {
             finished: true,
             finishedAt: Date.now()
-        })
+        });
         batch.commit();
     } else {
         const newSession = activeClassRef.collection("Sessions").doc();
@@ -323,6 +323,15 @@ export async function fetchTemplateNames() {
         templateNames.push(doc.data().name);
     });
     return templateNames;
+}
+
+export async function fetchTemplates() {
+    const snapshot = await TemplatesRef.get();
+    var templates = [];
+    snapshot.forEach(((doc) => {
+        templates.push(doc.data());
+    }));
+    return templates;
 }
 
 // return template (a DocumentSnapshot) if it exists, undefined if it doesnt
@@ -360,4 +369,10 @@ export async function setTemplate(name, calls) {
         });
         calls.forEach((call) => newTemplate.collection("Calls").add(call));
     }
+}
+
+// delete template
+export async function deleteTemplate(name) {
+    const templateRef = await fetchTemplateRef(name);
+    TemplatesRef.doc(templateRef.id).delete();
 }

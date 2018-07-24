@@ -49,7 +49,7 @@ class ClassDashboard extends React.Component {
         );
         const unfinishedListItems = this.state.sessionPlans.map((session) => 
             <li className="list-group-item d-flex justify-content-end" key={session.id}>
-                <div className="session-name"><p><strong>{session.name}</strong></p></div>
+                <div className="list-item-name"><p><strong>{session.name}</strong></p></div>
                 <div className="mr-5">Created on {(new Date(session.createdAt)).toDateString()}</div>
                 <button className="btn btn-sm btn-danger" onClick={() => this.deleteSession(session.name)}>Delete</button>
             </li>

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import Header from "./components/Header";
 import Home from "./components/Home";
-import ClassManager from "./components/ClassManager";
+import UserDashboard from "./components/UserDashboard";
 import { Switch, Route, HashRouter} from "react-router-dom";
-import PlanSessionView from "./components/PlanSessionView";
+import CreateCollectionView from "./components/CreateCollectionView";
 import RunSessionView from "./components/RunSessionView";
 import ReviewClassView from "./components/ReviewClassView";
-import CreateTemplateView from "./components/CreateTemplateView";
 import ClassDashboard from "./components/ClassDashboard";
 import * as db from "./util/dbfunctions";
 import firebase from "firebase";
@@ -50,25 +49,39 @@ class App extends Component {
     if (!this.state.activeUser) {
       routes = <Route path="/" component={Home}/>
     } else if (this.state.activeClass.name) {
-      routes = <div>
-          <Route exact path="/" render={(routeProps) => (
+      routes = <Switch>
+          <Route path="/class" render={(routeProps) => (
             <ClassDashboard {...routeProps} 
               activeClass={this.state.activeClass} 
               activeUser={this.state.activeUser}
               updateActiveClass={(name) => this.updateActiveClass(name)}
               resetClass={() => this.resetClass()} 
+            />
+          )}/>
+          <Route path="/create" render={() => (
+            <CreateCollectionView
+              activeClass={this.state.activeClass} 
               />
           )}/>
-          <Route path="/templates" component={CreateTemplateView}/>
-          <Route path="/plan" component={PlanSessionView}/>
           <Route path="/run" component={RunSessionView}/>
           <Route path="/review" component={ReviewClassView}/>
-        </div>
+          <Route path="/" render={() => (
+            <UserDashboard
+              activeClass={this.state.activeClass} 
+              activeUser={this.state.activeUser}
+              updateActiveClass={(name) => this.updateActiveClass(name)} 
+              />
+          )}/>
+        </Switch>
     } else {
       routes = <Switch>
-        <Route path="/templates" component={CreateTemplateView}/>
-        <Route path="/" render={(routeProps) => (
-        <ClassManager {...routeProps} 
+        <Route path="/create" render={() => (
+            <CreateCollectionView
+              activeClass={this.state.activeClass} 
+              />
+          )}/>
+        <Route path="/" render={() => (
+        <UserDashboard
               activeClass={this.state.activeClass} 
               activeUser={this.state.activeUser}
               updateActiveClass={(name) => this.updateActiveClass(name)} 
