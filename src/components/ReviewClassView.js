@@ -12,7 +12,8 @@ class ReviewClassView extends React.Component {
         selectedCalls: [],
         sessionNames: [],
         activeFilter: {},
-        modalData: {}
+        modalData: {},
+        sort: ""
     }
 
     componentDidMount() {
@@ -20,11 +21,12 @@ class ReviewClassView extends React.Component {
         this.loadSessionNames();
 
     }
-
-    loadAllCalls = async () => {
+    
+    async loadAllCalls() {
         db.fetchAllCalls().then((allCalls) => {
-            allCalls.sort((a, b) => this.compareCalls(a, b));
-            this.setState({ selectedCalls: allCalls, activeFilter: {} });
+            db.displayData(allCalls).then((displayData) => {
+                this.setState({ selectedCalls: displayData, activeFilter: {} });
+            })
         });
     }
 
@@ -35,7 +37,6 @@ class ReviewClassView extends React.Component {
     async loadSession(name) {
         db.fetchSessionCalls(name).then(async (sessionCalls) => {
             const displayData = await db.displayData(sessionCalls);
-            displayData.sort((a, b) => this.compareCalls(a, b));
             this.setState({ selectedCalls: displayData, activeFilter: {type: "session", name: name} });
         });
     }
@@ -67,16 +68,6 @@ class ReviewClassView extends React.Component {
         this.setState({ alerts: [] });
     }
 
-    compareCalls(a, b) {
-        if (a.name < b.name) {
-            return -1;
-        } else if (a.name > b.name) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
     resetFilters() {
         this.setState({ activeFilter: {}});
         this.loadAllCalls();
@@ -87,21 +78,30 @@ class ReviewClassView extends React.Component {
         case 'Used':
             db.fetchByEverUsed(true).then(async (calls) => {
                 const displayData = await db.displayData(calls);
-                displayData.sort((a, b) => this.compareCalls(a, b));
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
             })
             break;
         case 'Unused':
             db.fetchByEverUsed(false).then(async (calls) => {
                 const displayData = await db.displayData(calls);
-                displayData.sort((a, b) => this.compareCalls(a, b));
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
             })
             break;
         case "New":
             db.fetchNew().then(async (calls) => {
                 const displayData = await db.displayData(calls);
-                displayData.sort((a, b) => this.compareCalls(a, b));
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+            })
+            break;
+        case "Basic":
+            db.fetchByCategory("basic").then(async (calls) => {
+                const displayData = await db.displayData(calls);
+                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+            })
+            break;
+        case "Plus":
+            db.fetchByCategory("plus").then(async (calls) => {
+                const displayData = await db.displayData(calls);
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
             })
             break;
@@ -110,7 +110,6 @@ class ReviewClassView extends React.Component {
             break;
         case "group":
             db.fetchByGroup(name).then((displayData) => {
-                displayData.sort((a, b) => this.compareCalls(a, b));
                 this.setState({ selectedCalls: displayData, activeFilter: {type: "group", name: "Group " + name} });
             });
             break;
@@ -131,6 +130,10 @@ class ReviewClassView extends React.Component {
         this.setState({modalData: {title: "Selected Calls", body: text.slice(1)}});
     }
 
+    changeSort(sort) {
+        this.setState({sort});
+    }
+
     render() {
         return (
             <div>
@@ -141,10 +144,11 @@ class ReviewClassView extends React.Component {
                     selectFilter={(type, name) => this.selectFilter(type, name)}
                     exportSelection={() => {this.exportSelection()}}
                     resetFilters={() => this.resetFilters()}
+                    changeSort={(sort) => this.changeSort(sort)}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-12" id="reviewList" columns={4} calls={this.state.selectedCalls} onClick={(name) => this.showCall(name)} />
+                    <List size="col-md-12" id="reviewList" columns={4} calls={this.state.selectedCalls} sort={this.state.sort} onClick={(name) => this.showCall(name)} />
                 </div>
             </div>
         )

@@ -10,7 +10,8 @@ class RunSessionView extends React.Component {
         sessionCalls: [],
         alerts: [],
         sessionNames: [],
-        activeSession: ""
+        activeSession: "",
+        sort: "userPosition"
     }
 
 
@@ -26,7 +27,6 @@ class RunSessionView extends React.Component {
                 call.timestamp = Date.now();
                 call.group = displayData.find((iterator) => (iterator.name === call.name)).group;
             }));
-            sessionCalls.sort((a, b) => this.compareCalls(a, b));
             this.setState({ sessionCalls: sessionCalls, activeSession: name });
         });
     }
@@ -43,16 +43,6 @@ class RunSessionView extends React.Component {
         db.updateHistory(this.state.activeSession, historyUpdate);
         this.setState({ activeSession: "", sessionCalls: [] });
         this.showAlert("alert-success", "Session saved");
-    }
-
-    compareCalls(a, b) {
-        if (a.name < b.name) {
-            return -1;
-        } else if (a.name > b.name) {
-            return 1;
-        } else {
-            return 0;
-        }
     }
 
     toggleCall(name) {
@@ -80,13 +70,10 @@ class RunSessionView extends React.Component {
         this.loadSession(name);
     }
 
-    selectSortMethod = (sort) => {
-        console.log(`Selected Sort: ${sort}`)
+    changeSort(sort) {
+        this.setState({sort});
     }
 
-    selectActiveGroup = (group) => {
-        console.log(`Selected Group: ${group}`)
-    }
 
     render() {
         return (
@@ -94,16 +81,13 @@ class RunSessionView extends React.Component {
                 <RunFunctionBar
                     sessionNames={this.state.sessionNames}
                     activeSession={this.state.activeSession}
-                    sortBy={this.state.sortBy}
-                    activeGroup={this.state.activeGroup}
                     selectActiveSession={(session) => this.selectActiveSession(session)}
-                    selectSortMethod={(sort) => this.selectSortMethod(sort)}
-                    selectActiveGroup={(group) => this.selectActiveGroup(group)}
+                    changeSort={(sort) => this.changeSort(sort)}
                     finishSession={(e) => this.finishSession(e)}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-12" id="runList" columns={4} calls={this.state.sessionCalls} onClick={(name) => this.toggleCall(name)} />
+                    <List size="col-md-12" id="runList" columns={4} calls={this.state.sessionCalls} sort={this.state.sort} onClick={(name) => this.toggleCall(name)} />
                 </div>
             </div>
         )

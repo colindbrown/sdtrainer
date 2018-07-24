@@ -36,7 +36,7 @@ span.empty {
 }
 
 .carousel-item ul {
-  margin: 0px;
+  margin: 0;
 }
 
 .carousel-item {
@@ -151,9 +151,10 @@ span.empty {
 }
 
 .card-container {
-  margin-top: 10px;
+  margin-top: 0;
   height: 550px;
   overflow-y: scroll;
+  border: 1px solid #eee;
 }
 
 .class-card {
@@ -168,7 +169,7 @@ span.empty {
 }
 
 .class-card-button {
-  margin-top: 15px;
+  margin-top: 23px;
 }
 
 .below-navbar {
@@ -200,11 +201,13 @@ hr {
   width: 100%;
   pointer-events:none;
 }
+
 .vertical-align-center {
   display: table-cell;
   vertical-align: middle;
   pointer-events:none;
 }
+
 .modal-content {
   width:inherit;
   max-width:inherit; 
@@ -228,4 +231,34 @@ hr {
 .dropdown-menu-right { 
   right: 0; 
   left: auto; 
+}
+
+.pills-row {
+  margin-right: 0;
+  margin-left: 0;
+  border-radius: 5px 5px 0 0;
+
+}
+
+.collections-list {
+  height: 400px;
+  overflow-y: scroll;
+  margin-right: 0;
+  margin-left: 0;
+  border: 1px solid #eee;
+
+  .list-group-item {
+    border-radius: 0;
+
+    div {
+      margin-top: 4px;
+    }
+  }
+
+}
+
+.list-item-name {
+  position: absolute;
+  left: 15px;
+  top: 12px;
 }

@@ -12,15 +12,94 @@ class List extends React.Component {
         }
     }
 
+    getSort() {
+        switch (this.props.sort) {
+            case "lastUsed":
+                return (a,b) => this.lastUsedSort(a,b);
+            case "numUses":
+                return (a,b) => this.mostUsedSort(a,b);
+            case "group":
+                return (a,b) => this.groupSort(a,b);
+            case "plus/basic":
+                return (a,b) => this.plusBasicSort(a,b);
+            case "userPosition":
+                return (a,b) => this.userSort(a,b);
+            default:
+                return (a,b) => this.alphabeticalSort(a,b);
+        }
+    }
+
+    alphabeticalSort(a, b) {
+        if (a.name < b.name) {
+            return -1;
+        } else if (a.name > b.name) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    groupSort(a, b) {
+        if (a.group < b.group) {
+            return 1;
+        } else if (a.group > b.group) {
+            return -1;
+        } else {
+            return this.alphabeticalSort(a,b);
+        }
+    }
+
+    plusBasicSort(a, b) {
+        if (a.category === b.category) {
+            return this.alphabeticalSort(a,b);
+        } else if (a.category === "plus") {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+
+    mostUsedSort(a, b) {
+        if (a.uses < b.uses) {
+            return 1;
+        } else if (a.uses > b.uses) {
+            return -1;
+        } else {
+            return this.alphabeticalSort(a,b);
+        }
+    }
+
+    lastUsedSort(a, b) {
+        if (a.lastUsed < b.lastUsed) {
+            return 1;
+        } else if (a.lastUsed > b.lastUsed) {
+            return -1;
+        } else {
+            return this.alphabeticalSort(a,b);
+        }
+    }
+
+    userSort(a, b) {
+        if (a.position < b.position) {
+            return 1;
+        } else if (a.position > b.position) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
     render() {
         const NUMCOLUMNS = this.props.columns;
         const COLUMNSIZE = 12;
+        const sort = this.getSort();
 
         const id = this.props.id || "listCarousel";
 
+        const sortedCalls = this.props.sort === "arrayOrder" ? this.props.calls : this.props.calls.sort(sort);
         var listItems = [];
-        for (var i = 0; i < this.props.calls.length; i++) {
-            const call = this.props.calls[i];
+        for (var i = 0; i < sortedCalls.length; i++) {
+            const call = sortedCalls[i];
             listItems.push(<Call {...call} key={call.name} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.props.onClick(call.name)} />)
         }
         while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
