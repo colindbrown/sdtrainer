@@ -50,12 +50,6 @@ span.empty {
   padding-right: 75px;
 }
 
-.list-group-item {
-  height: 60px;
-  padding-top: 5%;
-}
-
-
 .carousel-control-prev, .carousel-control-next{
   width: 50px;
   height: 80%;
@@ -78,6 +72,8 @@ span.empty {
   color: #666;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   background: #fefefe;
+  height: 60px;
+  padding-top: 5%;
 
   .call:hover {
     background: #fefefe;
@@ -160,9 +156,10 @@ span.empty {
 }
 
 .card-container {
-  margin-top: 10px;
+  margin-top: 0;
   height: 550px;
   overflow-y: scroll;
+  border: 1px solid #eee;
 }
 
 .class-card {
@@ -177,7 +174,7 @@ span.empty {
 }
 
 .class-card-button {
-  margin-top: 15px;
+  margin-top: 23px;
 }
 
 .below-navbar {
@@ -237,4 +234,34 @@ hr {
 .dropdown-menu-right { 
   right: 0; 
   left: auto; 
+}
+
+.pills-row {
+  margin-right: 0px;
+  margin-left: 0px;
+  border-radius: 5px 5px 0px 0px;
+
+}
+
+.collections-list {
+  height: 400px;
+  overflow-y: scroll;
+  margin-right: 0px;
+  margin-left: 0px;
+  border: 1px solid #eee;
+
+  .list-group-item {
+    border-radius: 0px;
+
+    div {
+      margin-top: 4px;
+    }
+  }
+
+}
+
+.list-item-name {
+  position: absolute;
+  left: 15px;
+  top: 12px;
 }

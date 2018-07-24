@@ -13,22 +13,30 @@ var TemplatesRef;
 // takes an array of calls with names and returns an array of just names and groups
 export async function displayData(calls) {
     const allCalls = await fetchAllCalls();
-    const historySnapshot = await activeClassRef.collection("History").get();
-    const history = [];
-    historySnapshot.forEach(((doc) => {
-        history.push(doc.data());
-    }));
-    const sessions = await fetchAllSessions();
+    var history = [];
+    var sessions = [];
+    if (activeClassRef) {
+        const historySnapshot = await activeClassRef.collection("History").get();
+        historySnapshot.forEach(((doc) => {
+            history.push(doc.data());
+        }));
+        sessions = await fetchAllSessions();
+    }
 
     var callsData = [];
     calls.forEach((call) => {
         var callData = allCalls.find((iterator) => (call.name === iterator.name))
         const callHistory = history.find((iterator) => (call.name === iterator.name));
-        callData.uses = callHistory.uses.length;
-        if (callData.uses) {
-            const session = sessions.find((sessionIterator) => (sessionIterator.id === callHistory.uses[callHistory.uses.length-1]));
-            callData.lastUsed = session.finishedAt;
+        if (activeClassRef) {
+            callData.uses = callHistory.uses.length;
+            if (callData.uses) {
+                const session = sessions.find((sessionIterator) => (sessionIterator.id === callHistory.uses[callHistory.uses.length-1]));
+                callData.lastUsed = session.finishedAt;
+            } else {
+                callData.lastUsed = 0;
+            }
         } else {
+            callData.uses = 0;
             callData.lastUsed = 0;
         }
         callsData.push(callData);
@@ -301,6 +309,15 @@ export async function fetchTemplateNames() {
     return templateNames;
 }
 
+export async function fetchTemplates() {
+    const snapshot = await TemplatesRef.get();
+    var templates = [];
+    snapshot.forEach(((doc) => {
+        templates.push(doc.data());
+    }));
+    return templates;
+}
+
 // return template (a DocumentSnapshot) if it exists, undefined if it doesnt
 export async function fetchTemplateRef(name) {
     const snapshot = await TemplatesRef.where("name", "==", name).get();
@@ -337,4 +354,10 @@ export async function setTemplate(name, calls) {
             ref.update({position: i});
         }
     }
+}
+
+// delete template
+export async function deleteTemplate(name) {
+    const templateRef = await fetchTemplateRef(name);
+    TemplatesRef.doc(templateRef.id).delete();
 }

@@ -6,20 +6,35 @@ import Alerts from "./Alerts";
 import { NavLink } from "react-router-dom";
 
 
-class ClassManager extends React.Component {
+class UserDashboard extends React.Component {
 
     state = {
         classes: [],
-        alerts: []
+        alerts: [],
+        templates: []
     }
 
     componentDidMount() {
         this.loadClasses();
+        this.loadTemplates();
     }
 
     loadClasses = async () => {
         const classes = await db.fetchClassData();
         this.setState({classes});
+    }
+
+    loadTemplates = async () => {
+        const templates = await db.fetchTemplates();
+        this.setState({templates});
+    }
+
+    deleteTemplate = async (name) => {
+        db.deleteTemplate(name).then(() => {
+            this.loadTemplates().then(() => {
+                this.showAlert("alert-success", "Template deleted");
+            })
+        });
     }
 
     showAlert(type, text) {
@@ -54,7 +69,7 @@ class ClassManager extends React.Component {
                 <p className="lead text-muted">Completion statistics will go here</p>
                 <p className="lead text-muted">Sessions info/sessions run here</p>
                 <hr/>
-                <NavLink className={`btn btn-info mr-2`} to={`/plan`}>Plan a Session</NavLink>
+                <NavLink className={`btn btn-info mr-2`} to={`/create`}>Plan a Session</NavLink>
                 <NavLink className={`btn btn-info`} to={`/templates`}>Create a Template</NavLink>
             </div>;
         } else {
@@ -63,26 +78,48 @@ class ClassManager extends React.Component {
                 <p className="lead text-muted">Choose a class to manage from the classes below or create a new one</p>
                 <hr/>
                 <p className="lead text-muted"> Or create a template to use in your classes</p>
-                <NavLink className={`btn btn-info`} to={`/templates`}>Create a Template</NavLink>
+                <NavLink className={`btn btn-info`} to={`/create`}>Create a Template</NavLink>
             </div>;
         }
+        const templateListItems = this.state.templates.map((template) => 
+            <li className="list-group-item d-flex justify-content-end" key={template.name}>
+                <div className="list-item-name"><p><strong>{template.name}</strong></p></div>
+                <div className="mr-5">Created on {(new Date(template.createdAt)).toDateString()}</div>
+                <button className="btn btn-sm btn-danger" onClick={() => this.deleteTemplate(template.name)}>Delete</button>
+            </li>
+        );
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center class-jumbotron">
                     {jumboContent}
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
-                <div className="album bg-light card-container">
-                    <div className="container">
-                        <div className="row">
-                            {classCards}
+                <section>
+                    <ul className="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
+                        <li className="nav-item">
+                            <a className="text-secondary nav-link active" id="classes-tab" data-toggle="tab" href="#classes" role="tab" aria-controls="classes" aria-selected="true">Classes</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="text-secondary nav-link" id="templates-tab" data-toggle="tab" href="#templates" role="tab" aria-controls="templates" aria-selected="false">Templates</a>
+                        </li>
+                    </ul>
+                    <div className="tab-content" id="myTabContent">
+                        <div className="tab-pane fade show active album bg-light card-container" id="classes" role="tabpanel" aria-labelledby="classes-tab">
+                            <div className="container">
+                                <div className="row">
+                                    {classCards}
+                                </div>
+                            </div>
                         </div>
+                        <ul className="tab-pane fade list-group collections-list bg-light" id="templates" role="tabpanel" aria-labelledby="templates-tab">
+                            {templateListItems}
+                        </ul>
                     </div>
-                </div>
+                </section>
             </div>
         )
     }
     
 }
 
-export default ClassManager;
+export default UserDashboard;
