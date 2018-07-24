@@ -22,6 +22,8 @@ class ReviewFunctionBar extends React.Component {
                             <button className="dropdown-item" key={"used"} onClick={() => this.props.selectFilter("Used", "")}>Used</button>
                             <button className="dropdown-item" key={"unused"} onClick={() => this.props.selectFilter("Unused", "")}>Unused</button>
                             <button className="dropdown-item" key={"new"} onClick={() => this.props.selectFilter("New", "")}>New</button>
+                            <button className="dropdown-item" key={"new"} onClick={() => this.props.selectFilter("Basic", "")}>Basic</button>
+                            <button className="dropdown-item" key={"new"} onClick={() => this.props.selectFilter("Plus", "")}>Plus</button>
                         </div>
                     </div>
                     <div className="dropdown mr-2">
@@ -45,6 +47,11 @@ class ReviewFunctionBar extends React.Component {
                             Sort by
                         </button>
                         <div className="dropdown-menu">
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("")}>Alphabetical</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("plus/basic")}>Plus/Basic</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("numUses")}>Most Used</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("lastUsed")}>Last Used</button>
+                            <button className="dropdown-item" onClick={() => this.props.changeSort("group")}>Group</button>
                         </div>
                     </div>
                     <button className={`${filter.name ? "" : "disabled"} btn btn-secondary`} href="#" onClick={this.props.resetFilters}>Reset filters</button>

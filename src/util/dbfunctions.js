@@ -13,7 +13,35 @@ var TemplatesRef;
 // takes an array of calls with names and returns an array of just names and groups
 export async function displayData(calls) {
     const allCalls = await fetchAllCalls();
-    return calls.map((call) => allCalls.find((iterator) => (call.name === iterator.name)));
+    var history = [];
+    var sessions = [];
+    if (activeClassRef) {
+        const historySnapshot = await activeClassRef.collection("History").get();
+        historySnapshot.forEach(((doc) => {
+            history.push(doc.data());
+        }));
+        sessions = await fetchAllSessions();
+    }
+
+    var callsData = [];
+    calls.forEach((call) => {
+        var callData = allCalls.find((iterator) => (call.name === iterator.name))
+        const callHistory = history.find((iterator) => (call.name === iterator.name));
+        if (activeClassRef) {
+            callData.uses = callHistory.uses.length;
+            if (callData.uses) {
+                const session = sessions.find((sessionIterator) => (sessionIterator.id === callHistory.uses[callHistory.uses.length-1]));
+                callData.lastUsed = session.finishedAt;
+            } else {
+                callData.lastUsed = 0;
+            }
+        } else {
+            callData.uses = 0;
+            callData.lastUsed = 0;
+        }
+        callsData.push(callData);
+    })
+    return callsData;
 }
 
 export async function setActiveUser(user) {
@@ -119,6 +147,16 @@ export async function fetchByGroup(group) {
     return calls;
 }
 
+// returns all calls in a given category
+export async function fetchByCategory(category) {
+    const calls = [];
+    const snapshot = await AllCallsRef.where("category", "==", category).get();
+    snapshot.docs.forEach((callDoc) => {
+        calls.push(callDoc.data());
+    });
+    return calls;
+}
+
 // History methods
 
 // returns name, everUsed, and uses of a single call
@@ -153,8 +191,6 @@ export async function updateHistory(sessionName, calls) {
         const call = calls.find((callIterator) => (callIterator.name === prev.name));
         if (call) {
             const uses = call.everUsed ? prev.uses.concat([session.id]) : prev.uses;
-            console.log(uses);
-            console.log(session);
             batch.update(callDoc.ref, { everUsed: (call.everUsed || prev.everUsed), uses: uses, name: call.name });
         }
     });
@@ -255,7 +291,10 @@ export async function setSession(name, calls) {
         const activeClass = await getActiveClass();
         newSession.set({ name: name, createdAt: Date.now(), finished: false, id: activeClass.sessions });
         activeClassRef.update({sessions: (activeClass.sessions + 1)});
-        calls.forEach((call) => newSession.collection("Calls").add(call));
+        for (var i = 0; i < calls.length; i++) {
+            const ref = await newSession.collection("Calls").add(calls[i]);
+            ref.update({position: i});
+        }
     }
 }
 
@@ -310,7 +349,10 @@ export async function setTemplate(name, calls) {
     } else {
         const newTemplate = TemplatesRef.doc();
         newTemplate.set({ name: name, createdAt: Date.now() });
-        calls.forEach((call) => newTemplate.collection("Calls").add(call));
+        for (var i = 0; i < calls.length; i++) {
+            const ref = await newTemplate.collection("Calls").add(calls[i]);
+            ref.update({position: i});
+        }
     }
 }
 
