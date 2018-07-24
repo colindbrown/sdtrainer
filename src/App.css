@@ -6,7 +6,6 @@
   height: 80px; }
 
 .App-header {
-  background-color: #222;
   height: 150px;
   padding: 20px;
   color: white; }
@@ -80,9 +79,9 @@ span.empty {
 
 .call-empty {
   border: 1px solid #eee;
-  background: #fff; }
+  background: white; }
   .call-empty:hover {
-    background: #fff; }
+    background: white; }
 
 .group-0 {
   box-shadow: inset 0px 0px 9px 1px #ccc; }
@@ -90,29 +89,29 @@ span.empty {
     border: 1px solid #ccc; }
 
 .group-1 {
-  box-shadow: inset 0px 0px 9px 2px #e23c3c; }
+  box-shadow: inset 0px 0px 9px 2px #E23C3C; }
   .group-1:hover {
-    border: 1px solid #e23c3c; }
+    border: 1px solid #E23C3C; }
 
 .group-2 {
-  box-shadow: inset 0px 0px 9px 2px #e2d843; }
+  box-shadow: inset 0px 0px 9px 2px #E2D843; }
   .group-2:hover {
-    border: 1px solid #e2d843; }
+    border: 1px solid #E2D843; }
 
 .group-3 {
-  box-shadow: inset 0px 0px 9px 2px #62e062; }
+  box-shadow: inset 0px 0px 9px 2px #62E062; }
   .group-3:hover {
-    border: 1px solid #62e062; }
+    border: 1px solid #62E062; }
 
 .group-4 {
-  box-shadow: inset 0px 0px 9px 2px #4fe9d9; }
+  box-shadow: inset 0px 0px 9px 2px #4FE9D9; }
   .group-4:hover {
-    border: 1px solid #4fe9d9; }
+    border: 1px solid #4FE9D9; }
 
 .group-5 {
-  box-shadow: inset 0px 0px 9px 2px #3e3cc9; }
+  box-shadow: inset 0px 0px 9px 2px #3E3CC9; }
   .group-5:hover {
-    border: 1px solid #3e3cc9; }
+    border: 1px solid #3E3CC9; }
 
 .group-6 {
   box-shadow: inset 0px 0px 9px 2px #251938; }
@@ -126,7 +125,7 @@ span.empty {
   border-radius: 0rem 0rem 0rem .25rem; }
 
 .call-disabled {
-  background: #ddd;
+  background: #ccc;
   box-shadow: inset 0px 0px 9px 1px #999; }
 
 .class-jumbotron {

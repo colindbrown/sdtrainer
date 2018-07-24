@@ -1,3 +1,18 @@
+// Colors
+$info: #5bc0de;
+$group-1: #E23C3C;
+$group-2: #E2D843;
+$group-3: #62E062;
+$group-4: #4FE9D9;
+$group-5: #3E3CC9;
+$group-6: #251938;
+$lightest-grey: #fefefe;
+$lighter-grey: #eee;
+$light-grey: #ccc;
+$medium-grey: #999;
+$dark-grey: #666;
+$midnight: rgb(55, 56, 66);
+
 .App {
   text-align: center;
 }
@@ -8,7 +23,6 @@
 }
 
 .App-header {
-  background-color: #222;
   height: 150px;
   padding: 20px;
   color: white;
@@ -28,7 +42,7 @@
 }
 
 .main-bar {
-  background: rgb(55, 56, 66);
+  background: $midnight;
 }
 
 span.empty {
@@ -77,16 +91,16 @@ span.empty {
 .call {
   height: 65px;
   box-sizing: border-box;
-  color: #666;
+  color:  $dark-grey;
   font-family: 'Bree Serif';
   font-size: 18px;
-  background: #fefefe;
+  background:  $lightest-grey;
   margin-bottom: 0px;
-  border: 1px solid #eee;
+  border: 1px solid  $lighter-grey;
   border-radius: 0px;
   .call:hover {
-    background: #fefefe;
-    color: #666;
+    background:  $lightest-grey;
+    color:  $dark-grey;
   }
   &:first-child {
     border-radius: .25rem 0rem 0rem 0rem;
@@ -103,18 +117,18 @@ span.empty {
 }
 
 .call-empty {
-  border: 1px solid #eee;
-  background: #fff;
+  border: 1px solid  $lighter-grey;
+  background: white;
   &:hover {
-    background: #fff;
+    background: white;
   }
 }
 
 .group-0 {
-  box-shadow: inset 0px 0px 9px 1px #ccc;
+  box-shadow: inset 0px 0px 9px 1px  $light-grey;
 
   &:hover {
-    border: 1px solid #ccc;
+    border: 1px solid  $light-grey;
   }
 }
 
@@ -126,12 +140,12 @@ span.empty {
   }
 }
 
-.group-1 { @include group(rgb(226, 60, 60)); }
-.group-2 { @include group(rgb(226, 216, 67)); }
-.group-3 { @include group(rgb(98, 224, 98)); }
-.group-4 { @include group(rgb(79, 233, 217)); }
-.group-5 { @include group(rgb(62, 60, 201)); }
-.group-6 { @include group(rgb(37, 25, 56)); }
+.group-1 { @include group($group-1)};
+.group-2 { @include group($group-2)};
+.group-3 { @include group($group-3)};
+.group-4 { @include group($group-4)};
+.group-5 { @include group($group-5)};
+.group-6 { @include group($group-6)};
 
 .round-tr {
   border-radius: 0rem .25rem 0rem 0rem;
@@ -142,8 +156,8 @@ span.empty {
 }
 
 .call-disabled {
-  background: #ddd;
-  box-shadow: inset 0px 0px 9px 1px #999;
+  background: $light-grey;
+  box-shadow: inset 0px 0px 9px 1px  $medium-grey;
 }
 
 .class-jumbotron {
@@ -154,7 +168,7 @@ span.empty {
   margin-top: 0;
   height: 550px;
   overflow-y: scroll;
-  border: 1px solid #eee;
+  border: 1px solid  $lighter-grey;
 }
 
 .class-card {
@@ -196,7 +210,7 @@ hr {
 }
 
 .vertical-alignment-helper {
-  display:table;
+  display: table;
   height: 100%;
   width: 100%;
   pointer-events:none;
@@ -245,7 +259,7 @@ hr {
   overflow-y: scroll;
   margin-right: 0;
   margin-left: 0;
-  border: 1px solid #eee;
+  border: 1px solid  $lighter-grey;
 
   .list-group-item {
     border-radius: 0;
