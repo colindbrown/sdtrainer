@@ -118,53 +118,20 @@ span.empty {
   }
 }
 
-.group-1 {
-  box-shadow: inset 0px 0px 9px 2px rgba(226, 60, 60, 0.979);
+@mixin group($color) {
+  box-shadow: inset 0px 0px 9px 2px $color;
 
   &:hover {
-    border: 1px solid rgba(226, 60, 60, 0.979);
+    border: 1px solid $color;
   }
 }
 
-.group-2 {
-  box-shadow: inset 0px 0px 9px 2px rgb(226, 216, 67);
-
-  &:hover {
-    border: 1px solid rgb(226, 216, 67);
-  }
-}
-
-.group-3 {
-  box-shadow: inset 0px 0px 9px 2px rgb(98, 224, 98);
-
-  &:hover {
-    border: 1px solid rgb(98, 224, 98);
-  }
-}
-
-.group-4 {
-  box-shadow: inset 0px 0px 9px 2px rgb(79, 233, 217);
-
-  &:hover {
-    border: 1px solid rgb(79, 233, 217);
-  }
-}
-
-.group-5 {
-  box-shadow: inset 0px 0px 9px 2px rgb(62, 60, 201);
-
-  &:hover {
-    border: 1px solid rgb(62, 60, 201);
-  }
-}
-
-.group-6 {
-  box-shadow: inset 0px 0px 9px 2px rgb(37, 25, 56);
-
-  &:hover {
-    border: 1px solid rgb(37, 25, 56);
-  }
-}
+.group-1 { @include group(rgb(226, 60, 60)); }
+.group-2 { @include group(rgb(226, 216, 67)); }
+.group-3 { @include group(rgb(98, 224, 98)); }
+.group-4 { @include group(rgb(79, 233, 217)); }
+.group-5 { @include group(rgb(62, 60, 201)); }
+.group-6 { @include group(rgb(37, 25, 56)); }
 
 .round-tr {
   border-radius: 0rem .25rem 0rem 0rem;

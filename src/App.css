@@ -90,9 +90,9 @@ span.empty {
     border: 1px solid #ccc; }
 
 .group-1 {
-  box-shadow: inset 0px 0px 9px 2px rgba(226, 60, 60, 0.979); }
+  box-shadow: inset 0px 0px 9px 2px #e23c3c; }
   .group-1:hover {
-    border: 1px solid rgba(226, 60, 60, 0.979); }
+    border: 1px solid #e23c3c; }
 
 .group-2 {
   box-shadow: inset 0px 0px 9px 2px #e2d843; }

@@ -24,7 +24,8 @@ class List extends React.Component {
             listItems.push(<Call {...call} key={call.name} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.props.onClick(call.name)} />)
         }
         while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
-            listItems.push(<Call empty={true} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length)} name="~" group={0} key={`${id}, ${listItems.length}`} />)
+            const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
+            listItems.push(<Call empty={true} rounded={roundedCorners} group={0} key={`${id}, ${listItems.length}`} />)
         }
 
         var pages = [];
