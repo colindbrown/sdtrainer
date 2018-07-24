@@ -103,7 +103,14 @@ class RunSessionView extends React.Component {
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-12" id="runList" columns={4} calls={this.state.sessionCalls} onClick={(name) => this.toggleCall(name)} />
+                    <List 
+                        size="col-md-12" 
+                        id="runList" 
+                        columns={4} 
+                        calls={this.state.sessionCalls} 
+                        placeholderContent={{title: "Run a Session", text: "Select a session plan to run from the function bar above. Once you're done, finish the session using the button on the right."}}
+                        onClick={(name) => this.toggleCall(name)} 
+                    />
                 </div>
             </div>
         )
