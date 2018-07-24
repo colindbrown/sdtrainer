@@ -24,10 +24,15 @@ class List extends React.Component {
                 />
             );
         }
+        const placeholder = this.props.calls.length ? "" :
+            <div className="jumbotron placeholder">
+            Hello
+            </div>;
         return (
 
             <div id={id} className={`carousel slide ${this.props.size}`} data-wrap="false" data-interval="false">
                 <div className="carousel-inner container">
+                    {placeholder || ""}
                     {pages}
                 </div>
                 <a className="carousel-control-prev btn btn-secondary" href={`#${id}`} role="button" data-slide="prev">

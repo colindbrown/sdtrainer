@@ -34,7 +34,8 @@ span.empty {
 
 .carousel-item {
   border: 1px solid darkgrey;
-  border-radius: 5px; }
+  border-radius: 5px;
+  z-index: 0; }
 
 .carousel {
   margin-top: 35px;
@@ -200,3 +201,12 @@ hr {
   position: absolute;
   left: 15px;
   top: 12px; }
+
+.placeholder {
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 150px;
+  width: 300px;
+  margin: -75px 0 0 -150px; }
