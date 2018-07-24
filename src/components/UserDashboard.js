@@ -48,11 +48,10 @@ class UserDashboard extends React.Component {
 
     render() {
         const firstName = this.props.activeUser.displayName.split(" ")[0];
-        const activeClass = this.props.activeClass;
         const classCards = this.state.classes.map((classData) => <ClassCard 
             key={classData.name} 
             {...classData} 
-            activeClass={activeClass} 
+            activeClass={this.props.activeClass} 
             updateActiveClass={(name) => this.props.updateActiveClass(name)} /> 
         );
         classCards.push(<AddClassCard 
@@ -61,26 +60,6 @@ class UserDashboard extends React.Component {
             showAlert={(type,text) => this.showAlert(type, text)} 
             clearAlerts={() => this.clearAlerts()}
             />)
-        var jumboContent;
-        if (activeClass.name) {
-            jumboContent = <div className="container">
-                <h1 className="jumbotron-heading">{activeClass.name}</h1>
-                <hr/>
-                <p className="lead text-muted">Completion statistics will go here</p>
-                <p className="lead text-muted">Sessions info/sessions run here</p>
-                <hr/>
-                <NavLink className={`btn btn-info mr-2`} to={`/create`}>Plan a Session</NavLink>
-                <NavLink className={`btn btn-info`} to={`/templates`}>Create a Template</NavLink>
-            </div>;
-        } else {
-            jumboContent = <div className="container">
-                <h1 className="jumbotron-heading">Welcome {firstName}</h1>
-                <p className="lead text-muted">Choose a class to manage from the classes below or create a new one</p>
-                <hr/>
-                <p className="lead text-muted"> Or create a template to use in your classes</p>
-                <NavLink className={`btn btn-info`} to={`/create`}>Create a Template</NavLink>
-            </div>;
-        }
         const templateListItems = this.state.templates.map((template) => 
             <li className="list-group-item d-flex justify-content-end" key={template.name}>
                 <div className="list-item-name"><p><strong>{template.name}</strong></p></div>
@@ -91,7 +70,13 @@ class UserDashboard extends React.Component {
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center class-jumbotron">
-                    {jumboContent}
+                    <div className="container">
+                        <h1 className="jumbotron-heading">Welcome {firstName}</h1>
+                        <p className="lead text-muted">Choose a class to manage from the classes below or create a new one</p>
+                        <hr/>
+                        <p className="lead text-muted"> Or create a template to use in your classes</p>
+                        <NavLink className={`btn btn-info`} to={`/templates`}>Create a Template</NavLink>
+                    </div>
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <section>

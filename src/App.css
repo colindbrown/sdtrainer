@@ -30,7 +30,7 @@ span.empty {
   opacity: 0; }
 
 .carousel-item ul {
-  margin: 0px; }
+  margin: 0; }
 
 .carousel-item {
   border: 1px solid darkgrey;
@@ -71,43 +71,43 @@ span.empty {
     background: #fff; }
 
 .group-0 {
-  box-shadow: inset 0px -1px 9px 1px #ccc; }
+  box-shadow: inset 0 -1px 9px 1px #ccc; }
   .group-0:hover {
     border: 1px solid #ccc; }
 
 .group-1 {
-  box-shadow: inset 0px -1px 9px 1px rgba(226, 60, 60, 0.979); }
+  box-shadow: inset 0 -1px 9px 1px rgba(226, 60, 60, 0.979); }
   .group-1:hover {
     border: 1px solid rgba(226, 60, 60, 0.979); }
 
 .group-2 {
-  box-shadow: inset 0px -1px 9px 1px #e2d843; }
+  box-shadow: inset 0 -1px 9px 1px #e2d843; }
   .group-2:hover {
     border: 1px solid #e2d843; }
 
 .group-3 {
-  box-shadow: inset 0px -1px 9px 1px #62e062; }
+  box-shadow: inset 0 -1px 9px 1px #62e062; }
   .group-3:hover {
     border: 1px solid #62e062; }
 
 .group-4 {
-  box-shadow: inset 0px -1px 9px 1px #4fe9d9; }
+  box-shadow: inset 0 -1px 9px 1px #4fe9d9; }
   .group-4:hover {
     border: 1px solid #4fe9d9; }
 
 .group-5 {
-  box-shadow: inset 0px -1px 9px 1px #3e3cc9; }
+  box-shadow: inset 0 -1px 9px 1px #3e3cc9; }
   .group-5:hover {
     border: 1px solid #3e3cc9; }
 
 .group-6 {
-  box-shadow: inset 0px -1px 9px 1px #251938; }
+  box-shadow: inset 0 -1px 9px 1px #251938; }
   .group-6:hover {
     border: 1px solid #251938; }
 
 .call-disabled {
   background: #ddd;
-  box-shadow: inset 0px -1px 9px 1px #999; }
+  box-shadow: inset 0 -1px 9px 1px #999; }
 
 .class-jumbotron {
   margin-bottom: 15px; }
@@ -181,18 +181,18 @@ hr {
   left: auto; }
 
 .pills-row {
-  margin-right: 0px;
-  margin-left: 0px;
-  border-radius: 5px 5px 0px 0px; }
+  margin-right: 0;
+  margin-left: 0;
+  border-radius: 5px 5px 0 0; }
 
 .collections-list {
   height: 400px;
   overflow-y: scroll;
-  margin-right: 0px;
-  margin-left: 0px;
+  margin-right: 0;
+  margin-left: 0;
   border: 1px solid #eee; }
   .collections-list .list-group-item {
-    border-radius: 0px; }
+    border-radius: 0; }
     .collections-list .list-group-item div {
       margin-top: 4px; }
 

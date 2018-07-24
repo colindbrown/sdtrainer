@@ -55,6 +55,7 @@ class CreateFunctionBar extends React.Component {
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
+                    {usedButton}
                     <div className="dropdown mr-2">
                         <button className={`${disableTemplateMenu} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Add template
@@ -63,7 +64,6 @@ class CreateFunctionBar extends React.Component {
                             {templateListItems}
                         </div>
                     </div>
-                    {usedButton}
                     <div className="dropdown mr-2">
                         <button className={`${disableSessionMenu} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Add session

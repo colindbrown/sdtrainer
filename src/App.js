@@ -6,6 +6,7 @@ import { Switch, Route, HashRouter} from "react-router-dom";
 import CreateCollectionView from "./components/CreateCollectionView";
 import RunSessionView from "./components/RunSessionView";
 import ReviewClassView from "./components/ReviewClassView";
+import ClassDashboard from "./components/ClassDashboard";
 import * as db from "./util/dbfunctions";
 import firebase from "firebase";
 import './App.css';
@@ -34,6 +35,10 @@ class App extends Component {
     this.setState({activeClass: classData});
   }
 
+  resetClass = () => {
+    this.setState({activeClass: {}});
+  }
+
   signOut = () => {
     firebase.auth().signOut();
   }
@@ -45,7 +50,14 @@ class App extends Component {
       routes = <Route path="/" component={Home}/>
     } else if (this.state.activeClass.name) {
       routes = <Switch>
-          {/*<Route path="/class" component={ClassManager}/>*/}
+          <Route path="/class" render={(routeProps) => (
+            <ClassDashboard {...routeProps} 
+              activeClass={this.state.activeClass} 
+              activeUser={this.state.activeUser}
+              updateActiveClass={(name) => this.updateActiveClass(name)}
+              resetClass={() => this.resetClass()} 
+            />
+          )}/>
           <Route path="/create" render={() => (
             <CreateCollectionView
               activeClass={this.state.activeClass} 
@@ -63,7 +75,6 @@ class App extends Component {
         </Switch>
     } else {
       routes = <Switch>
-        {/*<Route path="/class" component={ClassManager}/>*/}
         <Route path="/create" render={() => (
             <CreateCollectionView
               activeClass={this.state.activeClass} 
@@ -81,7 +92,7 @@ class App extends Component {
     return (
       <HashRouter>
         <div className="App">
-          <Header activeClass={this.state.activeClass} activeUser={this.state.activeUser} signOut={() => this.signOut()}/>
+          <Header activeClass={this.state.activeClass} activeUser={this.state.activeUser} signOut={() => this.signOut()} resetClass={() => this.resetClass()}/>
           {routes}
         </div>
       </HashRouter>
