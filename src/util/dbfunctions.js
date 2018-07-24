@@ -1,5 +1,9 @@
-import { db } from "../db";
-import { AllCalls } from "./calls";
+import {
+    db
+} from "../db";
+import {
+    AllCalls
+} from "./calls";
 
 
 // references
@@ -21,7 +25,7 @@ export function namesArray(array) {
     array.forEach((element) => {
         namesArray.push(element.name);
     })
-    return namesArray
+    return namesArray;
 }
 
 export async function setActiveUser(user) {
@@ -36,7 +40,9 @@ export async function setActiveUser(user) {
 
 export async function createUser(user) {
     const newUserRef = db.collection("Users").doc();
-    newUserRef.set({email: user.email});
+    newUserRef.set({
+        email: user.email
+    });
     return newUserRef;
 }
 
@@ -68,9 +74,9 @@ export async function setActiveClass(name) {
 export async function fetchClassData() {
     const snapshot = await ClassesRef.get();
     var classes = [];
-    snapshot.forEach(((doc) => {
+    snapshot.forEach((doc) => {
         classes.push(doc.data());
-    }));
+    });
     return classes;
 }
 
@@ -111,9 +117,9 @@ export async function addAllCalls() {
 export async function fetchAllCalls() {
     const snapshot = await AllCallsRef.get();
     const allCalls = [];
-    snapshot.forEach(((doc) => {
+    snapshot.forEach((doc) => {
         allCalls.push(doc.data());
-    }));
+    });
     return allCalls;
 }
 
@@ -161,7 +167,11 @@ export async function updateHistory(sessionName, calls) {
         const call = calls.find((callIterator) => (callIterator.name === prev.name));
         if (call) {
             const uses = call.everUsed ? prev.uses.concat([session.id]) : prev.uses;
-            batch.update(callDoc.ref, { everUsed: (call.everUsed || prev.everUsed), uses: uses, name: call.name });
+            batch.update(callDoc.ref, {
+                everUsed: (call.everUsed || prev.everUsed),
+                uses: uses,
+                name: call.name
+            });
         }
     });
     batch.commit();
@@ -173,9 +183,9 @@ export async function updateHistory(sessionName, calls) {
 export async function fetchSessionNames() {
     const snapshot = await activeClassRef.collection("Sessions").get();
     var sessionNames = [];
-    snapshot.forEach(((doc) => {
+    snapshot.forEach((doc) => {
         sessionNames.push(doc.data().name);
-    }));
+    });
     return sessionNames;
 }
 
@@ -183,9 +193,9 @@ export async function fetchSessionNames() {
 export async function fetchUnfinishedSessions() {
     const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", false).get();
     var sessions = [];
-    snapshot.forEach(((doc) => {
+    snapshot.forEach((doc) => {
         sessions.push(doc.data());
-    }));
+    });
     return sessions;
 }
 
@@ -193,9 +203,9 @@ export async function fetchUnfinishedSessions() {
 export async function fetchfinishedSessions() {
     const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", true).get();
     var sessions = [];
-    snapshot.forEach(((doc) => {
+    snapshot.forEach((doc) => {
         sessions.push(doc.data());
-    }));
+    });
     return sessions;
 }
 
@@ -203,9 +213,9 @@ export async function fetchfinishedSessions() {
 export async function fetchUnfinishedSessionNames() {
     const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", false).get();
     var sessionNames = [];
-    snapshot.forEach(((doc) => {
+    snapshot.forEach((doc) => {
         sessionNames.push(doc.data().name);
-    }));
+    });
     return sessionNames;
 }
 
@@ -213,10 +223,10 @@ export async function fetchUnfinishedSessionNames() {
 export async function fetchFinishedSessionNames() {
     const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", true).get();
     var sessionNames = [];
-    snapshot.forEach(((doc) => {
+    snapshot.forEach((doc) => {
         sessionNames.push(doc.data().name);
-    }));
-    return sessionNames;
+    });
+return sessionNames;
 }
 
 // return session (a DocumentSnapshot) if it exists, undefined if it doesnt
@@ -257,10 +267,10 @@ export async function fetchSessionCalls(name) {
     const sessionRef = await fetchSessionRef(name);
     const snapshot = await sessionRef.collection("Calls").get();
     var sessionCalls = []
-    snapshot.forEach(((doc) => {
+    snapshot.forEach((doc) => {
         const call = doc.data();
         sessionCalls.push(call);
-    }));
+    });
     return sessionCalls;
 }
 
@@ -272,15 +282,28 @@ export async function setSession(name, calls) {
         var snapshot = await session.collection("Calls").get();
         snapshot.docs.forEach((callDoc) => {
             const call = calls.find((callIterator) => (callIterator.name === callDoc.data().name));
-            batch.update(callDoc.ref, { used: call.used, timestamp: call.timestamp });
+            batch.update(callDoc.ref, {
+                used: call.used,
+                timestamp: call.timestamp
+            });
         });
-        batch.update(session, { finished: true, finishedAt: Date.now() })
+        batch.update(session, {
+            finished: true,
+            finishedAt: Date.now()
+        })
         batch.commit();
     } else {
         const newSession = activeClassRef.collection("Sessions").doc();
         const activeClass = await getActiveClass();
-        newSession.set({ name: name, createdAt: Date.now(), finished: false, id: activeClass.sessions });
-        activeClassRef.update({sessions: (activeClass.sessions + 1)});
+        newSession.set({
+            name: name,
+            createdAt: Date.now(),
+            finished: false,
+            id: activeClass.sessions
+        });
+        activeClassRef.update({
+            sessions: (activeClass.sessions + 1)
+        });
         calls.forEach((call) => newSession.collection("Calls").add(call));
     }
 }
@@ -296,9 +319,9 @@ export async function deleteSession(name) {
 export async function fetchTemplateNames() {
     const snapshot = await TemplatesRef.get();
     var templateNames = [];
-    snapshot.forEach(((doc) => {
+    snapshot.forEach((doc) => {
         templateNames.push(doc.data().name);
-    }));
+    });
     return templateNames;
 }
 
@@ -317,10 +340,10 @@ export async function fetchTemplateCalls(name) {
     const templateRef = await fetchTemplateRef(name);
     const snapshot = await templateRef.collection("Calls").get();
     var templateCalls = []
-    snapshot.forEach(((doc) => {
+    snapshot.forEach((doc) => {
         const call = doc.data();
         templateCalls.push(call);
-    }));
+    });
     return templateCalls;
 }
 
@@ -331,7 +354,10 @@ export async function setTemplate(name, calls) {
         // modify templates
     } else {
         const newTemplate = TemplatesRef.doc();
-        newTemplate.set({ name: name, createdAt: Date.now() });
+        newTemplate.set({
+            name: name,
+            createdAt: Date.now()
+        });
         calls.forEach((call) => newTemplate.collection("Calls").add(call));
     }
 }
