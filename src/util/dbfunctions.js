@@ -24,7 +24,7 @@ export function namesArray(array) {
     var namesArray = [];
     array.forEach((element) => {
         namesArray.push(element.name);
-    })
+    });
     return namesArray;
 }
 
