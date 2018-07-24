@@ -89,6 +89,16 @@ class List extends React.Component {
         }
     }
 
+    async handleClick(name) {
+        await this.props.onClick(name)
+
+        const id = this.props.id || "listCarousel";
+        if (window.$(`div#${id}`).find(`.active.carousel-item`).length === 0) {
+            window.$(`div#${id}`).find(`.carousel-item`).last().addClass("active");
+        }
+
+    }
+
     render() {
         const NUMCOLUMNS = this.props.columns;
         const COLUMNSIZE = 12;
@@ -100,7 +110,7 @@ class List extends React.Component {
         var listItems = [];
         for (var i = 0; i < sortedCalls.length; i++) {
             const call = sortedCalls[i];
-            listItems.push(<Call {...call} key={call.name} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.props.onClick(call.name)} />)
+            listItems.push(<Call {...call} key={call.name} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.handleClick(call.name)} />)
         }
         while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
             const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
@@ -118,6 +128,7 @@ class List extends React.Component {
                 />
             );
         }
+
         return (
 
             <div id={id} className={`carousel slide ${this.props.size}`} data-wrap="false" data-interval="false">
