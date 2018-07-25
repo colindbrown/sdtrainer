@@ -13,13 +13,14 @@ class Call extends React.Component {
         } else {
             styling = `btn-outline-light group-${this.props.group}`;
         }
+        const name = this.props.category === "plus" ? this.props.name + " +" : this.props.name;
         return (
             <li 
             data-toggle="modal" 
             data-target={dataTarget} 
-            className={`btn list-group-flush list-group-item call ${styling} `} 
+            className={`btn list-group-item call ${styling} d-flex justify-content-center ${this.props.rounded}`} 
             onClick={this.props.onClick}>
-                <span className={this.props.empty ? "empty" : ""}>{this.props.name}</span>
+                <span className={`${this.props.empty ? "empty" : ""}`}>{name}</span>
             </li>
         )
     }

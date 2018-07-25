@@ -1,3 +1,19 @@
+// Colors
+$info: #5bc0de;
+$red: #E23C3C;
+$yellow: #E2D843;
+$green: #62E062;
+$teal: #4FE9D9;
+$violet: #3E3CC9;
+$dark-purple: #251938;
+$lightest-grey: #fefefe;
+$lighter-grey: #eee;
+$light-grey: #ccc;
+$medium-grey: #999;
+$dark-grey: #666;
+$midnight: rgb(55, 56, 66);
+$white: #fff;
+
 .App {
   text-align: center;
 }
@@ -8,10 +24,9 @@
 }
 
 .App-header {
-  background-color: #222;
   height: 150px;
   padding: 20px;
-  color: white;
+  color:  $white;
 }
 
 .App-title {
@@ -28,7 +43,7 @@
 }
 
 .main-bar {
-  background: rgb(55, 56, 66);
+  background: $midnight;
 }
 
 span.empty {
@@ -45,9 +60,12 @@ span.empty {
 }
 
 .carousel {
-  margin-top: 35px;
-  padding-left: 75px;
-  padding-right: 75px;
+  margin-top: 30px;
+
+  .carousel-inner {
+    width: 80%;
+    padding: 0px;
+  }
 }
 
 .carousel-control-prev, .carousel-control-next{
@@ -67,88 +85,80 @@ span.empty {
   right: 25px;
 }
 
-.call {
-  box-sizing: border-box;
-  color: #666;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  background: #fefefe;
-  height: 60px;
-  padding-top: 5%;
+.page {
+  height: 780px;
+}
 
+.call {
+  height: 65px;
+  box-sizing: border-box;
+  color:  $dark-grey;
+  font-family: 'Bree Serif';
+  font-size: 18px;
+  background:  $lightest-grey;
+  margin-bottom: 0px;
+  border: 1px solid  $lighter-grey;
+  border-radius: 0px;
   .call:hover {
-    background: #fefefe;
-    color: #666;
+    background:  $lightest-grey;
+    color:  $dark-grey;
+  }
+  &:first-child {
+    border-radius: .25rem 0rem 0rem 0rem;
+  }
+  &:last-child {
+    border-radius: 0rem 0rem .25rem 0rem ;
+  }
+
+  span {
+    position: absolute;
+    top: 18px;
   }
 
 }
 
 .call-empty {
-  border: 1px solid #eee;
-  background: #fff;
+  border: 1px solid  $lighter-grey;
+  background:  $white;
   &:hover {
-    background: #fff;
+    background:  $white;
   }
 }
 
 .group-0 {
-  box-shadow: inset 0 -1px 9px 1px #ccc;
+  box-shadow: inset 0px 0px 9px 1px  $light-grey;
 
   &:hover {
-    border: 1px solid #ccc;
+    border: 1px solid  $light-grey;
   }
 }
 
-.group-1 {
-  box-shadow: inset 0 -1px 9px 1px rgba(226, 60, 60, 0.979);
+@mixin group($color) {
+  box-shadow: inset 0px 0px 9px 2px $color;
 
   &:hover {
-    border: 1px solid rgba(226, 60, 60, 0.979);
+    border: 1px solid $color;
   }
 }
 
-.group-2 {
-  box-shadow: inset 0 -1px 9px 1px rgb(226, 216, 67);
+.group-1 { @include group($red)};
+.group-2 { @include group($yellow)};
+.group-3 { @include group($green)};
+.group-4 { @include group($teal)};
+.group-5 { @include group($violet)};
+.group-6 { @include group($dark-purple)};
 
-  &:hover {
-    border: 1px solid rgb(226, 216, 67);
-  }
+.round-tr {
+  border-radius: 0rem .25rem 0rem 0rem;
 }
 
-.group-3 {
-  box-shadow: inset 0 -1px 9px 1px rgb(98, 224, 98);
-
-  &:hover {
-    border: 1px solid rgb(98, 224, 98);
-  }
-}
-
-.group-4 {
-  box-shadow: inset 0 -1px 9px 1px rgb(79, 233, 217);
-
-  &:hover {
-    border: 1px solid rgb(79, 233, 217);
-  }
-}
-
-.group-5 {
-  box-shadow: inset 0 -1px 9px 1px rgb(62, 60, 201);
-
-  &:hover {
-    border: 1px solid rgb(62, 60, 201);
-  }
-}
-
-.group-6 {
-  box-shadow: inset 0 -1px 9px 1px rgb(37, 25, 56);
-
-  &:hover {
-    border: 1px solid rgb(37, 25, 56);
-  }
+.round-bl {
+  border-radius: 0rem 0rem 0rem .25rem;
 }
 
 .call-disabled {
-  background: #ddd;
-  box-shadow: inset 0 -1px 9px 1px #999;
+  background: $light-grey;
+  box-shadow: inset 0px 0px 9px 1px  $medium-grey;
 }
 
 .class-jumbotron {
@@ -159,7 +169,7 @@ span.empty {
   margin-top: 0;
   height: 550px;
   overflow-y: scroll;
-  border: 1px solid #eee;
+  border: 1px solid  $lighter-grey;
 }
 
 .class-card {
@@ -201,16 +211,18 @@ hr {
 }
 
 .vertical-alignment-helper {
-  display:table;
+  display: table;
   height: 100%;
   width: 100%;
   pointer-events:none;
 }
+
 .vertical-align-center {
   display: table-cell;
   vertical-align: middle;
   pointer-events:none;
 }
+
 .modal-content {
   width:inherit;
   max-width:inherit; 
@@ -248,7 +260,7 @@ hr {
   overflow-y: scroll;
   margin-right: 0;
   margin-left: 0;
-  border: 1px solid #eee;
+  border: 1px solid  $lighter-grey;
 
   .list-group-item {
     border-radius: 0;
