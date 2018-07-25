@@ -11,7 +11,8 @@ class CreateCollectionView extends React.Component {
         collectionList: [],
         alerts: [],
         sessionNames: [],
-        templateNames: []
+        templateNames: [],
+        sort: ""
     }
 
     // Lifecycle methods
@@ -26,8 +27,9 @@ class CreateCollectionView extends React.Component {
     // Async methods
     async loadAllCalls() {
         db.fetchAllCalls().then((allCalls) => {
-            allCalls.sort((a, b) => this.compareCalls(a, b));
-            this.setState({ callList: allCalls });
+            db.displayData(allCalls).then((displayData) => {
+                this.setState({ callList: displayData });
+            })
         });
     }
 
@@ -99,17 +101,6 @@ class CreateCollectionView extends React.Component {
         return false;
     }
 
-    // Helper methods
-    compareCalls(a, b) {
-        if (a.name < b.name) {
-            return -1;
-        } else if (a.name > b.name) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
     moveCall = (name, destination) => {
         var callList = this.state.callList;
         var collectionList = this.state.collectionList;
@@ -127,8 +118,6 @@ class CreateCollectionView extends React.Component {
                 collectionList.splice(index, 1);
             }
         }
-        callList.sort((a, b) => this.compareCalls(a, b));
-        collectionList.sort((a, b) => this.compareCalls(a, b));
         this.setState({ callList, collectionList });
     }
 
@@ -157,6 +146,10 @@ class CreateCollectionView extends React.Component {
         collectionList.forEach((call) => this.moveCall(call.name, "callList"));
     }
 
+    changeSort(sort) {
+        this.setState({sort});
+    }
+
     render() {
         return (
             <div>
@@ -170,6 +163,7 @@ class CreateCollectionView extends React.Component {
                     sessionNames={this.state.sessionNames}
                     addTemplate={(name) => this.addTemplate(name)}
                     templateNames={this.state.templateNames}
+                    changeSort={(sort) => this.changeSort(sort)}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
@@ -177,7 +171,8 @@ class CreateCollectionView extends React.Component {
                         size="col-md-6" 
                         id="callList" 
                         columns={2} 
-                        calls={this.state.callList}
+                        calls={this.state.callList} 
+                        sort={this.state.sort} 
                         onClick={(name) => this.moveCall(name, "collectionList")} 
                     />
                     <List 
@@ -185,6 +180,7 @@ class CreateCollectionView extends React.Component {
                         id="collectionList" 
                         columns={2} 
                         calls={this.state.collectionList} 
+                        sort={"arrayOrder"} 
                         placeholderContent={{title: "Create a Collection", 
                             text: "Add calls to your collection using the function bar or the list to the left. Once you're done, save your collection as either a session plan or a template."}}
                         onClick={(name) => this.moveCall(name, "callList")} 

@@ -6,10 +6,9 @@
   height: 80px; }
 
 .App-header {
-  background-color: #222;
   height: 150px;
   padding: 20px;
-  color: white; }
+  color: #fff; }
 
 .App-title {
   font-size: 1.5em; }
@@ -30,7 +29,7 @@ span.empty {
   opacity: 0; }
 
 .carousel-item ul {
-  margin: 0px; }
+  margin: 0; }
 
 .carousel-item {
   border: 1px solid darkgrey;
@@ -38,9 +37,10 @@ span.empty {
   z-index: 0; }
 
 .carousel {
-  margin-top: 35px;
-  padding-left: 75px;
-  padding-right: 75px; }
+  margin-top: 30px; }
+  .carousel .carousel-inner {
+    width: 80%;
+    padding: 0px; }
 
 .carousel-control-prev, .carousel-control-next {
   width: 50px;
@@ -54,16 +54,29 @@ span.empty {
 .carousel-control-next {
   right: 25px; }
 
+.page {
+  height: 780px; }
+
 .call {
+  height: 65px;
   box-sizing: border-box;
   color: #666;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: 'Bree Serif';
+  font-size: 18px;
   background: #fefefe;
-  height: 60px;
-  padding-top: 5%; }
+  margin-bottom: 0px;
+  border: 1px solid #eee;
+  border-radius: 0px; }
   .call .call:hover {
     background: #fefefe;
     color: #666; }
+  .call:first-child {
+    border-radius: .25rem 0rem 0rem 0rem; }
+  .call:last-child {
+    border-radius: 0rem 0rem .25rem 0rem; }
+  .call span {
+    position: absolute;
+    top: 18px; }
 
 .call-empty {
   border: 1px solid #eee;
@@ -72,43 +85,49 @@ span.empty {
     background: #fff; }
 
 .group-0 {
-  box-shadow: inset 0px -1px 9px 1px #ccc; }
+  box-shadow: inset 0px 0px 9px 1px #ccc; }
   .group-0:hover {
     border: 1px solid #ccc; }
 
 .group-1 {
-  box-shadow: inset 0px -1px 9px 1px rgba(226, 60, 60, 0.979); }
+  box-shadow: inset 0px 0px 9px 2px #E23C3C; }
   .group-1:hover {
-    border: 1px solid rgba(226, 60, 60, 0.979); }
+    border: 1px solid #E23C3C; }
 
 .group-2 {
-  box-shadow: inset 0px -1px 9px 1px #e2d843; }
+  box-shadow: inset 0px 0px 9px 2px #E2D843; }
   .group-2:hover {
-    border: 1px solid #e2d843; }
+    border: 1px solid #E2D843; }
 
 .group-3 {
-  box-shadow: inset 0px -1px 9px 1px #62e062; }
+  box-shadow: inset 0px 0px 9px 2px #62E062; }
   .group-3:hover {
-    border: 1px solid #62e062; }
+    border: 1px solid #62E062; }
 
 .group-4 {
-  box-shadow: inset 0px -1px 9px 1px #4fe9d9; }
+  box-shadow: inset 0px 0px 9px 2px #4FE9D9; }
   .group-4:hover {
-    border: 1px solid #4fe9d9; }
+    border: 1px solid #4FE9D9; }
 
 .group-5 {
-  box-shadow: inset 0px -1px 9px 1px #3e3cc9; }
+  box-shadow: inset 0px 0px 9px 2px #3E3CC9; }
   .group-5:hover {
-    border: 1px solid #3e3cc9; }
+    border: 1px solid #3E3CC9; }
 
 .group-6 {
-  box-shadow: inset 0px -1px 9px 1px #251938; }
+  box-shadow: inset 0px 0px 9px 2px #251938; }
   .group-6:hover {
     border: 1px solid #251938; }
 
+.round-tr {
+  border-radius: 0rem .25rem 0rem 0rem; }
+
+.round-bl {
+  border-radius: 0rem 0rem 0rem .25rem; }
+
 .call-disabled {
-  background: #ddd;
-  box-shadow: inset 0px -1px 9px 1px #999; }
+  background: #ccc;
+  box-shadow: inset 0px 0px 9px 1px #999; }
 
 .class-jumbotron {
   margin-bottom: 15px; }
@@ -182,18 +201,18 @@ hr {
   left: auto; }
 
 .pills-row {
-  margin-right: 0px;
-  margin-left: 0px;
-  border-radius: 5px 5px 0px 0px; }
+  margin-right: 0;
+  margin-left: 0;
+  border-radius: 5px 5px 0 0; }
 
 .collections-list {
   height: 400px;
   overflow-y: scroll;
-  margin-right: 0px;
-  margin-left: 0px;
+  margin-right: 0;
+  margin-left: 0;
   border: 1px solid #eee; }
   .collections-list .list-group-item {
-    border-radius: 0px; }
+    border-radius: 0; }
     .collections-list .list-group-item div {
       margin-top: 4px; }
 
