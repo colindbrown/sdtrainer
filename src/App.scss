@@ -1,17 +1,18 @@
 // Colors
 $info: #5bc0de;
-$group-1: #E23C3C;
-$group-2: #E2D843;
-$group-3: #62E062;
-$group-4: #4FE9D9;
-$group-5: #3E3CC9;
-$group-6: #251938;
+$red: #E23C3C;
+$yellow: #E2D843;
+$green: #62E062;
+$teal: #4FE9D9;
+$violet: #3E3CC9;
+$dark-purple: #251938;
 $lightest-grey: #fefefe;
 $lighter-grey: #eee;
 $light-grey: #ccc;
 $medium-grey: #999;
 $dark-grey: #666;
 $midnight: rgb(55, 56, 66);
+$white: #fff;
 
 .App {
   text-align: center;
@@ -25,7 +26,7 @@ $midnight: rgb(55, 56, 66);
 .App-header {
   height: 150px;
   padding: 20px;
-  color: white;
+  color:  $white;
 }
 
 .App-title {
@@ -118,9 +119,9 @@ span.empty {
 
 .call-empty {
   border: 1px solid  $lighter-grey;
-  background: white;
+  background:  $white;
   &:hover {
-    background: white;
+    background:  $white;
   }
 }
 
@@ -140,12 +141,12 @@ span.empty {
   }
 }
 
-.group-1 { @include group($group-1)};
-.group-2 { @include group($group-2)};
-.group-3 { @include group($group-3)};
-.group-4 { @include group($group-4)};
-.group-5 { @include group($group-5)};
-.group-6 { @include group($group-6)};
+.group-1 { @include group($red)};
+.group-2 { @include group($yellow)};
+.group-3 { @include group($green)};
+.group-4 { @include group($teal)};
+.group-5 { @include group($violet)};
+.group-6 { @include group($dark-purple)};
 
 .round-tr {
   border-radius: 0rem .25rem 0rem 0rem;
