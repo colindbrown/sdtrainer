@@ -7,8 +7,10 @@ import CreateFunctionBar from "./CreateFunctionBar";
 class CreateCollectionView extends React.Component {
 
     state = {
-        callList: "loading",
+        callList: [],
+        callsLoading: false,
         collectionList: [],
+        collectionCallsLoading: false,
         alerts: [],
         sessionNames: [],
         templateNames: [],
@@ -26,9 +28,10 @@ class CreateCollectionView extends React.Component {
 
     // Async methods
     async loadAllCalls() {
+        this.setState({callsLoading: true})
         db.fetchAllCalls().then((allCalls) => {
             db.displayData(allCalls).then((displayData) => {
-                this.setState({ callList: displayData });
+                this.setState({ callList: displayData, callsLoading: false });
             })
         });
     }
@@ -42,20 +45,24 @@ class CreateCollectionView extends React.Component {
     }
 
     async addSession(name) {
+        this.setState({ collectionCallsLoading: true })
         db.fetchSessionCalls(name).then(async (sessionCalls) => {
             const displayData = await db.displayData(sessionCalls);
             displayData.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
+            this.setState({collectionCallsLoading: false })
         });
     }
 
     async addTemplate(name) {
+        this.setState({ collectionCallsLoading: true })
         db.fetchTemplateCalls(name).then(async (templateCalls) => {
             const displayData = await db.displayData(templateCalls);
             displayData.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
+            this.setState({collectionCallsLoading: false })
         });
     }
 
@@ -133,11 +140,13 @@ class CreateCollectionView extends React.Component {
     // Props methods
     addAllUsed = async (e) => {
         e.preventDefault();
+        this.setState({collectionCallsLoading: true })
         db.fetchByEverUsed(true).then(async (calls) => {
             const displayData = await db.displayData(calls);
             displayData.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
+            this.setState({collectionCallsLoading: false })
         })
     }
 
@@ -172,6 +181,7 @@ class CreateCollectionView extends React.Component {
                         id="callList" 
                         columns={2} 
                         calls={this.state.callList} 
+                        loading={this.state.callsLoading}
                         sort={this.state.sort} 
                         onClick={(name) => this.moveCall(name, "collectionList")} 
                     />
@@ -180,6 +190,7 @@ class CreateCollectionView extends React.Component {
                         id="collectionList" 
                         columns={2} 
                         calls={this.state.collectionList} 
+                        loading={this.state.collectionCallsLoading}
                         sort={"arrayOrder"} 
                         onClick={(name) => this.moveCall(name, "callList")} 
                     />
