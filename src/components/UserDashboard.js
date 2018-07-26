@@ -3,6 +3,7 @@ import ClassCard from "./ClassCard";
 import * as db from "../util/dbfunctions";
 import AddClassCard from './AddClassCard';
 import Alerts from "./Alerts";
+import Placeholder from './Placeholder';
 import { NavLink } from "react-router-dom";
 
 
@@ -60,13 +61,13 @@ class UserDashboard extends React.Component {
             showAlert={(type,text) => this.showAlert(type, text)} 
             clearAlerts={() => this.clearAlerts()}
             />)
-        const templateListItems = this.state.templates.map((template) => 
+        const templateListItems = this.state.templates.length ? this.state.templates.map((template) => 
             <li className="list-group-item d-flex justify-content-end" key={template.name}>
                 <div className="list-item-name"><p><strong>{template.name}</strong></p></div>
                 <div className="mr-5">Created on {(new Date(template.createdAt)).toDateString()}</div>
                 <button className="btn btn-sm btn-danger" onClick={() => this.deleteTemplate(template.name)}>Delete</button>
             </li>
-        );
+        ) : <li><Placeholder content={{title: "Templates", text: "You don't have any templates to display at the moment.", rel: "/create", destination: "Create a Template"}}/></li>;
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center class-jumbotron">

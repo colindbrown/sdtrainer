@@ -129,10 +129,7 @@ class List extends React.Component {
                 />
             );
         }
-<<<<<<< HEAD
         const placeholder = !this.props.calls.length && this.props.placeholderContent ? <Placeholder content={this.props.placeholderContent} /> : "";
-=======
->>>>>>> master
 
         return (
 

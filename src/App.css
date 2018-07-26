@@ -232,3 +232,6 @@ hr {
   padding: 40px; }
   .placeholder h6 {
     line-height: 1.6; }
+
+.tab-content {
+  position: relative; }
