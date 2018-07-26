@@ -132,6 +132,7 @@ span.empty {
   margin-bottom: 15px; }
 
 .card-container {
+  position: relative;
   margin-top: 0;
   height: 550px;
   overflow-y: scroll;
