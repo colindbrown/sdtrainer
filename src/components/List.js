@@ -106,27 +106,38 @@ class List extends React.Component {
 
         const id = this.props.id || "listCarousel";
 
-        const sortedCalls = this.props.sort === "arrayOrder" ? this.props.calls : this.props.calls.sort(sort);
-        var listItems = [];
-        for (var i = 0; i < sortedCalls.length; i++) {
-            const call = sortedCalls[i];
-            listItems.push(<Call {...call} key={call.name} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.handleClick(call.name)} />)
-        }
-        while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
-            const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
-            listItems.push(<Call empty={true} rounded={roundedCorners} group={0} key={`${id}, ${listItems.length}`} />)
-        }
-
-        var pages = [];
-        for (var i = 0; i < (listItems.length / (NUMCOLUMNS*COLUMNSIZE)); i++) {
+        var pages = []
+        if (this.props.calls === "loading") {
+            var listItems = [];
+            while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
+                const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
+                listItems.push(<Call empty={true} rounded={roundedCorners} group={0} key={`${id}, ${listItems.length}`} />)
+            }
             pages.push(
-                <Page 
-                    key={i} 
-                    active={i === 0 ? "active" : ""} 
-                    columns={NUMCOLUMNS} columnSize={COLUMNSIZE} 
-                    calls={listItems.slice(i*(NUMCOLUMNS*COLUMNSIZE), (i+1)*(NUMCOLUMNS*COLUMNSIZE))} 
-                />
+                <Page loading={true} active="active" calls={listItems}/>
             );
+        } else {
+            const sortedCalls = this.props.sort === "arrayOrder" ? this.props.calls : this.props.calls.sort(sort);
+            var listItems = [];
+            for (var i = 0; i < sortedCalls.length; i++) {
+                const call = sortedCalls[i];
+                listItems.push(<Call {...call} key={call.name} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.handleClick(call.name)} />)
+            }
+            while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
+                const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
+                listItems.push(<Call empty={true} rounded={roundedCorners} group={0} key={`${id}, ${listItems.length}`} />)
+            }
+
+            for (var i = 0; i < (listItems.length / (NUMCOLUMNS*COLUMNSIZE)); i++) {
+                pages.push(
+                    <Page 
+                        key={i} 
+                        active={i === 0 ? "active" : ""} 
+                        columns={NUMCOLUMNS} columnSize={COLUMNSIZE} 
+                        calls={listItems.slice(i*(NUMCOLUMNS*COLUMNSIZE), (i+1)*(NUMCOLUMNS*COLUMNSIZE))} 
+                    />
+                );
+            }
         }
 
         return (

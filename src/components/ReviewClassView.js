@@ -9,7 +9,7 @@ class ReviewClassView extends React.Component {
 
     state = {
         alerts: [],
-        selectedCalls: [],
+        selectedCalls: "loading",
         sessionNames: [],
         activeFilter: {},
         modalData: {},
@@ -148,7 +148,14 @@ class ReviewClassView extends React.Component {
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-12" id="reviewList" columns={4} calls={this.state.selectedCalls} sort={this.state.sort} onClick={(name) => this.showCall(name)} />
+                    <List 
+                        size="col-md-12" 
+                        id="reviewList" 
+                        columns={4} 
+                        calls={this.state.selectedCalls} 
+                        sort={this.state.sort} 
+                        onClick={(name) => this.showCall(name)} 
+                    />
                 </div>
             </div>
         )

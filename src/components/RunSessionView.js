@@ -20,6 +20,7 @@ class RunSessionView extends React.Component {
     }
 
     async loadSession(name) {
+        this.setState({sessionCalls: "loading"});
         db.fetchSessionCalls(name).then( async (sessionCalls) => {
             const displayData = await db.displayData(sessionCalls);
             sessionCalls.forEach(((call) => {
@@ -87,7 +88,14 @@ class RunSessionView extends React.Component {
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-12" id="runList" columns={4} calls={this.state.sessionCalls} sort={this.state.sort} onClick={(name) => this.toggleCall(name)} />
+                    <List 
+                        size="col-md-12" 
+                        id="runList" 
+                        columns={4} 
+                        calls={this.state.sessionCalls} 
+                        sort={this.state.sort} 
+                        onClick={(name) => this.toggleCall(name)} 
+                    />
                 </div>
             </div>
         )

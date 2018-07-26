@@ -54,6 +54,7 @@ span.empty {
   right: 25px; }
 
 .page {
+  position: relative;
   height: 780px; }
 
 .call {
@@ -206,7 +207,8 @@ hr {
   border-radius: 50%;
   width: 50px;
   height: 50px;
-  animation: spin 2s linear infinite; }
+  animation: spin 2s linear infinite;
+  z-index: 1; }
 
 @keyframes spin {
   0% {
