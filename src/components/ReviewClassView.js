@@ -46,6 +46,7 @@ class ReviewClassView extends React.Component {
     }
 
     async showCall(name) {
+        this.setState({ modalData: { loading: true }});
         db.fetchCallHistory(name).then(async (call) => {
             const sessionData = await db.fetchAllSessions();
             var body = "";
@@ -129,6 +130,7 @@ class ReviewClassView extends React.Component {
     }
 
     exportSelection() {
+        this.setState({ modalData: { loading: true }});
         var text = "";
         if (this.state.selectedCalls.length > 0) {
             this.state.selectedCalls.forEach(((call) => {

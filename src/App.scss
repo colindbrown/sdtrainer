@@ -228,7 +228,9 @@ hr {
 .modal-content {
   width:inherit;
   max-width:inherit; 
+  min-width: 300px;
   height:inherit;
+  min-height: 200px;
   margin: 0 auto;
   pointer-events:all;
 }
