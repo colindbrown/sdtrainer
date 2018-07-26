@@ -70,7 +70,7 @@ class ClassDashboard extends React.Component {
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <section>
-                    <ul className="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
+                    <ul className="nav nav-tabs nav-fill row tabs-row" id="myTab" role="tablist">
                         <li className="nav-item">
                             <a className="text-secondary nav-link active" id="plans-tab" data-toggle="tab" href="#plans" role="tab" aria-controls="plans" aria-selected="true">Session Plans</a>
                         </li>
@@ -79,10 +79,10 @@ class ClassDashboard extends React.Component {
                         </li>
                     </ul>
                     <div className="tab-content" id="myTabContent">
-                        <ul className="tab-pane fade show active list-group collections-list bg-light" id="plans" role="tabpanel" aria-labelledby="plans-tab">
+                        <ul className="tab-pane fade show active list-group collections-list" id="plans" role="tabpanel" aria-labelledby="plans-tab">
                             {unfinishedListItems}
                         </ul>
-                        <ul className="tab-pane fade list-group collections-list bg-light" id="finished" role="tabpanel" aria-labelledby="finished-tab">
+                        <ul className="tab-pane fade list-group collections-list" id="finished" role="tabpanel" aria-labelledby="finished-tab">
                             {finishedListItems}
                         </ul>
                     </div>

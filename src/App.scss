@@ -6,8 +6,8 @@ $green: #62E062;
 $teal: #4FE9D9;
 $violet: #3E3CC9;
 $dark-purple: #251938;
-$lightest-grey: #fefefe;
-$lighter-grey: #eee;
+$lightest-grey: #fdfdfd;
+$lighter-grey: #e9ecef;
 $light-grey: #ccc;
 $medium-grey: #999;
 $dark-grey: #666;
@@ -168,9 +168,11 @@ span.empty {
 
 .card-container {
   margin-top: 0;
-  height: 550px;
+  height: 400px;
   overflow-y: scroll;
-  border: 1px solid  $lighter-grey;
+  border: 1px solid  $light-grey;
+  border-top: 0 solid transparent;
+  background-color: $white
 }
 
 .class-card {
@@ -249,11 +251,25 @@ hr {
   left: auto; 
 }
 
-.pills-row {
+.tabs-row {
   margin-right: 0;
   margin-left: 0;
   border-radius: 5px 5px 0 0;
+  border: 0 solid transparent;
+  background: $lighter-grey;
 
+  & > .nav-item {
+    border-color: $light-grey;
+    margin-bottom: 0;
+    
+    & > .nav-link {
+      border-bottom: 1px solid $light-grey;
+    }
+    & > .active {
+      background: $white;
+      border-bottom: 1px solid $white;
+    }
+  }
 }
 
 .collections-list {
@@ -261,10 +277,16 @@ hr {
   overflow-y: scroll;
   margin-right: 0;
   margin-left: 0;
-  border: 1px solid  $lighter-grey;
+  border: 1px solid $light-grey;
+  border-top: 0 solid transparent;
+  background-color: $white;
 
   .list-group-item {
     border-radius: 0;
+    background-color: $lightest-grey;
+    border: 1px solid $lighter-grey;
+    border-right: 0 solid transparent;
+    border-left: 0 solid transparent;
 
     div {
       margin-top: 4px;

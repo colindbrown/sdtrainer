@@ -81,7 +81,7 @@ class UserDashboard extends React.Component {
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <section>
-                    <ul className="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
+                    <ul className="nav nav-tabs nav-fill row tabs-row" id="myTab" role="tablist">
                         <li className="nav-item">
                             <a className="text-secondary nav-link active" id="classes-tab" data-toggle="tab" href="#classes" role="tab" aria-controls="classes" aria-selected="true">Classes</a>
                         </li>
@@ -90,14 +90,14 @@ class UserDashboard extends React.Component {
                         </li>
                     </ul>
                     <div className="tab-content" id="myTabContent">
-                        <div className="tab-pane fade show active album bg-light card-container" id="classes" role="tabpanel" aria-labelledby="classes-tab">
+                        <div className="tab-pane fade show active album card-container" id="classes" role="tabpanel" aria-labelledby="classes-tab">
                             <div className="container">
                                 <div className="row">
                                     {classCards}
                                 </div>
                             </div>
                         </div>
-                        <ul className="tab-pane fade list-group collections-list bg-light" id="templates" role="tabpanel" aria-labelledby="templates-tab">
+                        <ul className="tab-pane fade list-group collections-list" id="templates" role="tabpanel" aria-labelledby="templates-tab">
                             {templateListItems}
                         </ul>
                     </div>
