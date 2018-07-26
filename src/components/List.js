@@ -99,6 +99,14 @@ class List extends React.Component {
 
     }
 
+    filterCalls(calls) {
+        if (this.props.filter) {
+            return calls.filter((call) => call.name.toLowerCase().startsWith(this.props.filter.toLowerCase()));
+        } else {
+            return calls;
+        }
+    }
+
     render() {
         const NUMCOLUMNS = this.props.columns;
         const COLUMNSIZE = 12;
@@ -106,7 +114,9 @@ class List extends React.Component {
 
         const id = this.props.id || "listCarousel";
 
-        const sortedCalls = this.props.sort === "arrayOrder" ? this.props.calls : this.props.calls.sort(sort);
+        const filteredCalls = this.filterCalls(this.props.calls);
+        const sortedCalls = this.props.sort === "arrayOrder" ? filteredCalls : filteredCalls.sort(sort);
+
         var listItems = [];
         for (var i = 0; i < sortedCalls.length; i++) {
             const call = sortedCalls[i];
