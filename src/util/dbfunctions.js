@@ -79,7 +79,8 @@ export async function createNewClub(name) {
     const docRef = await ClubsRef.add({
         name: name,
         createdAt: Date.now(),
-        sessions: 0
+        sessions: 0,
+        taught: 0
     })
     const allCalls = await fetchAllCalls();
     allCalls.forEach((call) => {
@@ -200,10 +201,14 @@ export async function updateHistory(sessionName, calls) {
     var batch = db.batch();
     var snapshot = await activeClubRef.collection("History").get();
     const session = await fetchSessionData(sessionName);
+    var newCalls = [];
     snapshot.docs.forEach((callDoc) => {
         const prev = callDoc.data();
         const call = calls.find((callIterator) => (callIterator.name === prev.name));
         if (call) {
+            if (!prev.everUsed && call.everUsed) {
+                newCalls.push(call);
+            }
             const uses = call.everUsed ? prev.uses.concat([session.id]) : prev.uses;
             batch.update(callDoc.ref, {
                 everUsed: (call.everUsed || prev.everUsed),
@@ -213,6 +218,9 @@ export async function updateHistory(sessionName, calls) {
         }
     });
     batch.commit();
+    activeClubRef.get().then((clubSnapshot) => {
+        activeClubRef.update({ newCalls: newCalls, taught: clubSnapshot.data().taught + newCalls.length });
+    })
 }
 
 // Session methods
