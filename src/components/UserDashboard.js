@@ -1,7 +1,7 @@
 import React from 'react';
-import ClassCard from "./ClassCard";
+import ClubCard from "./ClubCard";
 import * as db from "../util/dbfunctions";
-import AddClassCard from './AddClassCard';
+import AddClubCard from './AddClubCard';
 import Alerts from "./Alerts";
 import { NavLink } from "react-router-dom";
 
@@ -9,19 +9,19 @@ import { NavLink } from "react-router-dom";
 class UserDashboard extends React.Component {
 
     state = {
-        classes: [],
+        clubs: [],
         alerts: [],
         templates: []
     }
 
     componentDidMount() {
-        this.loadClasses();
+        this.loadClubs();
         this.loadTemplates();
     }
 
-    loadClasses = async () => {
-        const classes = await db.fetchClassData();
-        this.setState({classes});
+    loadClubs = async () => {
+        const clubs = await db.fetchClubData();
+        this.setState({clubs});
     }
 
     loadTemplates = async () => {
@@ -48,15 +48,15 @@ class UserDashboard extends React.Component {
 
     render() {
         const firstName = this.props.activeUser.displayName.split(" ")[0];
-        const classCards = this.state.classes.map((classData) => <ClassCard 
-            key={classData.name} 
-            {...classData} 
-            activeClass={this.props.activeClass} 
-            updateActiveClass={(name) => this.props.updateActiveClass(name)} /> 
+        const clubCards = this.state.clubs.map((clubData) => <ClubCard 
+            key={clubData.name} 
+            {...clubData} 
+            activeClub={this.props.activeClub} 
+            updateActiveClub={(name) => this.props.updateActiveClub(name)} /> 
         );
-        classCards.push(<AddClassCard 
-            key="addClassCard" 
-            updateActiveClass={(name) => this.props.updateActiveClass(name)}
+        clubCards.push(<AddClubCard 
+            key="addClubCard" 
+            updateActiveClub={(name) => this.props.updateActiveClub(name)}
             showAlert={(type,text) => this.showAlert(type, text)} 
             clearAlerts={() => this.clearAlerts()}
             />)
@@ -69,12 +69,12 @@ class UserDashboard extends React.Component {
         );
         return (
             <div className="container below-navbar">
-                <section className="jumbotron text-center class-jumbotron">
+                <section className="jumbotron text-center club-jumbotron">
                     <div className="container">
                         <h1 className="jumbotron-heading">Welcome {firstName}</h1>
-                        <p className="lead text-muted">Choose a class to manage from the classes below or create a new one</p>
+                        <p className="lead text-muted">Choose a club to manage from the clubs below or create a new one</p>
                         <hr/>
-                        <p className="lead text-muted"> Or create a template to use in your classes</p>
+                        <p className="lead text-muted"> Or create a template to use in your clubs</p>
                         <NavLink className={`btn btn-info`} to={`/templates`}>Create a Template</NavLink>
                     </div>
                 </section>
@@ -82,17 +82,17 @@ class UserDashboard extends React.Component {
                 <section>
                     <ul className="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
                         <li className="nav-item">
-                            <a className="text-secondary nav-link active" id="classes-tab" data-toggle="tab" href="#classes" role="tab" aria-controls="classes" aria-selected="true">Classes</a>
+                            <a className="text-secondary nav-link active" id="clubs-tab" data-toggle="tab" href="#clubs" role="tab" aria-controls="clubs" aria-selected="true">Clubs</a>
                         </li>
                         <li className="nav-item">
                             <a className="text-secondary nav-link" id="templates-tab" data-toggle="tab" href="#templates" role="tab" aria-controls="templates" aria-selected="false">Templates</a>
                         </li>
                     </ul>
                     <div className="tab-content" id="myTabContent">
-                        <div className="tab-pane fade show active album bg-light card-container" id="classes" role="tabpanel" aria-labelledby="classes-tab">
+                        <div className="tab-pane fade show active album bg-light card-container" id="clubs" role="tabpanel" aria-labelledby="clubs-tab">
                             <div className="container">
                                 <div className="row">
-                                    {classCards}
+                                    {clubCards}
                                 </div>
                             </div>
                         </div>

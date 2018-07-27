@@ -7,9 +7,9 @@ import {
 
 
 // references
-var activeClassRef;
+var activeClubRef;
 const AllCallsRef = db.collection("AllCalls");
-var ClassesRef;
+var ClubsRef;
 var TemplatesRef;
 
 // General methods
@@ -19,8 +19,8 @@ export async function displayData(calls) {
     const allCalls = await fetchAllCalls();
     var history = [];
     var sessions = [];
-    if (activeClassRef) {
-        const historySnapshot = await activeClassRef.collection("History").get();
+    if (activeClubRef) {
+        const historySnapshot = await activeClubRef.collection("History").get();
         historySnapshot.forEach(((doc) => {
             history.push(doc.data());
         }));
@@ -31,7 +31,7 @@ export async function displayData(calls) {
     calls.forEach((call) => {
         var callData = allCalls.find((iterator) => (call.name === iterator.name))
         const callHistory = history.find((iterator) => (call.name === iterator.name));
-        if (activeClassRef) {
+        if (activeClubRef) {
             callData.uses = callHistory.uses.length;
             if (callData.uses) {
                 const session = sessions.find((sessionIterator) => (sessionIterator.id === callHistory.uses[callHistory.uses.length-1]));
@@ -61,7 +61,7 @@ export async function setActiveUser(user) {
     var activeUserId;
     if (snapshot.size > 0) {
         activeUserId = snapshot.docs[0].id;
-        ClassesRef = db.collection("Users").doc(activeUserId).collection("Classes");
+        ClubsRef = db.collection("Users").doc(activeUserId).collection("Clubs");
         TemplatesRef = db.collection("Users").doc(activeUserId).collection("Templates");
     }
 }
@@ -74,9 +74,9 @@ export async function createUser(user) {
     return newUserRef;
 }
 
-// Class methods
-export async function createNewClass(name) {
-    const docRef = await ClassesRef.add({
+// Club methods
+export async function createNewClub(name) {
+    const docRef = await ClubsRef.add({
         name: name,
         createdAt: Date.now(),
         sessions: 0
@@ -91,31 +91,31 @@ export async function createNewClass(name) {
     })
 }
 
-// sets the active class, returns the class
-export async function setActiveClass(name) {
-    const snapshot = await ClassesRef.where("name", "==", name).get();
-    activeClassRef = snapshot.docs[0].ref;
+// sets the active club, returns the club
+export async function setActiveClub(name) {
+    const snapshot = await ClubsRef.where("name", "==", name).get();
+    activeClubRef = snapshot.docs[0].ref;
     return snapshot.docs[0].data();
 }
 
-// gets the data of all classes
-export async function fetchClassData() {
-    const snapshot = await ClassesRef.get();
-    var classes = [];
+// gets the data of all clubs
+export async function fetchClubData() {
+    const snapshot = await ClubsRef.get();
+    var clubs = [];
     snapshot.forEach((doc) => {
-        classes.push(doc.data());
+        clubs.push(doc.data());
     });
-    return classes;
+    return clubs;
 }
 
-export async function getActiveClass() {
-    const snapshot = await activeClassRef.get();
+export async function getActiveClub() {
+    const snapshot = await activeClubRef.get();
     return snapshot.data();
 }
 
 // return class (a DocumentSnapshot) if it exists, undefined if it doesnt
-export async function checkClass(name) {
-    const snapshot = await ClassesRef.where("name", "==", name).get();
+export async function checkClub(name) {
+    const snapshot = await ClubsRef.where("name", "==", name).get();
     if (snapshot.size === 0) {
         return undefined;
     } else {
@@ -175,14 +175,14 @@ export async function fetchByCategory(category) {
 
 // returns name, everUsed, and uses of a single call
 export async function fetchCallHistory(name) {
-    const snapshot = await activeClassRef.collection("History").where("name", "==", name).get();
+    const snapshot = await activeClubRef.collection("History").where("name", "==", name).get();
     return snapshot.docs[0].data();
 }
 
 // returns all calls that have either been used or never been used
 export async function fetchByEverUsed(used) {
     const calls = [];
-    const snapshot = await activeClassRef.collection("History").where("everUsed", "==", used).get();
+    const snapshot = await activeClubRef.collection("History").where("everUsed", "==", used).get();
     snapshot.docs.forEach((callDoc) => {
         calls.push(callDoc.data());
     });
@@ -198,7 +198,7 @@ export async function fetchNew() {
 // updates the everUsed and uses data for all provided calls
 export async function updateHistory(sessionName, calls) {
     var batch = db.batch();
-    var snapshot = await activeClassRef.collection("History").get();
+    var snapshot = await activeClubRef.collection("History").get();
     const session = await fetchSessionData(sessionName);
     snapshot.docs.forEach((callDoc) => {
         const prev = callDoc.data();
@@ -219,7 +219,7 @@ export async function updateHistory(sessionName, calls) {
 
 // returns an array of all session names
 export async function fetchSessionNames() {
-    const snapshot = await activeClassRef.collection("Sessions").get();
+    const snapshot = await activeClubRef.collection("Sessions").get();
     var sessionNames = [];
     snapshot.forEach((doc) => {
         sessionNames.push(doc.data().name);
@@ -229,7 +229,7 @@ export async function fetchSessionNames() {
 
 // returns an array of all unfinished sessions
 export async function fetchUnfinishedSessions() {
-    const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", false).get();
+    const snapshot = await activeClubRef.collection("Sessions").where("finished", "==", false).get();
     var sessions = [];
     snapshot.forEach((doc) => {
         sessions.push(doc.data());
@@ -239,7 +239,7 @@ export async function fetchUnfinishedSessions() {
 
 // returns an array of all finished sessions
 export async function fetchfinishedSessions() {
-    const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", true).get();
+    const snapshot = await activeClubRef.collection("Sessions").where("finished", "==", true).get();
     var sessions = [];
     snapshot.forEach((doc) => {
         sessions.push(doc.data());
@@ -249,7 +249,7 @@ export async function fetchfinishedSessions() {
 
 // returns an array of the names of all unfinished sessions
 export async function fetchUnfinishedSessionNames() {
-    const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", false).get();
+    const snapshot = await activeClubRef.collection("Sessions").where("finished", "==", false).get();
     var sessionNames = [];
     snapshot.forEach((doc) => {
         sessionNames.push(doc.data().name);
@@ -259,7 +259,7 @@ export async function fetchUnfinishedSessionNames() {
 
 // returns an array of the names of all finished sessions
 export async function fetchFinishedSessionNames() {
-    const snapshot = await activeClassRef.collection("Sessions").where("finished", "==", true).get();
+    const snapshot = await activeClubRef.collection("Sessions").where("finished", "==", true).get();
     var sessionNames = [];
     snapshot.forEach((doc) => {
         sessionNames.push(doc.data().name);
@@ -269,7 +269,7 @@ return sessionNames;
 
 // return session (a DocumentSnapshot) if it exists, undefined if it doesnt
 export async function fetchSessionRef(name) {
-    const sessionsRef = activeClassRef.collection("Sessions")
+    const sessionsRef = activeClubRef.collection("Sessions")
     const snapshot = await sessionsRef.where("name", "==", name).get();
     if (snapshot.size === 0) {
         return undefined;
@@ -280,7 +280,7 @@ export async function fetchSessionRef(name) {
 
 // return session data for a specific session
 export async function fetchSessionData(name) {
-    const sessionsRef = activeClassRef.collection("Sessions")
+    const sessionsRef = activeClubRef.collection("Sessions")
     const snapshot = await sessionsRef.where("name", "==", name).get();
     if (snapshot.size === 0) {
         return undefined;
@@ -291,7 +291,7 @@ export async function fetchSessionData(name) {
 
 // return session data for a specific session
 export async function fetchAllSessions(name) {
-    const sessionsRef = activeClassRef.collection("Sessions")
+    const sessionsRef = activeClubRef.collection("Sessions")
     const snapshot = await sessionsRef.get();
     var sessions = [];
     snapshot.forEach((doc) => {
@@ -331,10 +331,10 @@ export async function setSession(name, calls) {
         });
         batch.commit();
     } else {
-        const newSession = activeClassRef.collection("Sessions").doc();
-        const activeClass = await getActiveClass();
-        newSession.set({ name: name, createdAt: Date.now(), finished: false, id: activeClass.sessions });
-        activeClassRef.update({sessions: (activeClass.sessions + 1)});
+        const newSession = activeClubRef.collection("Sessions").doc();
+        const activeClub = await getActiveClub();
+        newSession.set({ name: name, createdAt: Date.now(), finished: false, id: activeClub.sessions });
+        activeClubRef.update({sessions: (activeClub.sessions + 1)});
         for (var i = 0; i < calls.length; i++) {
             const ref = await newSession.collection("Calls").add(calls[i]);
             ref.update({position: i});
@@ -345,7 +345,7 @@ export async function setSession(name, calls) {
 // deletes a session
 export async function deleteSession(name) {
     const ref = await fetchSessionRef(name);
-    activeClassRef.collection("Sessions").doc(ref.id).delete();
+    activeClubRef.collection("Sessions").doc(ref.id).delete();
 }
 
 // Template methods

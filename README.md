@@ -1,6 +1,6 @@
 ## Square Dancing Trainer
 
-Welcome to Square Dancing trainer, an app to assist in teaching square dancing calls to new classes. It provides tools for tracking multiple classes' progress over time as well as planning and running individual sessions.
+Welcome to Square Dancing trainer, an app to assist in teaching square dancing calls to new clubs. It provides tools for tracking multiple clubs' progress over time as well as planning and running individual sessions.
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 

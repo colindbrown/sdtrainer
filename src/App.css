@@ -128,7 +128,7 @@ span.empty {
   background: #ccc;
   box-shadow: inset 0px 0px 9px 1px #999; }
 
-.class-jumbotron {
+.club-jumbotron {
   margin-bottom: 15px; }
 
 .card-container {
@@ -137,16 +137,16 @@ span.empty {
   overflow-y: scroll;
   border: 1px solid #eee; }
 
-.class-card {
+.club-card {
   margin-top: 13px;
   margin-bottom: 12px;
   height: 250px; }
 
-.class-card-title {
+.club-card-title {
   height: 50px;
   padding-top: 10px; }
 
-.class-card-button {
+.club-card-button {
   margin-top: 23px; }
 
 .below-navbar {

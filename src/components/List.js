@@ -94,7 +94,7 @@ class List extends React.Component {
 
         const id = this.props.id || "listCarousel";
         if (window.$(`div#${id}`).find(`.active.carousel-item`).length === 0) {
-            window.$(`div#${id}`).find(`.carousel-item`).last().addClass("active");
+            window.$(`div#${id}`).find(`.carousel-item`).last().addClub("active");
         }
 
     }

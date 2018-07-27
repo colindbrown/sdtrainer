@@ -33,7 +33,7 @@ class CreateFunctionBar extends React.Component {
 
     render() {
         var sessionListItems = [];
-        if (this.props.activeClass) {
+        if (this.props.activeClub) {
             sessionListItems = this.props.sessionNames.map((name) =>
                 <button className="dropdown-item" key={name} onClick={() => this.props.addSession(name)}>{name}</button>
             );
@@ -42,11 +42,11 @@ class CreateFunctionBar extends React.Component {
             <button className="dropdown-item" key={name} onClick={() => this.props.addTemplate(name)}>{name}</button>
         );
 
-        const disableSessionMenu = (this.props.activeClass && (this.props.sessionNames.length > 0)) ? "" : "disabled";
-        const disableSaveSession = (this.props.activeClass) ? "" : "disabled";
+        const disableSessionMenu = (this.props.activeClub && (this.props.sessionNames.length > 0)) ? "" : "disabled";
+        const disableSaveSession = (this.props.activeClub) ? "" : "disabled";
         const disableTemplateMenu = (this.props.templateNames.length > 0) ? "" : "disabled";
 
-        const usedButton = this.props.activeClass ? 
+        const usedButton = this.props.activeClub ? 
             <button className={`btn btn-secondary mr-2`} onClick={this.props.addAllUsed}>Add all used calls</button> :
             <button className={`btn btn-secondary disabled mr-2`}>Add all used calls</button>;
             

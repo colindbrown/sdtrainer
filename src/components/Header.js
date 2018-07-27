@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import squareLogo from "../img/logo.PNG";
 
-const Header = ({activeClass, activeUser, signOut, resetClass}) => (
+const Header = ({activeClub, activeUser, signOut, resetClub}) => (
   <header>
     <nav className="navbar navbar-dark navbar-expand-lg main-bar sticky-top">
       <img
@@ -13,7 +13,7 @@ const Header = ({activeClass, activeUser, signOut, resetClass}) => (
         alt=""
       />
 
-      <NavLink className={`navbar-brand ml-2`} to={`/`} onClick={() => resetClass()}>
+      <NavLink className={`navbar-brand ml-2`} to={`/`} onClick={() => resetClub()}>
         {activeUser ? "Square" : ""}
       </NavLink>
 
@@ -23,11 +23,11 @@ const Header = ({activeClass, activeUser, signOut, resetClass}) => (
       
       {activeUser ?
       <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
-        {activeClass.name ? 
+        {activeClub.name ? 
         <ul className="navbar-nav">
             <NavLinker
-              relUrl="class"
-              name="Class"
+              relUrl="club"
+              name="Club"
             />
             <NavLinker
               relUrl="create"
@@ -44,7 +44,7 @@ const Header = ({activeClass, activeUser, signOut, resetClass}) => (
         </ul> :
         <ul className="navbar-nav">
           <li className="nav-item">
-            <a className="nav-link disabled">Class</a>
+            <a className="nav-link disabled">Club</a>
           </li>
           <NavLinker
             relUrl="create"

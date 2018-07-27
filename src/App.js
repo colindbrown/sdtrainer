@@ -5,8 +5,8 @@ import UserDashboard from "./components/UserDashboard";
 import { Switch, Route, HashRouter} from "react-router-dom";
 import CreateCollectionView from "./components/CreateCollectionView";
 import RunSessionView from "./components/RunSessionView";
-import ReviewClassView from "./components/ReviewClassView";
-import ClassDashboard from "./components/ClassDashboard";
+import ReviewClubView from "./components/ReviewClubView";
+import ClubDashboard from "./components/ClubDashboard";
 import * as db from "./util/dbfunctions";
 import firebase from "firebase";
 import './App.css';
@@ -14,7 +14,7 @@ import './App.css';
 class App extends Component {
 
   state = {
-    activeClass: {},
+    activeClub: {},
     activeUser: ""
   }
 
@@ -30,13 +30,13 @@ class App extends Component {
     });
   }
 
-  updateActiveClass = async (name) => {
-    const classData = await db.setActiveClass(name);
-    this.setState({activeClass: classData});
+  updateActiveClub = async (name) => {
+    const clubData = await db.setActiveClub(name);
+    this.setState({activeClub: clubData});
   }
 
-  resetClass = () => {
-    this.setState({activeClass: {}});
+  resetClub = () => {
+    this.setState({activeClub: {}});
   }
 
   signOut = () => {
@@ -48,28 +48,28 @@ class App extends Component {
     var routes;
     if (!this.state.activeUser) {
       routes = <Route path="/" component={Home}/>
-    } else if (this.state.activeClass.name) {
+    } else if (this.state.activeClub.name) {
       routes = <Switch>
-          <Route path="/class" render={(routeProps) => (
-            <ClassDashboard {...routeProps} 
-              activeClass={this.state.activeClass} 
+          <Route path="/club" render={(routeProps) => (
+            <ClubDashboard {...routeProps} 
+              activeClub={this.state.activeClub} 
               activeUser={this.state.activeUser}
-              updateActiveClass={(name) => this.updateActiveClass(name)}
-              resetClass={() => this.resetClass()} 
+              updateActiveClub={(name) => this.updateActiveClub(name)}
+              resetClub={() => this.resetClub()} 
             />
           )}/>
           <Route path="/create" render={() => (
             <CreateCollectionView
-              activeClass={this.state.activeClass} 
+              activeClub={this.state.activeClub} 
               />
           )}/>
           <Route path="/run" component={RunSessionView}/>
-          <Route path="/review" component={ReviewClassView}/>
+          <Route path="/review" component={ReviewClubView}/>
           <Route path="/" render={() => (
             <UserDashboard
-              activeClass={this.state.activeClass} 
+              activeClub={this.state.activeClub} 
               activeUser={this.state.activeUser}
-              updateActiveClass={(name) => this.updateActiveClass(name)} 
+              updateActiveClub={(name) => this.updateActiveClub(name)} 
               />
           )}/>
         </Switch>
@@ -77,14 +77,14 @@ class App extends Component {
       routes = <Switch>
         <Route path="/create" render={() => (
             <CreateCollectionView
-              activeClass={this.state.activeClass} 
+              activeClub={this.state.activeClub} 
               />
           )}/>
         <Route path="/" render={() => (
         <UserDashboard
-              activeClass={this.state.activeClass} 
+              activeClub={this.state.activeClub} 
               activeUser={this.state.activeUser}
-              updateActiveClass={(name) => this.updateActiveClass(name)} 
+              updateActiveClub={(name) => this.updateActiveClub(name)} 
               />
       )}/>
       </Switch>
@@ -92,7 +92,7 @@ class App extends Component {
     return (
       <HashRouter>
         <div className="App">
-          <Header activeClass={this.state.activeClass} activeUser={this.state.activeUser} signOut={() => this.signOut()} resetClass={() => this.resetClass()}/>
+          <Header activeClub={this.state.activeClub} activeUser={this.state.activeUser} signOut={() => this.signOut()} resetClub={() => this.resetClub()}/>
           {routes}
         </div>
       </HashRouter>

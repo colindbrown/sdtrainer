@@ -19,7 +19,7 @@ class CreateCollectionView extends React.Component {
     componentDidMount() {
         this.loadAllCalls();
         this.loadTemplateNames();
-        if (this.props.activeClass.name) {
+        if (this.props.activeClub.name) {
             this.loadSessionNames();
         }
     }
@@ -154,7 +154,7 @@ class CreateCollectionView extends React.Component {
         return (
             <div>
                 <CreateFunctionBar
-                    activeClass={this.props.activeClass.name}
+                    activeClub={this.props.activeClub.name}
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
                     saveNewSession={(name) => this.saveNewSession(name)}

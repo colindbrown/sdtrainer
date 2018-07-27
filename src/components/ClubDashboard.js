@@ -4,7 +4,7 @@ import Alerts from "./Alerts";
 import { NavLink } from "react-router-dom";
 
 
-class ClassDashboard extends React.Component {
+class ClubDashboard extends React.Component {
 
     state = {
         alerts: [],
@@ -40,7 +40,7 @@ class ClassDashboard extends React.Component {
     }
 
     render() {
-        const activeClass = this.props.activeClass;
+        const activeClub = this.props.activeClub;
         const finishedListItems = this.state.finishedSessions.map((session) => 
             <li className="list-group-item d-flex" key={session.id}>
                 <div className="float-left"><strong>{session.name}</strong></div>
@@ -56,15 +56,15 @@ class ClassDashboard extends React.Component {
         );
         return (
             <div className="container below-navbar">
-                <section className="jumbotron text-center class-jumbotron">
+                <section className="jumbotron text-center club-jumbotron">
                     <div className="container">
-                        <h1 className="jumbotron-heading">{activeClass.name}</h1>
+                        <h1 className="jumbotron-heading">{activeClub.name}</h1>
                         <hr/>
                         <p className="lead text-muted">Completion statistics will go here</p>
                         <p className="lead text-muted">Sessions info/sessions run here</p>
                         <hr/>
                         <NavLink className={`btn btn-info mr-2`} to={`/plan`}>Plan a Session</NavLink>
-                        <NavLink className={`btn btn-secondary`} to={`/`} onClick={() => this.props.resetClass()}>Select another Class</NavLink>
+                        <NavLink className={`btn btn-secondary`} to={`/`} onClick={() => this.props.resetClub()}>Select another Club</NavLink>
                     </div>
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
@@ -93,4 +93,4 @@ class ClassDashboard extends React.Component {
     
 }
 
-export default ClassDashboard;
+export default ClubDashboard;
