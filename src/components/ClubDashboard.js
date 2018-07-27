@@ -54,16 +54,20 @@ class ClubDashboard extends React.Component {
                 <button className="btn btn-sm btn-danger" onClick={() => this.deleteSession(session.name)}>Delete</button>
             </li>
         );
+        const percentTaught = 100*activeClub.taught/db.totalCalls;
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center club-jumbotron">
                     <div className="container">
                         <h1 className="jumbotron-heading">{activeClub.name}</h1>
                         <hr/>
-                        <p className="lead text-muted">Completion statistics will go here</p>
-                        <p className="lead text-muted">Sessions info/sessions run here</p>
+                        <p className="lead text-muted">{activeClub.taught} calls out of {db.totalCalls} taught</p>
+                        <div className="progress">
+                            <div className="progress-bar bg-info" style={{ width: `${percentTaught}%` }} role="progressbar"></div>
+                        </div>
+                        <p className="lead text-muted">{activeClub.sessions} sessions run</p>
                         <hr/>
-                        <NavLink className={`btn btn-info mr-2`} to={`/plan`}>Plan a Session</NavLink>
+                        <NavLink className={`btn btn-info mr-2`} to={`/create`}>Plan a Session</NavLink>
                         <NavLink className={`btn btn-secondary`} to={`/`} onClick={() => this.props.resetClub()}>Select another Club</NavLink>
                     </div>
                 </section>

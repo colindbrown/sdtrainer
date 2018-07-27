@@ -219,3 +219,12 @@ hr {
   position: absolute;
   left: 15px;
   top: 12px; }
+
+.progress {
+  position: relative;
+  max-width: 600px;
+  border: 1px solid #ccc;
+  left: 50%;
+  -webkit-transform: translateX(-300px);
+  transform: translateX(-300px);
+  margin-bottom: 16px; }

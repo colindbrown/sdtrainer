@@ -1,9 +1,5 @@
-import {
-    db
-} from "../db";
-import {
-    AllCalls
-} from "./calls";
+import { db } from "../db";
+import { totalCalls, AllCalls } from "./calls";
 
 
 // references
@@ -418,3 +414,5 @@ export async function deleteTemplate(name) {
     const templateRef = await fetchTemplateRef(name);
     TemplatesRef.doc(templateRef.id).delete();
 }
+
+export { totalCalls };
