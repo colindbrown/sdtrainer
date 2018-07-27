@@ -32,7 +32,7 @@ class App extends Component {
 
   updateActiveClub = async (name) => {
     const clubData = await db.setActiveClub(name);
-    this.setState({activeClub: clubData});
+    this.setState({activeClub: clubData });
   }
 
   resetClub = () => {

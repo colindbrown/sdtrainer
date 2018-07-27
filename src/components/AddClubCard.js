@@ -1,10 +1,12 @@
 import React from "react";
 import * as db from "../util/dbfunctions";
+import { Redirect } from "react-router-dom";
 
 class AddClubCard extends React.Component {
 
     state = {
-        newClubName: ""
+        newClubName: "",
+        redirect: ""
     }
 
     handleChange = (e) => {
@@ -24,7 +26,7 @@ class AddClubCard extends React.Component {
             } else {
                 db.createNewClub(this.state.newClubName).then(() => {
                     this.props.updateActiveClub(this.state.newClubName);
-                    this.setState({ newClubName: "" });
+                    this.setState({ newClubName: "", redirect: "/club"});
                 });
             }
         }
@@ -34,6 +36,7 @@ class AddClubCard extends React.Component {
 
         return (
             <div className="col-md-4">
+            {this.state.redirect ? <Redirect to={this.state.redirect}/> : ""}
               <div className="card club-card box-shadow">
                 <h4 className="club-card-title card-title bg-dark text-white">Add a New Club</h4>
                 <div className="card-body">
