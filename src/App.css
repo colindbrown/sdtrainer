@@ -232,3 +232,23 @@ hr {
   -webkit-transform: translateX(-300px);
   transform: translateX(-300px);
   margin-bottom: 16px; }
+
+.confirm-modal {
+  position: relative;
+  width: 400px;
+  height: 200px; }
+  .confirm-modal .modal-text {
+    position: absolute;
+    width: 300px;
+    top: 40px;
+    left: 50%;
+    -webkit-transform: translateX(-150px);
+    transform: translateX(-150px); }
+  .confirm-modal .row {
+    position: absolute;
+    width: 200px;
+    bottom: 40px;
+    left: 50%;
+    margin: 0;
+    -webkit-transform: translateX(-100px);
+    transform: translateX(-100px); }

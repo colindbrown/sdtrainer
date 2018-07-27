@@ -3,6 +3,7 @@ import ClubCard from "./ClubCard";
 import * as db from "../util/dbfunctions";
 import AddClubCard from './AddClubCard';
 import Alerts from "./Alerts";
+import ConfirmModal from "./ConfirmModal";
 import { NavLink } from "react-router-dom";
 
 
@@ -54,6 +55,17 @@ class UserDashboard extends React.Component {
         this.setState({ alerts: [] });
     }
 
+    deleteItem = (type, name) => {
+        switch (type){
+            case "club":
+                this.setState({modalFunction: () => this.deleteClub(name)});
+                break;
+            case "template":
+                this.setState({modalFunction: () => this.deleteTemplate(name)});
+                break;
+        }
+    }
+
     render() {
         const firstName = this.props.activeUser.displayName.split(" ")[0];
         const clubCards = this.state.clubs.map((clubData) => <ClubCard 
@@ -61,7 +73,7 @@ class UserDashboard extends React.Component {
             {...clubData} 
             activeClub={this.props.activeClub} 
             updateActiveClub={(name) => this.props.updateActiveClub(name)} 
-            deleteClub={(name) => this.deleteClub(name)}
+            deleteClub={(name) => this.deleteItem("club", name)}
         />);
         clubCards.push(<AddClubCard 
             key="addClubCard" 
@@ -73,7 +85,7 @@ class UserDashboard extends React.Component {
             <li className="list-group-item d-flex justify-content-end" key={template.name}>
                 <div className="list-item-name"><p><strong>{template.name}</strong></p></div>
                 <div className="mr-5">Created on {(new Date(template.createdAt)).toDateString()}</div>
-                <button className="btn btn-sm btn-danger" onClick={() => this.deleteTemplate(template.name)}>Delete</button>
+                <button className="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmModal" onClick={() => this.deleteItem("template", template.name)}>Delete</button>
             </li>
         );
         return (
@@ -88,6 +100,7 @@ class UserDashboard extends React.Component {
                     </div>
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
+                <ConfirmModal onClick={this.state.modalFunction} />
                 <section>
                     <ul className="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
                         <li className="nav-item">
