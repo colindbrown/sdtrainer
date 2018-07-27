@@ -123,7 +123,6 @@ export async function checkClub(name) {
 
 // deletes a club
 export async function deleteClub(name) {
-    console.log(name)
     const snapshot = await ClubsRef.where("name", "==", name).get();
     if (snapshot.size === 1) {
         snapshot.docs[0].ref.delete();

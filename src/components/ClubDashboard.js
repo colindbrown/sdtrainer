@@ -2,6 +2,7 @@ import React from 'react';
 import * as db from "../util/dbfunctions";
 import Alerts from "./Alerts";
 import { NavLink } from "react-router-dom";
+import ConfirmModal from "./ConfirmModal";
 
 
 class ClubDashboard extends React.Component {
@@ -9,7 +10,8 @@ class ClubDashboard extends React.Component {
     state = {
         alerts: [],
         finishedSessions: [],
-        sessionPlans: []
+        sessionPlans: [],
+        templates: []
     }
 
     componentDidMount() {
@@ -39,6 +41,10 @@ class ClubDashboard extends React.Component {
         this.setState({ alerts: [] });
     }
 
+    deleteItem = (name) => {
+        this.setState({modalFunction: () => this.deleteSession(name)});
+    }
+
     render() {
         const activeClub = this.props.activeClub;
         const finishedListItems = this.state.finishedSessions.map((session) => 
@@ -51,7 +57,7 @@ class ClubDashboard extends React.Component {
             <li className="list-group-item d-flex justify-content-end" key={session.id}>
                 <div className="list-item-name"><p><strong>{session.name}</strong></p></div>
                 <div className="mr-5">Created on {(new Date(session.createdAt)).toDateString()}</div>
-                <button className="btn btn-sm btn-danger" onClick={() => this.deleteSession(session.name)}>Delete</button>
+                <button className="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmModal" onClick={() => this.deleteItem(session.name)}>Delete</button>
             </li>
         );
         const percentTaught = 100*activeClub.taught/db.totalCalls;
@@ -72,6 +78,7 @@ class ClubDashboard extends React.Component {
                     </div>
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
+                <ConfirmModal onClick={this.state.modalFunction} />
                 <section>
                     <ul className="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
                         <li className="nav-item">
