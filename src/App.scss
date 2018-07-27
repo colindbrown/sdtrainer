@@ -176,6 +176,13 @@ span.empty {
   margin-top: 13px;
   margin-bottom: 12px;
   height: 250px;
+
+  & .card-text {
+    font-size: 18px;
+  }
+  & .text-secondary {
+    font-size: 16px;
+  }
 }
 
 .club-card-title {
@@ -184,7 +191,7 @@ span.empty {
 }
 
 .club-card-button {
-  margin-top: 23px;
+  margin-top: 10px;
 }
 
 .below-navbar {

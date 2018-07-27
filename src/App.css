@@ -141,13 +141,17 @@ span.empty {
   margin-top: 13px;
   margin-bottom: 12px;
   height: 250px; }
+  .club-card .card-text {
+    font-size: 18px; }
+  .club-card .text-secondary {
+    font-size: 16px; }
 
 .club-card-title {
   height: 50px;
   padding-top: 10px; }
 
 .club-card-button {
-  margin-top: 23px; }
+  margin-top: 10px; }
 
 .below-navbar {
   margin-top: 20px; }
