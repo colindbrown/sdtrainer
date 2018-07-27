@@ -192,8 +192,8 @@ export async function fetchByEverUsed(used) {
 
 // returns all calls that have only been used once
 export async function fetchNew() {
-    var calls = await fetchByEverUsed(true);
-    return calls.filter((call) => (call.uses.length === 1))
+    var snapshot = await activeClubRef.get();
+    return snapshot.data().newCalls;
 }
 
 // updates the everUsed and uses data for all provided calls
