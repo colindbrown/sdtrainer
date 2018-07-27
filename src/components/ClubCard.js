@@ -15,7 +15,8 @@ class ClubCard extends React.Component {
                     <p className="card-text">{this.props.taught} calls out of {totalCalls} taught</p>
                     <p className="card-text text-secondary">{created}</p>
                     <div className="club-card-button">
-                        <NavLink className={`btn btn-info`} to={`/club`} onClick={() => this.props.updateActiveClub(this.props.name)}>Select Club</NavLink>
+                        <NavLink className={`btn btn-info mr-2`} to={`/club`} onClick={() => this.props.updateActiveClub(this.props.name)}>Select Club</NavLink>
+                        <button className="btn btn-danger" onClick={() => this.props.deleteClub(this.props.name)}>Delete</button>
                     </div>
                 </div>
               </div>

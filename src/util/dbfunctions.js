@@ -105,6 +105,7 @@ export async function fetchClubData() {
     return clubs;
 }
 
+// returns the data of the active club
 export async function getActiveClub() {
     const snapshot = await activeClubRef.get();
     return snapshot.data();
@@ -117,6 +118,15 @@ export async function checkClub(name) {
         return undefined;
     } else {
         return snapshot.docs[0].data();
+    }
+}
+
+// deletes a club
+export async function deleteClub(name) {
+    console.log(name)
+    const snapshot = await ClubsRef.where("name", "==", name).get();
+    if (snapshot.size === 1) {
+        snapshot.docs[0].ref.delete();
     }
 }
 

@@ -42,9 +42,9 @@ class AddClubCard extends React.Component {
                 <div className="card-body">
                   <h5 className="card-text">Choose a descriptive name</h5>
                   <div className="row">
-                    <form className="form-inline offset-md-3 col-md-6 justify-content-center mt-3" onSubmit={this.handleSubmit}>
+                    <form className="form-inline offset-md-3 col-md-6 justify-content-center mt-2" onSubmit={this.handleSubmit}>
                         <input className="form-control mr-2" placeholder="Name" value={this.state.newClubName} onChange={this.handleChange} />
-                        <button className="btn btn-info mt-2" type="submit">Create new club</button>
+                        <button className="btn btn-info mt-3" type="submit">Create new club</button>
                     </form>
                     </div>
                 </div>

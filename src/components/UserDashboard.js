@@ -37,6 +37,14 @@ class UserDashboard extends React.Component {
         });
     }
 
+    deleteClub = async (name) => {
+        db.deleteClub(name).then(() => {
+            this.loadClubs().then(() => {
+                this.showAlert("alert-success", "Club deleted");
+            })
+        });
+    }
+
     showAlert(type, text) {
         const alerts = [{ type: type, text: text }];
         this.setState({ alerts });
@@ -52,14 +60,15 @@ class UserDashboard extends React.Component {
             key={clubData.name} 
             {...clubData} 
             activeClub={this.props.activeClub} 
-            updateActiveClub={(name) => this.props.updateActiveClub(name)} /> 
-        );
+            updateActiveClub={(name) => this.props.updateActiveClub(name)} 
+            deleteClub={(name) => this.deleteClub(name)}
+        />);
         clubCards.push(<AddClubCard 
             key="addClubCard" 
             updateActiveClub={(name) => this.props.updateActiveClub(name)}
             showAlert={(type,text) => this.showAlert(type, text)} 
             clearAlerts={() => this.clearAlerts()}
-            />)
+        />)
         const templateListItems = this.state.templates.map((template) => 
             <li className="list-group-item d-flex justify-content-end" key={template.name}>
                 <div className="list-item-name"><p><strong>{template.name}</strong></p></div>
