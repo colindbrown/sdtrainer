@@ -36,7 +36,7 @@ class Database {
             historySnapshot.forEach(((doc) => {
                 history.push(doc.data());
             }));
-            sessions = await this.sessions.fetchAllSessions();
+            sessions = await this.sessions.fetchSessions();
         }
 
         var callsData = [];
@@ -46,7 +46,7 @@ class Database {
             if (this.activeClubRef) {
                 callData.uses = callHistory.uses.length;
                 if (callData.uses) {
-                    const session = sessions.find((sessionIterator) => (sessionIterator.id === callHistory.uses[callHistory.uses.length-1]));
+                    const session = sessions.find((sessionIterator) => (sessionIterator.name === callHistory.uses[callHistory.uses.length-1]));
                     callData.lastUsed = session.finishedAt;
                 } else {
                     callData.lastUsed = 0;

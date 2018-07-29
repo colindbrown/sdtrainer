@@ -55,8 +55,8 @@ class ReviewClubView extends React.Component {
             var body = "";
             if (call.uses.length > 0) {
                 body = "Uses:"
-                call.uses.forEach((id) => {
-                    const session = sessionData.find((sessionIterator) => (sessionIterator.id === id));
+                call.uses.forEach((name) => {
+                    const session = sessionData.find((sessionIterator) => (sessionIterator.name === name));
                     const date = new Date(session.finishedAt);
                     body = body + `\n${session.name}: ${date.toDateString()}`;
                 })

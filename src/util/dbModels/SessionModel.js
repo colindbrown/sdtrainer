@@ -26,8 +26,7 @@ class SessionModel {
         } else {
             const newSession = this.db.activeClubRef.collection("Sessions").doc();
             const activeClub = await this.db.activeClubRef.get();
-            newSession.set({ name: name, createdAt: Date.now(), finished: false, id: activeClub.data().sessions });
-            this.db.activeClubRef.update({sessions: (activeClub.data().sessions + 1)});
+            newSession.set({ name: name, createdAt: Date.now(), finished: false });
             for (var i = 0; i < calls.length; i++) {
                 const ref = await newSession.collection("Calls").add(calls[i]);
                 ref.update({position: i});
