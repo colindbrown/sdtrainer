@@ -5,7 +5,7 @@ import List from "./List";
 import Modal from "./Modal";
 import Alerts from "./Alerts";
 
-class ReviewClassView extends React.Component {
+class ReviewClubView extends React.Component {
 
     state = {
         alerts: [],
@@ -176,4 +176,4 @@ class ReviewClassView extends React.Component {
 
 }
 
-export default ReviewClassView;
+export default ReviewClubView;

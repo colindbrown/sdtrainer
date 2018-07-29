@@ -3,10 +3,11 @@ import * as db from "../util/dbfunctions";
 import Alerts from "./Alerts";
 import Loader from "./Loader";
 import { NavLink } from "react-router-dom";
+import ConfirmModal from "./ConfirmModal";
 import Placeholder from './Placeholder';
 
 
-class ClassDashboard extends React.Component {
+class ClubDashboard extends React.Component {
 
     state = {
         alerts: [],
@@ -44,8 +45,12 @@ class ClassDashboard extends React.Component {
         this.setState({ alerts: [] });
     }
 
+    deleteItem = (name) => {
+        this.setState({modalFunction: () => this.deleteSession(name)});
+    }
+
     render() {
-        const activeClass = this.props.activeClass;
+        const activeClub = this.props.activeClub;
         var finishedListItems;
         if (this.state.loadingFinishedSessions) {
             finishedListItems = <Loader/>;
@@ -65,24 +70,29 @@ class ClassDashboard extends React.Component {
             <li className="list-group-item d-flex justify-content-end" key={session.id}>
                 <div className="list-item-name"><p><strong>{session.name}</strong></p></div>
                 <div className="mr-5">Created on {(new Date(session.createdAt)).toDateString()}</div>
-                <button className="btn btn-sm btn-danger" onClick={() => this.deleteSession(session.name)}>Delete</button>
+                <button className="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmModal" onClick={() => this.deleteItem(session.name)}>Delete</button>
             </li>
         ) : <li><Placeholder content={{title: "Session Plans", text: "You don't have any session plans to display at the moment.", rel: "/create", destination: "Plan a Session"}}/></li>;
         }
+        const percentTaught = 100*activeClub.taught/db.totalCalls;
         return (
             <div className="container below-navbar">
-                <section className="jumbotron text-center class-jumbotron">
+                <section className="jumbotron text-center club-jumbotron">
                     <div className="container">
-                        <h1 className="jumbotron-heading">{activeClass.name}</h1>
+                        <h1 className="jumbotron-heading">{activeClub.name}</h1>
                         <hr/>
-                        <p className="lead text-muted">Completion statistics will go here</p>
-                        <p className="lead text-muted">Sessions info/sessions run here</p>
+                        <p className="lead text-muted">{activeClub.taught} calls out of {db.totalCalls} taught</p>
+                        <div className="progress">
+                            <div className="progress-bar bg-info" style={{ width: `${percentTaught}%` }} role="progressbar"></div>
+                        </div>
+                        <p className="lead text-muted">{activeClub.sessions} sessions run</p>
                         <hr/>
-                        <NavLink className={`btn btn-info mr-2`} to={`/plan`}>Plan a Session</NavLink>
-                        <NavLink className={`btn btn-secondary`} to={`/`} onClick={() => this.props.resetClass()}>Select another Class</NavLink>
+                        <NavLink className={`btn btn-info mr-2`} to={`/create`}>Plan a Session</NavLink>
+                        <NavLink className={`btn btn-secondary`} to={`/`} onClick={() => this.props.resetClub()}>Select another Club</NavLink>
                     </div>
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
+                <ConfirmModal onClick={this.state.modalFunction} />
                 <section>
                     <ul className="nav nav-tabs nav-fill row tabs-row" id="myTab" role="tablist">
                         <li className="nav-item">
@@ -108,4 +118,4 @@ class ClassDashboard extends React.Component {
     
 }
 
-export default ClassDashboard;
+export default ClubDashboard;

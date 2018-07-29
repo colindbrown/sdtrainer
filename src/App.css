@@ -130,7 +130,7 @@ span.empty {
   background: #ccc;
   box-shadow: inset 0px 0px 9px 1px #999; }
 
-.class-jumbotron {
+.club-jumbotron {
   margin-bottom: 15px; }
 
 .card-container {
@@ -142,17 +142,21 @@ span.empty {
   border-top: 0 solid transparent;
   background-color: #fff; }
 
-.class-card {
+.club-card {
   margin-top: 13px;
   margin-bottom: 12px;
   height: 250px; }
+  .club-card .card-text {
+    font-size: 18px; }
+  .club-card .text-secondary {
+    font-size: 16px; }
 
-.class-card-title {
+.club-card-title {
   height: 50px;
   padding-top: 10px; }
 
-.class-card-button {
-  margin-top: 23px; }
+.club-card-button {
+  margin-top: 10px; }
 
 .below-navbar {
   margin-top: 20px; }
@@ -265,6 +269,35 @@ hr {
   position: absolute;
   left: 15px;
   top: 12px; }
+
+.progress {
+  position: relative;
+  max-width: 600px;
+  border: 1px solid #ccc;
+  left: 50%;
+  -webkit-transform: translateX(-300px);
+  transform: translateX(-300px);
+  margin-bottom: 16px; }
+
+.confirm-modal {
+  position: relative;
+  width: 400px;
+  height: 200px; }
+  .confirm-modal .modal-text {
+    position: absolute;
+    width: 300px;
+    top: 40px;
+    left: 50%;
+    -webkit-transform: translateX(-150px);
+    transform: translateX(-150px); }
+  .confirm-modal .row {
+    position: absolute;
+    width: 200px;
+    bottom: 40px;
+    left: 50%;
+    margin: 0;
+    -webkit-transform: translateX(-100px);
+    transform: translateX(-100px); }
 
 .placeholder {
   z-index: 1;
