@@ -205,6 +205,8 @@ class CreateCollectionView extends React.Component {
                         columns={2}
                         calls={this.state.collectionList}
                         sort={"arrayOrder"}
+                        placeholderContent={{title: "Create a Collection", 
+                            text: "Add calls to your collection using the function bar or the list to the left. Once you're done, save your collection as either a session plan or a template."}}
                         onClick={(name) => this.moveCall(name, "callList")} 
                     />
                 </div>

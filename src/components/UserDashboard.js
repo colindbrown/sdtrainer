@@ -3,6 +3,7 @@ import ClassCard from "./ClassCard";
 import * as db from "../util/dbfunctions";
 import AddClassCard from './AddClassCard';
 import Alerts from "./Alerts";
+import Placeholder from './Placeholder';
 import { NavLink } from "react-router-dom";
 
 
@@ -60,13 +61,13 @@ class UserDashboard extends React.Component {
             showAlert={(type,text) => this.showAlert(type, text)} 
             clearAlerts={() => this.clearAlerts()}
             />)
-        const templateListItems = this.state.templates.map((template) => 
+        const templateListItems = this.state.templates.length ? this.state.templates.map((template) => 
             <li className="list-group-item d-flex justify-content-end" key={template.name}>
                 <div className="list-item-name"><p><strong>{template.name}</strong></p></div>
                 <div className="mr-5">Created on {(new Date(template.createdAt)).toDateString()}</div>
                 <button className="btn btn-sm btn-danger" onClick={() => this.deleteTemplate(template.name)}>Delete</button>
             </li>
-        );
+        ) : <li><Placeholder content={{title: "Templates", text: "You don't have any templates to display at the moment.", rel: "/create", destination: "Create a Template"}}/></li>;
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center class-jumbotron">
@@ -80,7 +81,7 @@ class UserDashboard extends React.Component {
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <section>
-                    <ul className="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
+                    <ul className="nav nav-tabs nav-fill row tabs-row" id="myTab" role="tablist">
                         <li className="nav-item">
                             <a className="text-secondary nav-link active" id="classes-tab" data-toggle="tab" href="#classes" role="tab" aria-controls="classes" aria-selected="true">Classes</a>
                         </li>
@@ -89,14 +90,14 @@ class UserDashboard extends React.Component {
                         </li>
                     </ul>
                     <div className="tab-content" id="myTabContent">
-                        <div className="tab-pane fade show active album bg-light card-container" id="classes" role="tabpanel" aria-labelledby="classes-tab">
+                        <div className="tab-pane fade show active album card-container" id="classes" role="tabpanel" aria-labelledby="classes-tab">
                             <div className="container">
                                 <div className="row">
                                     {classCards}
                                 </div>
                             </div>
                         </div>
-                        <ul className="tab-pane fade list-group collections-list bg-light" id="templates" role="tabpanel" aria-labelledby="templates-tab">
+                        <ul className="tab-pane fade list-group collections-list" id="templates" role="tabpanel" aria-labelledby="templates-tab">
                             {templateListItems}
                         </ul>
                     </div>
