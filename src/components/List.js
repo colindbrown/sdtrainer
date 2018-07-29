@@ -99,6 +99,18 @@ class List extends React.Component {
 
     }
 
+    filterCalls(calls) {
+        if (this.props.filter) {
+            const filtered = calls.filter((call) => call.name.toLowerCase().startsWith(this.props.filter.toLowerCase()));
+            if (filtered.length === 1) {
+                this.props.returnSingle(filtered[0]);
+            }
+            return filtered;
+        } else {
+            return calls;
+        }
+    }
+
     render() {
         const NUMCOLUMNS = this.props.columns;
         const COLUMNSIZE = 12;
@@ -106,7 +118,9 @@ class List extends React.Component {
 
         const id = this.props.id || "listCarousel";
 
-        const sortedCalls = this.props.sort === "arrayOrder" ? this.props.calls : this.props.calls.sort(sort);
+        const filteredCalls = this.filterCalls(this.props.calls);
+        const sortedCalls = this.props.sort === "arrayOrder" ? filteredCalls : filteredCalls.sort(sort);
+
         var listItems = [];
         for (var i = 0; i < sortedCalls.length; i++) {
             const call = sortedCalls[i];
@@ -118,13 +132,13 @@ class List extends React.Component {
         }
 
         var pages = [];
-        for (var i = 0; i < (listItems.length / (NUMCOLUMNS*COLUMNSIZE)); i++) {
+        for (var j = 0; j < (listItems.length / (NUMCOLUMNS*COLUMNSIZE)); j++) {
             pages.push(
                 <Page 
-                    key={i} 
-                    active={i === 0 ? "active" : ""} 
+                    key={j} 
+                    active={j === 0 ? "active" : ""} 
                     columns={NUMCOLUMNS} columnSize={COLUMNSIZE} 
-                    calls={listItems.slice(i*(NUMCOLUMNS*COLUMNSIZE), (i+1)*(NUMCOLUMNS*COLUMNSIZE))} 
+                    calls={listItems.slice(j*(NUMCOLUMNS*COLUMNSIZE), (j+1)*(NUMCOLUMNS*COLUMNSIZE))} 
                 />
             );
         }
