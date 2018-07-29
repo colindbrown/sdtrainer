@@ -33,7 +33,8 @@ span.empty {
 
 .carousel-item {
   border: 1px solid darkgrey;
-  border-radius: 5px; }
+  border-radius: 5px;
+  z-index: 0; }
 
 .carousel {
   margin-top: 30px; }
@@ -63,12 +64,12 @@ span.empty {
   color: #666;
   font-family: 'Bree Serif';
   font-size: 18px;
-  background: #fefefe;
+  background: #fdfdfd;
   margin-bottom: 0px;
-  border: 1px solid #eee;
+  border: 1px solid #e9ecef;
   border-radius: 0px; }
   .call .call:hover {
-    background: #fefefe;
+    background: #fdfdfd;
     color: #666; }
   .call:first-child {
     border-radius: .25rem 0rem 0rem 0rem; }
@@ -79,7 +80,7 @@ span.empty {
     top: 18px; }
 
 .call-empty {
-  border: 1px solid #eee;
+  border: 1px solid #e9ecef;
   background: #fff; }
   .call-empty:hover {
     background: #fff; }
@@ -135,9 +136,11 @@ span.empty {
 .card-container {
   position: relative;
   margin-top: 0;
-  height: 550px;
+  height: 400px;
   overflow-y: scroll;
-  border: 1px solid #eee; }
+  border: 1px solid #ccc;
+  border-top: 0 solid transparent;
+  background-color: #fff; }
 
 .class-card {
   margin-top: 13px;
@@ -203,6 +206,7 @@ hr {
   right: 0;
   left: auto; }
 
+<<<<<<< HEAD
 .loader {
   border: 5px solid #f3f3f3;
   border-top: 5px solid #5bc0de;
@@ -226,9 +230,22 @@ hr {
   margin-left: -25px; }
 
 .pills-row {
+=======
+.tabs-row {
+>>>>>>> master
   margin-right: 0;
   margin-left: 0;
-  border-radius: 5px 5px 0 0; }
+  border-radius: 5px 5px 0 0;
+  border: 0 solid transparent;
+  background: #e9ecef; }
+  .tabs-row > .nav-item {
+    border-color: #ccc;
+    margin-bottom: 0; }
+    .tabs-row > .nav-item > .nav-link {
+      border-bottom: 1px solid #ccc; }
+    .tabs-row > .nav-item > .active {
+      background: #fff;
+      border-bottom: 1px solid #fff; }
 
 .collections-list {
   position: relative;
@@ -236,9 +253,15 @@ hr {
   overflow-y: scroll;
   margin-right: 0;
   margin-left: 0;
-  border: 1px solid #eee; }
+  border: 1px solid #ccc;
+  border-top: 0 solid transparent;
+  background-color: #fff; }
   .collections-list .list-group-item {
-    border-radius: 0; }
+    border-radius: 0;
+    background-color: #fdfdfd;
+    border: 1px solid #e9ecef;
+    border-right: 0 solid transparent;
+    border-left: 0 solid transparent; }
     .collections-list .list-group-item div {
       margin-top: 4px; }
 
@@ -246,3 +269,18 @@ hr {
   position: absolute;
   left: 15px;
   top: 12px; }
+
+.placeholder {
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 250px;
+  width: 400px;
+  margin: -125px 0 0 -200px;
+  padding: 40px; }
+  .placeholder h6 {
+    line-height: 1.6; }
+
+.tab-content {
+  position: relative; }

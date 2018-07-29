@@ -78,6 +78,12 @@ class RunSessionView extends React.Component {
 
 
     render() {
+        var placeholderContent = {};
+        if (this.state.sessionNames.length > 0) {
+            placeholderContent={title: "Run a Session", text: "Select a session plan to run from the function bar above. Once you're done, finish the session using the button on the right."};
+        } else {
+            placeholderContent={title: "Run a Session", text: "You don't have any session plans to run at the moment.", rel: "/create", destination: "Plan a Session"};
+        }
         return (
             <div>
                 <RunFunctionBar
@@ -94,10 +100,16 @@ class RunSessionView extends React.Component {
                         id="runList" 
                         columns={4} 
                         calls={this.state.sessionCalls} 
+<<<<<<< HEAD
                         loading={this.state.sessionCallsLoading}
                         sort={this.state.sort} 
                         onClick={(name) => this.toggleCall(name)} 
                     />
+=======
+                        sort={this.state.sort} 
+                        placeholderContent={placeholderContent}
+                        onClick={(name) => this.toggleCall(name)} />
+>>>>>>> master
                 </div>
             </div>
         )

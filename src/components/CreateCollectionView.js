@@ -14,7 +14,9 @@ class CreateCollectionView extends React.Component {
         alerts: [],
         sessionNames: [],
         templateNames: [],
-        sort: ""
+        sort: "",
+        filterString: "",
+        single: {}
     }
 
     // Lifecycle methods
@@ -159,6 +161,24 @@ class CreateCollectionView extends React.Component {
         this.setState({sort});
     }
 
+    updateFilterString(string) {
+        this.setState({filterString: string});
+    }
+
+    filterEnter() {
+        if (this.state.single.name) {
+            this.moveCall(this.state.single.name, "collectionList");
+            return true;
+        }  
+        return false;
+    }
+
+    returnSingle(call) {
+        if (this.state.single !== call) {
+            this.setState({single: call});
+        }
+    }
+
     render() {
         return (
             <div>
@@ -173,25 +193,31 @@ class CreateCollectionView extends React.Component {
                     addTemplate={(name) => this.addTemplate(name)}
                     templateNames={this.state.templateNames}
                     changeSort={(sort) => this.changeSort(sort)}
+                    updateFilterString={(string) => this.updateFilterString(string)}
+                    filterEnter={() => this.filterEnter()}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List 
-                        size="col-md-6" 
-                        id="callList" 
-                        columns={2} 
-                        calls={this.state.callList} 
+                    <List
+                        size="col-md-6"
+                        id="callList"
+                        columns={2}
+                        calls={this.state.callList}
+                        sort={this.state.sort}
                         loading={this.state.callsLoading}
-                        sort={this.state.sort} 
                         onClick={(name) => this.moveCall(name, "collectionList")} 
+                        filter={this.state.filterString}
+                        returnSingle={(call) => this.returnSingle(call)}
                     />
-                    <List 
-                        size="col-md-6" 
-                        id="collectionList" 
-                        columns={2} 
-                        calls={this.state.collectionList} 
+                    <List
+                        size="col-md-6"
+                        id="collectionList"
+                        columns={2}
+                        calls={this.state.collectionList}
+                        sort={"arrayOrder"}
                         loading={this.state.collectionCallsLoading}
-                        sort={"arrayOrder"} 
+                        placeholderContent={{title: "Create a Collection", 
+                            text: "Add calls to your collection using the function bar or the list to the left. Once you're done, save your collection as either a session plan or a template."}}
                         onClick={(name) => this.moveCall(name, "callList")} 
                     />
                 </div>

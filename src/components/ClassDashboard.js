@@ -3,6 +3,7 @@ import * as db from "../util/dbfunctions";
 import Alerts from "./Alerts";
 import Loader from "./Loader";
 import { NavLink } from "react-router-dom";
+import Placeholder from './Placeholder';
 
 
 class ClassDashboard extends React.Component {
@@ -46,24 +47,24 @@ class ClassDashboard extends React.Component {
         if (this.state.finishedSessions === "loading") {
             finishedListItems = <Loader/>;
         } else {
-            finishedListItems = this.state.finishedSessions.map((session) => 
-                <li className="list-group-item d-flex" key={session.id}>
-                    <div className="float-left"><strong>{session.name}</strong></div>
-                    <div className="ml-auto">Finished on {(new Date(session.finishedAt)).toDateString()}</div>
-                </li>
-            );
+            finishedListItems = this.state.finishedSessions.length ? this.state.finishedSessions.map((session) => 
+            <li className="list-group-item d-flex" key={session.id}>
+                <div className="float-left"><strong>{session.name}</strong></div>
+                <div className="ml-auto">Finished on {(new Date(session.finishedAt)).toDateString()}</div>
+            </li>
+        ) : <Placeholder content={{title: "Finished Sessions", text: "You don't have any finished sessions to display yet.", rel: "/run", destination: "Run a Session"}}/>;
         }
         var unfinishedListItems;
         if (this.state.sessionPlans === "loading") {
             unfinishedListItems = <Loader/>;
         } else {
-            unfinishedListItems = this.state.sessionPlans.map((session) => 
-                <li className="list-group-item d-flex justify-content-end" key={session.id}>
-                    <div className="list-item-name"><p><strong>{session.name}</strong></p></div>
-                    <div className="mr-5">Created on {(new Date(session.createdAt)).toDateString()}</div>
-                    <button className="btn btn-sm btn-danger" onClick={() => this.deleteSession(session.name)}>Delete</button>
-                </li>
-            );
+            unfinishedListItems = this.state.sessionPlans.length ? this.state.sessionPlans.map((session) => 
+            <li className="list-group-item d-flex justify-content-end" key={session.id}>
+                <div className="list-item-name"><p><strong>{session.name}</strong></p></div>
+                <div className="mr-5">Created on {(new Date(session.createdAt)).toDateString()}</div>
+                <button className="btn btn-sm btn-danger" onClick={() => this.deleteSession(session.name)}>Delete</button>
+            </li>
+        ) : <li><Placeholder content={{title: "Session Plans", text: "You don't have any session plans to display at the moment.", rel: "/create", destination: "Plan a Session"}}/></li>;
         }
         return (
             <div className="container below-navbar">
@@ -80,7 +81,7 @@ class ClassDashboard extends React.Component {
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <section>
-                    <ul className="nav nav-tabs nav-fill row pills-row bg-light" id="myTab" role="tablist">
+                    <ul className="nav nav-tabs nav-fill row tabs-row" id="myTab" role="tablist">
                         <li className="nav-item">
                             <a className="text-secondary nav-link active" id="plans-tab" data-toggle="tab" href="#plans" role="tab" aria-controls="plans" aria-selected="true">Session Plans</a>
                         </li>
@@ -89,10 +90,10 @@ class ClassDashboard extends React.Component {
                         </li>
                     </ul>
                     <div className="tab-content" id="myTabContent">
-                        <ul className="tab-pane fade show active list-group collections-list bg-light" id="plans" role="tabpanel" aria-labelledby="plans-tab">
+                        <ul className="tab-pane fade show active list-group collections-list" id="plans" role="tabpanel" aria-labelledby="plans-tab">
                             {unfinishedListItems}
                         </ul>
-                        <ul className="tab-pane fade list-group collections-list bg-light" id="finished" role="tabpanel" aria-labelledby="finished-tab">
+                        <ul className="tab-pane fade list-group collections-list" id="finished" role="tabpanel" aria-labelledby="finished-tab">
                             {finishedListItems}
                         </ul>
                     </div>
