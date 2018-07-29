@@ -10,6 +10,7 @@ class ReviewClassView extends React.Component {
     state = {
         alerts: [],
         selectedCalls: [],
+        selectedCallsLoading: false,
         sessionNames: [],
         activeFilter: {},
         modalData: {},
@@ -23,9 +24,10 @@ class ReviewClassView extends React.Component {
     }
     
     async loadAllCalls() {
+        this.setState({ selectedCallsLoading: true });
         db.fetchAllCalls().then((allCalls) => {
             db.displayData(allCalls).then((displayData) => {
-                this.setState({ selectedCalls: displayData, activeFilter: {} });
+                this.setState({ selectedCalls: displayData, activeFilter: {}, selectedCallsLoading: false });
             })
         });
     }
@@ -35,13 +37,16 @@ class ReviewClassView extends React.Component {
     }
 
     async loadSession(name) {
+        this.setState({ selectedCallsLoading: true });
         db.fetchSessionCalls(name).then(async (sessionCalls) => {
             const displayData = await db.displayData(sessionCalls);
             this.setState({ selectedCalls: displayData, activeFilter: {type: "session", name: name} });
+            this.setState({ selectedCallsLoading: false });
         });
     }
 
     async showCall(name) {
+        this.setState({ modalData: { loading: true }});
         db.fetchCallHistory(name).then(async (call) => {
             const sessionData = await db.fetchAllSessions();
             var body = "";
@@ -76,41 +81,47 @@ class ReviewClassView extends React.Component {
     selectFilter = async (type, name) => {
         switch (type) {
         case 'Used':
+                this.setState({ selectedCallsLoading: true });
             db.fetchByEverUsed(true).then(async (calls) => {
                 const displayData = await db.displayData(calls);
-                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+                this.setState({ selectedCalls: displayData, selectedCallsLoading: false, activeFilter: {type: "filter", name: type} });
             })
             break;
         case 'Unused':
+                this.setState({ selectedCallsLoading: true });
             db.fetchByEverUsed(false).then(async (calls) => {
                 const displayData = await db.displayData(calls);
-                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+                this.setState({ selectedCalls: displayData, selectedCallsLoading: false, activeFilter: {type: "filter", name: type} });
             })
             break;
         case "New":
+            this.setState({ selectedCallsLoading: true });
             db.fetchNew().then(async (calls) => {
                 const displayData = await db.displayData(calls);
-                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+                this.setState({ selectedCalls: displayData, selectedCallsLoading: false, activeFilter: {type: "filter", name: type} });
             })
             break;
         case "Basic":
+            this.setState({ selectedCallsLoading: true });
             db.fetchByCategory("basic").then(async (calls) => {
                 const displayData = await db.displayData(calls);
-                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+                this.setState({ selectedCalls: displayData, selectedCallsLoading: false, activeFilter: {type: "filter", name: type} });
             })
             break;
         case "Plus":
+            this.setState({ selectedCallsLoading: true });
             db.fetchByCategory("plus").then(async (calls) => {
                 const displayData = await db.displayData(calls);
-                this.setState({ selectedCalls: displayData, activeFilter: {type: "filter", name: type} });
+                this.setState({ selectedCalls: displayData, selectedCallsLoading: false, activeFilter: {type: "filter", name: type} });
             })
             break;
         case "session":
             this.loadSession(name);
             break;
         case "group":
+            this.setState({ selectedCallsLoading: true });
             db.fetchByGroup(name).then((displayData) => {
-                this.setState({ selectedCalls: displayData, activeFilter: {type: "group", name: "Group " + name} });
+                this.setState({ selectedCalls: displayData, selectedCallsLoading: false, activeFilter: {type: "group", name: "Group " + name} });
             });
             break;
         default:
@@ -119,6 +130,7 @@ class ReviewClassView extends React.Component {
     }
 
     exportSelection() {
+        this.setState({ modalData: { loading: true }});
         var text = "";
         if (this.state.selectedCalls.length > 0) {
             this.state.selectedCalls.forEach(((call) => {
@@ -148,7 +160,15 @@ class ReviewClassView extends React.Component {
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-12" id="reviewList" columns={4} calls={this.state.selectedCalls} sort={this.state.sort} onClick={(name) => this.showCall(name)} />
+                    <List 
+                        size="col-md-12" 
+                        id="reviewList" 
+                        columns={4} 
+                        calls={this.state.selectedCalls} 
+                        loading={this.state.selectedCallsLoading}
+                        sort={this.state.sort} 
+                        onClick={(name) => this.showCall(name)} 
+                    />
                 </div>
             </div>
         )

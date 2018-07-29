@@ -87,6 +87,7 @@ span.empty {
 }
 
 .page {
+  position: relative;
   height: 780px;
 }
 
@@ -167,6 +168,7 @@ span.empty {
 }
 
 .card-container {
+  position: relative;
   margin-top: 0;
   height: 400px;
   overflow-y: scroll;
@@ -229,7 +231,9 @@ hr {
 .modal-content {
   width:inherit;
   max-width:inherit; 
+  min-width: 300px;
   height:inherit;
+  min-height: 200px;
   margin: 0 auto;
   pointer-events:all;
 }
@@ -249,6 +253,29 @@ hr {
 .dropdown-menu-right { 
   right: 0; 
   left: auto; 
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #5bc0de;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  z-index: 1;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -25px;
+  margin-left: -25px;
 }
 
 .tabs-row {
@@ -273,6 +300,7 @@ hr {
 }
 
 .collections-list {
+  position: relative;
   height: 400px;
   overflow-y: scroll;
   margin-right: 0;

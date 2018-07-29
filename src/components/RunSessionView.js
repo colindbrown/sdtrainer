@@ -8,6 +8,7 @@ class RunSessionView extends React.Component {
 
     state = {
         sessionCalls: [],
+        sessionCallsLoading: false,
         alerts: [],
         sessionNames: [],
         activeSession: "",
@@ -20,6 +21,7 @@ class RunSessionView extends React.Component {
     }
 
     async loadSession(name) {
+        this.setState({sessionCallsLoading: true});
         db.fetchSessionCalls(name).then( async (sessionCalls) => {
             const displayData = await db.displayData(sessionCalls);
             sessionCalls.forEach(((call) => {
@@ -27,7 +29,7 @@ class RunSessionView extends React.Component {
                 call.timestamp = Date.now();
                 call.group = displayData.find((iterator) => (iterator.name === call.name)).group;
             }));
-            this.setState({ sessionCalls: sessionCalls, activeSession: name });
+            this.setState({ sessionCalls: sessionCalls, activeSession: name, sessionCallsLoading: false });
         });
     }
 
@@ -98,9 +100,11 @@ class RunSessionView extends React.Component {
                         id="runList" 
                         columns={4} 
                         calls={this.state.sessionCalls} 
+                        loading={this.state.sessionCallsLoading}
                         sort={this.state.sort} 
                         placeholderContent={placeholderContent}
-                        onClick={(name) => this.toggleCall(name)} />
+                        onClick={(name) => this.toggleCall(name)} 
+                    />
                 </div>
             </div>
         )

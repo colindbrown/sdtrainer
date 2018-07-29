@@ -1,6 +1,7 @@
 import React from 'react';
 import * as db from "../util/dbfunctions";
 import Alerts from "./Alerts";
+import Loader from "./Loader";
 import { NavLink } from "react-router-dom";
 import Placeholder from './Placeholder';
 
@@ -10,7 +11,9 @@ class ClassDashboard extends React.Component {
     state = {
         alerts: [],
         finishedSessions: [],
-        sessionPlans: []
+        loadingFinishedSessions: true,
+        sessionPlans: [],
+        loadingSessionPlans: true
     }
 
     componentDidMount() {
@@ -20,10 +23,11 @@ class ClassDashboard extends React.Component {
     loadSessions = async () => {
         const finished = await db.fetchfinishedSessions();
         const plans = await db.fetchUnfinishedSessions();
-        this.setState({finishedSessions: finished, sessionPlans: plans});
+        this.setState({finishedSessions: finished, sessionPlans: plans, loadingFinishedSessions: false, loadingSessionPlans: false});
     }
 
     deleteSession = async (id) => {
+        this.setState({loadingSessionPlans: true});
         db.deleteSession(id).then(() => {
             this.loadSessions().then(() => {
                 this.showAlert("alert-success", "Session deleted");
@@ -42,19 +46,29 @@ class ClassDashboard extends React.Component {
 
     render() {
         const activeClass = this.props.activeClass;
-        const finishedListItems = this.state.finishedSessions.length ? this.state.finishedSessions.map((session) => 
+        var finishedListItems;
+        if (this.state.loadingFinishedSessions) {
+            finishedListItems = <Loader/>;
+        } else {
+            finishedListItems = this.state.finishedSessions.length ? this.state.finishedSessions.map((session) => 
             <li className="list-group-item d-flex" key={session.id}>
                 <div className="float-left"><strong>{session.name}</strong></div>
                 <div className="ml-auto">Finished on {(new Date(session.finishedAt)).toDateString()}</div>
             </li>
         ) : <Placeholder content={{title: "Finished Sessions", text: "You don't have any finished sessions to display yet.", rel: "/run", destination: "Run a Session"}}/>;
-        const unfinishedListItems = this.state.sessionPlans.length ? this.state.sessionPlans.map((session) => 
+        }
+        var unfinishedListItems;
+        if (this.state.loadingSessionPlans) {
+            unfinishedListItems = <Loader/>;
+        } else {
+            unfinishedListItems = this.state.sessionPlans.length ? this.state.sessionPlans.map((session) => 
             <li className="list-group-item d-flex justify-content-end" key={session.id}>
                 <div className="list-item-name"><p><strong>{session.name}</strong></p></div>
                 <div className="mr-5">Created on {(new Date(session.createdAt)).toDateString()}</div>
                 <button className="btn btn-sm btn-danger" onClick={() => this.deleteSession(session.name)}>Delete</button>
             </li>
         ) : <li><Placeholder content={{title: "Session Plans", text: "You don't have any session plans to display at the moment.", rel: "/create", destination: "Plan a Session"}}/></li>;
+        }
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center class-jumbotron">

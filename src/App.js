@@ -6,6 +6,7 @@ import { Switch, Route, HashRouter} from "react-router-dom";
 import CreateCollectionView from "./components/CreateCollectionView";
 import RunSessionView from "./components/RunSessionView";
 import ReviewClassView from "./components/ReviewClassView";
+import Loader from "./components/Loader";
 import ClassDashboard from "./components/ClassDashboard";
 import * as db from "./util/dbfunctions";
 import firebase from "firebase";
@@ -15,17 +16,18 @@ class App extends Component {
 
   state = {
     activeClass: {},
-    activeUser: ""
+    activeUser: "",
+    loadingUser: true
   }
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         db.setActiveUser(user).then(() => {
-          this.setState({activeUser: user});
+          this.setState({activeUser: user, loadingUser: false});
         });
       } else {
-        this.setState({activeUser: ""});
+        this.setState({activeUser: "", loadingUser: false});
       }
     });
   }
@@ -46,7 +48,9 @@ class App extends Component {
 
   render() {
     var routes;
-    if (!this.state.activeUser) {
+    if (this.state.loadingUser) {
+      routes = <Loader/>;
+    } else if (!this.state.activeUser) {
       routes = <Route path="/" component={Home}/>
     } else if (this.state.activeClass.name) {
       routes = <Switch>

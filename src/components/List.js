@@ -97,6 +97,7 @@ class List extends React.Component {
                 <Page 
                     key={j} 
                     active={j === 0 ? "active" : ""} 
+                    loading={this.props.loading}
                     columns={NUMCOLUMNS} columnSize={COLUMNSIZE} 
                     calls={listItems.slice(j*(NUMCOLUMNS*COLUMNSIZE), (j+1)*(NUMCOLUMNS*COLUMNSIZE))} 
                 />

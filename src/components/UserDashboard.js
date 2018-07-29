@@ -3,6 +3,7 @@ import ClassCard from "./ClassCard";
 import * as db from "../util/dbfunctions";
 import AddClassCard from './AddClassCard';
 import Alerts from "./Alerts";
+import Loader from "./Loader";
 import Placeholder from './Placeholder';
 import { NavLink } from "react-router-dom";
 
@@ -11,8 +12,10 @@ class UserDashboard extends React.Component {
 
     state = {
         classes: [],
+        classesLoading: true,
         alerts: [],
-        templates: []
+        templates: [],
+        templatesLoading: true
     }
 
     componentDidMount() {
@@ -22,15 +25,16 @@ class UserDashboard extends React.Component {
 
     loadClasses = async () => {
         const classes = await db.fetchClassData();
-        this.setState({classes});
+        this.setState({ classes, classesLoading: false });
     }
 
     loadTemplates = async () => {
         const templates = await db.fetchTemplates();
-        this.setState({templates});
+        this.setState({ templates, templatesLoading: false });
     }
 
     deleteTemplate = async (name) => {
+        this.setState({ templatesLoading: true });
         db.deleteTemplate(name).then(() => {
             this.loadTemplates().then(() => {
                 this.showAlert("alert-success", "Template deleted");
@@ -49,25 +53,35 @@ class UserDashboard extends React.Component {
 
     render() {
         const firstName = this.props.activeUser.displayName.split(" ")[0];
-        const classCards = this.state.classes.map((classData) => <ClassCard 
-            key={classData.name} 
-            {...classData} 
-            activeClass={this.props.activeClass} 
-            updateActiveClass={(name) => this.props.updateActiveClass(name)} /> 
-        );
-        classCards.push(<AddClassCard 
-            key="addClassCard" 
-            updateActiveClass={(name) => this.props.updateActiveClass(name)}
-            showAlert={(type,text) => this.showAlert(type, text)} 
-            clearAlerts={() => this.clearAlerts()}
-            />)
-        const templateListItems = this.state.templates.length ? this.state.templates.map((template) => 
+        var classCards;
+        if (this.state.classesLoading) {
+            classCards = <Loader/>;
+        } else {
+            classCards = this.state.classes.map((classData) => <ClassCard 
+                key={classData.name} 
+                {...classData} 
+                activeClass={this.props.activeClass} 
+                updateActiveClass={(name) => this.props.updateActiveClass(name)} /> 
+            );
+            classCards.push(<AddClassCard 
+                key="addClassCard" 
+                updateActiveClass={(name) => this.props.updateActiveClass(name)}
+                showAlert={(type,text) => this.showAlert(type, text)} 
+                clearAlerts={() => this.clearAlerts()}
+            />);
+        }
+        var templateListItems;
+        if (this.state.templatesLoading) {
+            templateListItems = <Loader/>;
+        } else {
+            templateListItems = this.state.templates.length ? this.state.templates.map((template) => 
             <li className="list-group-item d-flex justify-content-end" key={template.name}>
                 <div className="list-item-name"><p><strong>{template.name}</strong></p></div>
                 <div className="mr-5">Created on {(new Date(template.createdAt)).toDateString()}</div>
                 <button className="btn btn-sm btn-danger" onClick={() => this.deleteTemplate(template.name)}>Delete</button>
             </li>
         ) : <li><Placeholder content={{title: "Templates", text: "You don't have any templates to display at the moment.", rel: "/create", destination: "Create a Template"}}/></li>;
+        }
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center class-jumbotron">
@@ -76,7 +90,7 @@ class UserDashboard extends React.Component {
                         <p className="lead text-muted">Choose a class to manage from the classes below or create a new one</p>
                         <hr/>
                         <p className="lead text-muted"> Or create a template to use in your classes</p>
-                        <NavLink className={`btn btn-info`} to={`/templates`}>Create a Template</NavLink>
+                        <NavLink className={`btn btn-info`} to={`/create`}>Create a Template</NavLink>
                     </div>
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
