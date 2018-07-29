@@ -8,6 +8,7 @@ class RunSessionView extends React.Component {
 
     state = {
         sessionCalls: [],
+        sessionCallsLoading: false,
         alerts: [],
         sessionNames: [],
         activeSession: "",
@@ -20,6 +21,7 @@ class RunSessionView extends React.Component {
     }
 
     async loadSession(name) {
+        this.setState({sessionCallsLoading: true});
         db.fetchSessionCalls(name).then( async (sessionCalls) => {
             const displayData = await db.displayData(sessionCalls);
             sessionCalls.forEach(((call) => {
@@ -27,7 +29,7 @@ class RunSessionView extends React.Component {
                 call.timestamp = Date.now();
                 call.group = displayData.find((iterator) => (iterator.name === call.name)).group;
             }));
-            this.setState({ sessionCalls: sessionCalls, activeSession: name });
+            this.setState({ sessionCalls: sessionCalls, activeSession: name, sessionCallsLoading: false });
         });
     }
 
@@ -76,6 +78,12 @@ class RunSessionView extends React.Component {
 
 
     render() {
+        var placeholderContent = {};
+        if (this.state.sessionNames.length > 0) {
+            placeholderContent={title: "Run a Session", text: "Select a session plan to run from the function bar above. Once you're done, finish the session using the button on the right."};
+        } else {
+            placeholderContent={title: "Run a Session", text: "You don't have any session plans to run at the moment.", rel: "/create", destination: "Plan a Session"};
+        }
         return (
             <div>
                 <RunFunctionBar
@@ -87,7 +95,16 @@ class RunSessionView extends React.Component {
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-12" id="runList" columns={4} calls={this.state.sessionCalls} sort={this.state.sort} onClick={(name) => this.toggleCall(name)} />
+                    <List 
+                        size="col-md-12" 
+                        id="runList" 
+                        columns={4} 
+                        calls={this.state.sessionCalls} 
+                        loading={this.state.sessionCallsLoading}
+                        sort={this.state.sort} 
+                        placeholderContent={placeholderContent}
+                        onClick={(name) => this.toggleCall(name)} 
+                    />
                 </div>
             </div>
         )
