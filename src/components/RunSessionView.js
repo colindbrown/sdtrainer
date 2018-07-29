@@ -1,7 +1,7 @@
 import React from "react";
 import List from "./List";
 import Alerts from "./Alerts";
-import * as db from "../util/dbfunctions";
+import { db } from "../util/dbfunctions";
 import RunFunctionBar from "./RunFunctionBar";
 
 class RunSessionView extends React.Component {
@@ -22,8 +22,8 @@ class RunSessionView extends React.Component {
 
     async loadSession(name) {
         this.setState({sessionCallsLoading: true});
-        db.fetchSessionCalls(name).then( async (sessionCalls) => {
-            const displayData = await db.displayData(sessionCalls);
+        db.sessions.fetchSessionCalls(name).then( async (sessionCalls) => {
+            const displayData = await db.fetchDisplayData(sessionCalls);
             sessionCalls.forEach(((call) => {
                 call.disabled = false;
                 call.timestamp = Date.now();
@@ -34,15 +34,18 @@ class RunSessionView extends React.Component {
     }
 
     async loadSessionNames() {
-        db.fetchUnfinishedSessionNames().then((sessionNames) => { this.setState({ sessionNames }) });
+        db.sessions.fetchUnfinishedSessions().then((sessions) => {
+            const sessionNames = db.createNamesArray(sessions);
+            this.setState({ sessionNames });
+        });
     }
 
     finishSession(e) {
         e.preventDefault();
         const sessionUpdate = this.state.sessionCalls.map((call) => ({ name: call.name, used: call.disabled, timestamp: call.timestamp}));
-        db.setSession(this.state.activeSession, sessionUpdate).then(() => this.loadSessionNames());
+        db.sessions.setSession(this.state.activeSession, sessionUpdate).then(() => this.loadSessionNames());
         const historyUpdate = this.state.sessionCalls.map((call) => ({ name: call.name, everUsed: call.disabled, uses: [call.timestamp] }));
-        db.updateHistory(this.state.activeSession, historyUpdate);
+        db.history.updateHistory(this.state.activeSession, historyUpdate);
         this.setState({ activeSession: "", sessionCalls: [] });
         this.showAlert("alert-success", "Session saved");
     }

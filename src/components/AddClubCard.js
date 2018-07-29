@@ -1,5 +1,5 @@
 import React from "react";
-import * as db from "../util/dbfunctions";
+import { db } from "../util/dbfunctions";
 import { Redirect } from "react-router-dom";
 
 class AddClubCard extends React.Component {
@@ -20,11 +20,11 @@ class AddClubCard extends React.Component {
         if (!name) {
             this.props.showAlert("alert-warning", "Please name your club");
         } else {
-            const clubData = await db.checkClub(name);
+            const clubData = await db.clubs.checkClub(name);
             if (clubData) {
                 this.props.showAlert("alert-warning", "A class with that name already exists");
             } else {
-                db.createNewClub(this.state.newClubName).then(() => {
+                db.clubs.createNewClub(this.state.newClubName).then(() => {
                     this.props.updateActiveClub(this.state.newClubName);
                     this.setState({ newClubName: "", redirect: "/club"});
                 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import ClubCard from "./ClubCard";
-import * as db from "../util/dbfunctions";
+import { db } from "../util/dbfunctions";
 import AddClubCard from './AddClubCard';
 import Alerts from "./Alerts";
 import ConfirmModal from "./ConfirmModal";
@@ -25,18 +25,18 @@ class UserDashboard extends React.Component {
     }
 
     loadClubs = async () => {
-        const clubs = await db.fetchClubData();
+        const clubs = await db.clubs.fetchClubs();
         this.setState({ clubs, clubsLoading: false });
     }
 
     loadTemplates = async () => {
-        const templates = await db.fetchTemplates();
+        const templates = await db.templates.fetchTemplates();
         this.setState({ templates, templatesLoading: false });
     }
 
     deleteTemplate = async (name) => {
         this.setState({ templatesLoading: true });
-        db.deleteTemplate(name).then(() => {
+        db.templates.deleteTemplate(name).then(() => {
             this.loadTemplates().then(() => {
                 this.showAlert("alert-success", "Template deleted");
             })
@@ -44,7 +44,7 @@ class UserDashboard extends React.Component {
     }
 
     deleteClub = async (name) => {
-        db.deleteClub(name).then(() => {
+        db.clubs.deleteClub(name).then(() => {
             this.loadClubs().then(() => {
                 this.showAlert("alert-success", "Club deleted");
             })

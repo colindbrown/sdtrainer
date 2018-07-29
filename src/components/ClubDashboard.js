@@ -1,5 +1,5 @@
 import React from 'react';
-import * as db from "../util/dbfunctions";
+import { db } from "../util/dbfunctions";
 import Alerts from "./Alerts";
 import Loader from "./Loader";
 import { NavLink } from "react-router-dom";
@@ -22,14 +22,14 @@ class ClubDashboard extends React.Component {
     }
 
     loadSessions = async () => {
-        const finished = await db.fetchfinishedSessions();
-        const plans = await db.fetchUnfinishedSessions();
+        const finished = await db.sessions.fetchfinishedSessions();
+        const plans = await db.sessions.fetchUnfinishedSessions();
         this.setState({finishedSessions: finished, sessionPlans: plans, loadingFinishedSessions: false, loadingSessionPlans: false});
     }
 
     deleteSession = async (id) => {
         this.setState({loadingSessionPlans: true});
-        db.deleteSession(id).then(() => {
+        db.sessions.deleteSession(id).then(() => {
             this.loadSessions().then(() => {
                 this.showAlert("alert-success", "Session deleted");
             })
@@ -74,14 +74,14 @@ class ClubDashboard extends React.Component {
             </li>
         ) : <li><Placeholder content={{title: "Session Plans", text: "You don't have any session plans to display at the moment.", rel: "/create", destination: "Plan a Session"}}/></li>;
         }
-        const percentTaught = 100*activeClub.taught/db.totalCalls;
+        const percentTaught = 100*activeClub.taught/db.calls.totalCalls;
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center club-jumbotron">
                     <div className="container">
                         <h1 className="jumbotron-heading">{activeClub.name}</h1>
                         <hr/>
-                        <p className="lead text-muted">{activeClub.taught} calls out of {db.totalCalls} taught</p>
+                        <p className="lead text-muted">{activeClub.taught} calls out of {db.calls.totalCalls} taught</p>
                         <div className="progress">
                             <div className="progress-bar bg-info" style={{ width: `${percentTaught}%` }} role="progressbar"></div>
                         </div>

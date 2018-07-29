@@ -12,6 +12,6 @@ messagingSenderId: "671291885254"
 firebase.initializeApp(config);
 
 firebase.firestore().enablePersistence();
-const db = firebase.firestore();
+const dbRef = firebase.firestore();
 
-export { db };
+export { dbRef };
