@@ -11,9 +11,9 @@ class ClassDashboard extends React.Component {
     state = {
         alerts: [],
         finishedSessions: [],
-        loadingFinished: true,
+        loadingFinishedSessions: true,
         sessionPlans: [],
-        loadingUnfinished: true
+        loadingSessionPlans: true
     }
 
     componentDidMount() {
@@ -23,11 +23,11 @@ class ClassDashboard extends React.Component {
     loadSessions = async () => {
         const finished = await db.fetchfinishedSessions();
         const plans = await db.fetchUnfinishedSessions();
-        this.setState({finishedSessions: finished, sessionPlans: plans, loadingFinished: false, loadingUnfinished: false});
+        this.setState({finishedSessions: finished, sessionPlans: plans, loadingFinishedSessions: false, loadingSessionPlans: false});
     }
 
     deleteSession = async (id) => {
-        this.setState({loadingUnfinished: true});
+        this.setState({loadingSessionPlans: true});
         db.deleteSession(id).then(() => {
             this.loadSessions().then(() => {
                 this.showAlert("alert-success", "Session deleted");
@@ -47,7 +47,7 @@ class ClassDashboard extends React.Component {
     render() {
         const activeClass = this.props.activeClass;
         var finishedListItems;
-        if (this.state.loadingFinished) {
+        if (this.state.loadingFinishedSessions) {
             finishedListItems = <Loader/>;
         } else {
             finishedListItems = this.state.finishedSessions.length ? this.state.finishedSessions.map((session) => 
@@ -58,7 +58,7 @@ class ClassDashboard extends React.Component {
         ) : <Placeholder content={{title: "Finished Sessions", text: "You don't have any finished sessions to display yet.", rel: "/run", destination: "Run a Session"}}/>;
         }
         var unfinishedListItems;
-        if (this.state.loadingUnfinished) {
+        if (this.state.loadingSessionPlans) {
             unfinishedListItems = <Loader/>;
         } else {
             unfinishedListItems = this.state.sessionPlans.length ? this.state.sessionPlans.map((session) => 
