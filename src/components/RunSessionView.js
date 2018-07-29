@@ -100,16 +100,11 @@ class RunSessionView extends React.Component {
                         id="runList" 
                         columns={4} 
                         calls={this.state.sessionCalls} 
-<<<<<<< HEAD
                         loading={this.state.sessionCallsLoading}
                         sort={this.state.sort} 
+                        placeholderContent={placeholderContent}
                         onClick={(name) => this.toggleCall(name)} 
                     />
-=======
-                        sort={this.state.sort} 
-                        placeholderContent={placeholderContent}
-                        onClick={(name) => this.toggleCall(name)} />
->>>>>>> master
                 </div>
             </div>
         )

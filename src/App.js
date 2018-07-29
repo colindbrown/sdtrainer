@@ -16,17 +16,18 @@ class App extends Component {
 
   state = {
     activeClass: {},
-    activeUser: "loading"
+    activeUser: "",
+    loadingUser: true
   }
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         db.setActiveUser(user).then(() => {
-          this.setState({activeUser: user});
+          this.setState({activeUser: user, loadingUser: false});
         });
       } else {
-        this.setState({activeUser: ""});
+        this.setState({activeUser: "", loadingUser: false});
       }
     });
   }
@@ -47,7 +48,7 @@ class App extends Component {
 
   render() {
     var routes;
-    if (this.state.activeUser === "loading") {
+    if (this.state.loadingUser) {
       routes = <Loader/>;
     } else if (!this.state.activeUser) {
       routes = <Route path="/" component={Home}/>

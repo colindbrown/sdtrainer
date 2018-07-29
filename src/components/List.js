@@ -91,22 +91,13 @@ class List extends React.Component {
             listItems.push(<Call empty={true} rounded={roundedCorners} group={0} key={`${id}, ${listItems.length}`} />)
         }
 
-<<<<<<< HEAD
-        var pages = []
-        for (var i = 0; i < (listItems.length / (NUMCOLUMNS*COLUMNSIZE)); i++) {
-            pages.push(
-                <Page 
-                    key={i} 
-                    active={i === 0 ? "active" : ""} 
-                    loading={this.props.loading}
-=======
         var pages = [];
         for (var j = 0; j < (listItems.length / (NUMCOLUMNS*COLUMNSIZE)); j++) {
             pages.push(
                 <Page 
                     key={j} 
                     active={j === 0 ? "active" : ""} 
->>>>>>> master
+                    loading={this.props.loading}
                     columns={NUMCOLUMNS} columnSize={COLUMNSIZE} 
                     calls={listItems.slice(j*(NUMCOLUMNS*COLUMNSIZE), (j+1)*(NUMCOLUMNS*COLUMNSIZE))} 
                 />

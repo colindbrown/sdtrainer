@@ -11,9 +11,11 @@ import { NavLink } from "react-router-dom";
 class UserDashboard extends React.Component {
 
     state = {
-        classes: "loading",
+        classes: [],
+        classesLoading: true,
         alerts: [],
-        templates: "loading"
+        templates: [],
+        templatesLoading: true
     }
 
     componentDidMount() {
@@ -23,15 +25,16 @@ class UserDashboard extends React.Component {
 
     loadClasses = async () => {
         const classes = await db.fetchClassData();
-        this.setState({classes});
+        this.setState({ classes, classesLoading: false });
     }
 
     loadTemplates = async () => {
         const templates = await db.fetchTemplates();
-        this.setState({templates});
+        this.setState({ templates, templatesLoading: false });
     }
 
     deleteTemplate = async (name) => {
+        this.setState({ templatesLoading: true });
         db.deleteTemplate(name).then(() => {
             this.loadTemplates().then(() => {
                 this.showAlert("alert-success", "Template deleted");
@@ -51,7 +54,7 @@ class UserDashboard extends React.Component {
     render() {
         const firstName = this.props.activeUser.displayName.split(" ")[0];
         var classCards;
-        if (this.state.classes === "loading") {
+        if (this.state.classesLoading) {
             classCards = <Loader/>;
         } else {
             classCards = this.state.classes.map((classData) => <ClassCard 
@@ -68,7 +71,7 @@ class UserDashboard extends React.Component {
             />);
         }
         var templateListItems;
-        if (this.state.templates === "loading") {
+        if (this.state.templatesLoading) {
             templateListItems = <Loader/>;
         } else {
             templateListItems = this.state.templates.length ? this.state.templates.map((template) => 
