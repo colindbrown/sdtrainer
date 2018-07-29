@@ -43,6 +43,14 @@ class App extends Component {
     firebase.auth().signOut();
   }
 
+  setPassedCollection = (type, name) => {
+    this.setState({ passedCollection: {type: type, name: name} });
+  }
+
+  resetPassedCollection() {
+    this.setState({ passedCollection: undefined });
+  }
+
 
   render() {
     var routes;
@@ -55,36 +63,53 @@ class App extends Component {
               activeClass={this.state.activeClass} 
               activeUser={this.state.activeUser}
               updateActiveClass={(name) => this.updateActiveClass(name)}
-              resetClass={() => this.resetClass()} 
+              resetClass={() => this.resetClass()}
+              setPassedCollection={(type, name) => this.setPassedCollection(type, name)}
             />
           )}/>
           <Route path="/create" render={() => (
             <CreateCollectionView
-              activeClass={this.state.activeClass} 
-              />
+              activeClass={this.state.activeClass}
+              passedCollection={this.state.passedCollection}
+              resetPassedCollection={() => this.resetPassedCollection()} 
+            />
           )}/>
-          <Route path="/run" component={RunSessionView}/>
-          <Route path="/review" component={ReviewClassView}/>
+          <Route path="/run" render={() => (
+            <RunSessionView
+              passedCollection={this.state.passedCollection}
+              resetPassedCollection={() => this.resetPassedCollection()} 
+            />
+          )}/>
+          <Route path="/review" render={() => (
+            <ReviewClassView
+              passedCollection={this.state.passedCollection}
+              resetPassedCollection={() => this.resetPassedCollection()} 
+            />
+          )}/>
           <Route path="/" render={() => (
             <UserDashboard
               activeClass={this.state.activeClass} 
               activeUser={this.state.activeUser}
-              updateActiveClass={(name) => this.updateActiveClass(name)} 
-              />
+              updateActiveClass={(name) => this.updateActiveClass(name)}
+              setPassedCollection={(type, name) => this.setPassedCollection(type, name)} 
+            />
           )}/>
         </Switch>
     } else {
       routes = <Switch>
         <Route path="/create" render={() => (
-            <CreateCollectionView
-              activeClass={this.state.activeClass} 
-              />
-          )}/>
+          <CreateCollectionView
+            activeClass={this.state.activeClass}
+            passedCollection={this.state.passedCollection}
+            resetPassedCollection={() => this.resetPassedCollection()} 
+          />
+        )}/>
         <Route path="/" render={() => (
         <UserDashboard
               activeClass={this.state.activeClass} 
               activeUser={this.state.activeUser}
-              updateActiveClass={(name) => this.updateActiveClass(name)} 
+              updateActiveClass={(name) => this.updateActiveClass(name)}
+              setPassedCollection={(type, name) => this.setPassedCollection(type, name)} 
               />
       )}/>
       </Switch>
