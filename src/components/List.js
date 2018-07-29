@@ -15,77 +15,36 @@ class List extends React.Component {
     getSort() {
         switch (this.props.sort) {
             case "lastUsed":
-                return (a,b) => this.lastUsedSort(a,b);
+                return (a,b) => this.sortBy(a,b, "lastUsed", "name");
             case "numUses":
-                return (a,b) => this.mostUsedSort(a,b);
+                return (a,b) => this.sortBy(a,b, "uses", "name");
             case "group":
-                return (a,b) => this.groupSort(a,b);
+                return (a,b) => this.sortBy(a,b, "group", "name");
             case "plus/basic":
-                return (a,b) => this.plusBasicSort(a,b);
+                return (a,b) => this.sortBy(a,b, "category", "name");
             case "userPosition":
-                return (a,b) => this.userSort(a,b);
+                return (a,b) => this.sortBy(a,b, "position", "");
             default:
-                return (a,b) => this.alphabeticalSort(a,b);
+                return (a,b) => this.sortBy(a,b, "name", "");
         }
     }
 
-    alphabeticalSort(a, b) {
-        if (a.name < b.name) {
-            return -1;
-        } else if (a.name > b.name) {
-            return 1;
-        } else {
-            return 0;
+    sortBy(a,b, attribute, subAttribute) {
+        var reverse = false;
+        if (attribute === "name") {
+            reverse = true;
         }
-    }
 
-    groupSort(a, b) {
-        if (a.group < b.group) {
-            return 1;
-        } else if (a.group > b.group) {
-            return -1;
+        if (a[attribute] < b[attribute]) {
+            return reverse ? -1 : 1;
+        } else if (a[attribute] > b[attribute]) {
+            return reverse ? 1 : -1;
         } else {
-            return this.alphabeticalSort(a,b);
-        }
-    }
-
-    plusBasicSort(a, b) {
-        if (a.category === b.category) {
-            return this.alphabeticalSort(a,b);
-        } else if (a.category === "plus") {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
-
-    mostUsedSort(a, b) {
-        if (a.uses < b.uses) {
-            return 1;
-        } else if (a.uses > b.uses) {
-            return -1;
-        } else {
-            return this.alphabeticalSort(a,b);
-        }
-    }
-
-    lastUsedSort(a, b) {
-        if (a.lastUsed < b.lastUsed) {
-            return 1;
-        } else if (a.lastUsed > b.lastUsed) {
-            return -1;
-        } else {
-            return this.alphabeticalSort(a,b);
-        }
-    }
-
-    userSort(a, b) {
-        if (a.position < b.position) {
-            return 1;
-        } else if (a.position > b.position) {
-            return -1;
-        } else {
-            return 0;
+            if (subAttribute) {
+                return this.sortBy(a,b, subAttribute, "");
+            } else {
+                return 0;
+            }
         }
     }
 
