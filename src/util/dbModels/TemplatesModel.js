@@ -7,7 +7,7 @@ class TemplatesModel {
     // lifecycle methods
 
     // create a template with the provided calls
-    async createTemplate(name, calls) {
+    async create(name, calls) {
         const newTemplate = this.db.TemplatesRef.doc();
         newTemplate.set({ name: name, createdAt: Date.now() });
         for (var i = 0; i < calls.length; i++) {
@@ -17,8 +17,8 @@ class TemplatesModel {
     }
 
     // delete template
-    async deleteTemplate(name) {
-        const templateRef = await this.fetchTemplateRef(name);
+    async delete(name) {
+        const templateRef = await this.fetchRef(name);
         const snapshot = await templateRef.collection("Calls").get();
         snapshot.docs.forEach((doc) => doc.ref.delete());
         templateRef.delete();
@@ -27,7 +27,7 @@ class TemplatesModel {
     // accessor methods
 
     // return all templates
-    async fetchTemplates() {
+    async fetchAll() {
         const snapshot = await this.db.TemplatesRef.get();
         var templates = [];
         snapshot.forEach(((doc) => {
@@ -36,8 +36,14 @@ class TemplatesModel {
         return templates;
     }
 
+    // returns an array of all template names
+    async fetchNames() {
+        const templates = await this.fetchAll();
+        return this.db.createNamesArray(templates);
+    }
+
     // return template (a DocumentSnapshot) if it exists, undefined if it doesnt
-    async fetchTemplateRef(name) {
+    async fetchRef(name) {
         const snapshot = await this.db.TemplatesRef.where("name", "==", name).get();
         if (snapshot.size === 0) {
             return undefined;
@@ -47,15 +53,21 @@ class TemplatesModel {
     }
 
     // return array of calls in a template with names
-    async fetchTemplateCalls(name) {
-        const templateRef = await this.fetchTemplateRef(name);
+    async fetchCalls(name) {
+        const templateRef = await this.fetchRef(name);
         const snapshot = await templateRef.collection("Calls").get();
         var templateCalls = []
         snapshot.forEach((doc) => {
             const call = doc.data();
             templateCalls.push(call);
         });
-        return templateCalls;
+        return await this.db.fetchDisplayData(templateCalls);
+    }
+
+    // return if a template with the provided name exists
+    async check(name) {
+        const snapshot = await this.db.TemplatesRef.where("name", "==", name).get();
+        return snapshot.size === 1;
     }
 
 }

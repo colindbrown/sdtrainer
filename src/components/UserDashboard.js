@@ -25,18 +25,18 @@ class UserDashboard extends React.Component {
     }
 
     loadClubs = async () => {
-        const clubs = await db.clubs.fetchClubs();
+        const clubs = await db.clubs.fetchAll();
         this.setState({ clubs, clubsLoading: false });
     }
 
     loadTemplates = async () => {
-        const templates = await db.templates.fetchTemplates();
+        const templates = await db.templates.fetchAll();
         this.setState({ templates, templatesLoading: false });
     }
 
     deleteTemplate = async (name) => {
         this.setState({ templatesLoading: true });
-        db.templates.deleteTemplate(name).then(() => {
+        db.templates.delete(name).then(() => {
             this.loadTemplates().then(() => {
                 this.showAlert("alert-success", "Template deleted");
             })
@@ -44,7 +44,7 @@ class UserDashboard extends React.Component {
     }
 
     deleteClub = async (name) => {
-        db.clubs.deleteClub(name).then(() => {
+        db.clubs.delete(name).then(() => {
             this.loadClubs().then(() => {
                 this.showAlert("alert-success", "Club deleted");
             })

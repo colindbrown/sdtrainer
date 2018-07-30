@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { totalCalls } from "../util/calls";
+import { callCount } from "../util/calls";
 
 class ClubCard extends React.Component {
 
@@ -12,7 +12,7 @@ class ClubCard extends React.Component {
               <div className="card club-card box-shadow">
                 <h4 className="club-card-title card-title bg-secondary text-white">{this.props.name}</h4>
                 <div className="card-body d-flex flex-column align-content-end">
-                    <p className="card-text">{this.props.taught} calls out of {totalCalls} taught</p>
+                    <p className="card-text">{this.props.taught} calls out of {callCount} taught</p>
                     <p className="card-text text-secondary">{created}</p>
                     <div className="club-card-button">
                         <NavLink className={`btn btn-info mr-2`} to={`/club`} onClick={() => this.props.updateActiveClub(this.props.name)}>Select Club</NavLink>

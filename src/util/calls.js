@@ -152,5 +152,5 @@ const AllCalls = {
     }
 }
 
-const totalCalls = 121;
-export { totalCalls, AllCalls };
+const callCount = 121;
+export { callCount, AllCalls };

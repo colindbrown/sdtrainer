@@ -20,11 +20,11 @@ class AddClubCard extends React.Component {
         if (!name) {
             this.props.showAlert("alert-warning", "Please name your club");
         } else {
-            const clubData = await db.clubs.checkClub(name);
-            if (clubData) {
-                this.props.showAlert("alert-warning", "A class with that name already exists");
+            const clubExists = await db.clubs.check(name);
+            if (clubExists) {
+                this.props.showAlert("alert-warning", "A club with that name already exists");
             } else {
-                db.clubs.createNewClub(this.state.newClubName).then(() => {
+                db.clubs.create(this.state.newClubName).then(() => {
                     this.props.updateActiveClub(this.state.newClubName);
                     this.setState({ newClubName: "", redirect: "/club"});
                 });

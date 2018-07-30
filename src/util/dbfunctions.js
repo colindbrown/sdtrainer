@@ -28,15 +28,12 @@ class Database {
 
     // takes an array with names and return an array of calls with all relevant data
     async fetchDisplayData(calls) {
-        const allCalls = await this.calls.fetchAllCalls();
+        const allCalls = await this.calls.fetchData();
         var history = [];
         var sessions = [];
         if (this.activeClubRef) {
-            const historySnapshot = await this.activeClubRef.collection("History").get();
-            historySnapshot.forEach(((doc) => {
-                history.push(doc.data());
-            }));
-            sessions = await this.sessions.fetchSessions();
+            history = await this.history.fetchAll();
+            sessions = await this.sessions.fetchAll();
         }
 
         var callsData = [];

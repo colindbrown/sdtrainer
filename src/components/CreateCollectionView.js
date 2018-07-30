@@ -31,32 +31,27 @@ class CreateCollectionView extends React.Component {
     // Async methods
     async loadAllCalls() {
         this.setState({callsLoading: true})
-        db.calls.fetchAllCalls().then((allCalls) => {
-            db.fetchDisplayData(allCalls).then((displayData) => {
-                this.setState({ callList: displayData, callsLoading: false });
-            })
+        db.calls.fetchAll().then((allCalls) => {
+            this.setState({ callList: allCalls, callsLoading: false });
         });
     }
 
     async loadSessionNames() {
-        db.sessions.fetchSessions().then((sessions) => { 
-            const sessionNames = db.createNamesArray(sessions);
+        db.sessions.fetchNames().then((sessionNames) => {
             this.setState({ sessionNames });
         });
     }
 
     async loadTemplateNames() {
-        db.templates.fetchTemplates().then((templates) => { 
-            const templateNames = db.createNamesArray(templates);
+        db.templates.fetchNames().then((templateNames) => {
             this.setState({ templateNames });
         });
     }
 
     async addSession(name) {
         this.setState({ collectionCallsLoading: true })
-        db.sessions.fetchSessionCalls(name).then(async (sessionCalls) => {
-            const displayData = await db.fetchDisplayData(sessionCalls);
-            displayData.forEach(((call) => {
+        db.sessions.fetchCalls(name).then((sessionCalls) => {
+            sessionCalls.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
             this.setState({collectionCallsLoading: false })
@@ -65,9 +60,8 @@ class CreateCollectionView extends React.Component {
 
     async addTemplate(name) {
         this.setState({ collectionCallsLoading: true })
-        db.templates.fetchTemplateCalls(name).then(async (templateCalls) => {
-            const displayData = await db.fetchDisplayData(templateCalls);
-            displayData.forEach(((call) => {
+        db.templates.fetchCalls(name).then((templateCalls) => {
+            templateCalls.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
             this.setState({collectionCallsLoading: false })
@@ -80,12 +74,12 @@ class CreateCollectionView extends React.Component {
         } else if (this.state.collectionList.length === 0) {
             this.showAlert("alert-warning", "Please add some calls to your session");
         } else {
-            const session = await db.sessions.fetchSessionRef(name);
-            if (session) {
+            const sessionExists = await db.sessions.check(name);
+            if (sessionExists) {
                 this.showAlert("alert-warning", "A session with that name already exists");
             } else {
                 const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
-                await db.sessions.setSession(name, sessionCalls);
+                await db.sessions.create(name, sessionCalls);
                 this.showAlert("alert-success", "Session saved");
                 this.removeAll();
                 this.loadSessionNames();
@@ -101,12 +95,12 @@ class CreateCollectionView extends React.Component {
         } else if (this.state.collectionList.length === 0) {
             this.showAlert("alert-warning", "Please add some calls to your template");
         } else {
-            const template = await db.templates.fetchTemplateRef(name);
-            if (template) {
+            const templateExists = await db.templates.check(name);
+            if (templateExists) {
                 this.showAlert("alert-warning", "A template with that name already exists");
             } else {
                 const templateCalls = this.state.collectionList.map((call) => ({ name: call.name }));
-                await db.templates.createTemplate(name, templateCalls);
+                await db.templates.create(name, templateCalls);
                 this.showAlert("alert-success", "Template saved");
                 this.removeAll();
                 this.loadTemplateNames();
@@ -149,9 +143,8 @@ class CreateCollectionView extends React.Component {
     addAllUsed = async (e) => {
         e.preventDefault();
         this.setState({collectionCallsLoading: true })
-        db.history.fetchByEverUsed(true).then(async (calls) => {
-            const displayData = await db.fetchDisplayData(calls);
-            displayData.forEach(((call) => {
+        db.history.fetchByEverUsed(true).then((calls) => {
+            calls.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
             this.setState({collectionCallsLoading: false })
