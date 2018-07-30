@@ -12,10 +12,10 @@ class ClubModel {
             createdAt: Date.now(),
             taught: 0
         })
-        const allCalls = await this.db.calls.fetchAll();
-        allCalls.forEach((call) => {
+        const callNames = await this.db.calls.fetchNames();
+        callNames.forEach((name) => {
             docRef.collection("History").add({
-                name: call.name,
+                name: name,
                 everUsed: false,
                 uses: []
             })

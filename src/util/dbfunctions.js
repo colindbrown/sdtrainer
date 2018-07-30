@@ -28,7 +28,7 @@ class Database {
 
     // takes an array with names and return an array of calls with all relevant data
     async fetchDisplayData(calls) {
-        const allCalls = await this.calls.fetchAll();
+        const allCalls = await this.calls.fetchData();
         var history = [];
         var sessions = [];
         if (this.activeClubRef) {

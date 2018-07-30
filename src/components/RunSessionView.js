@@ -22,12 +22,10 @@ class RunSessionView extends React.Component {
 
     async loadSession(name) {
         this.setState({sessionCallsLoading: true});
-        db.sessions.fetchCalls(name).then( async (sessionCalls) => {
-            const displayData = await db.fetchDisplayData(sessionCalls);
+        db.sessions.fetchCalls(name).then((sessionCalls) => {
             sessionCalls.forEach(((call) => {
                 call.disabled = false;
                 call.timestamp = Date.now();
-                call.group = displayData.find((iterator) => (iterator.name === call.name)).group;
             }));
             this.setState({ sessionCalls: sessionCalls, activeSession: name, sessionCallsLoading: false });
         });

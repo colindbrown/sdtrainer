@@ -61,7 +61,7 @@ class TemplatesModel {
             const call = doc.data();
             templateCalls.push(call);
         });
-        return templateCalls;
+        return await this.db.fetchDisplayData(templateCalls);
     }
 
     // return if a template with the provided name exists

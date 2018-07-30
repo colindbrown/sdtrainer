@@ -34,7 +34,7 @@ class HistoryModel {
 
     // returns history of all calls
     async fetchAll() {
-        const historySnapshot = await this.activeClubRef.collection("History").get();
+        const historySnapshot = await this.db.activeClubRef.collection("History").get();
         var history = [];
         historySnapshot.forEach(((doc) => {
             history.push(doc.data());
@@ -55,13 +55,13 @@ class HistoryModel {
         snapshot.docs.forEach((callDoc) => {
             calls.push(callDoc.data());
         });
-        return calls;
+        return await this.db.fetchDisplayData(calls);
     }
 
     // returns all calls that have only been used once
     async fetchNew() {
         var snapshot = await this.db.activeClubRef.get();
-        return snapshot.data().newCalls;
+        return await this.db.fetchDisplayData(snapshot.data().newCalls);
     }
 
 }

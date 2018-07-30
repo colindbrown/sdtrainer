@@ -27,14 +27,30 @@ class CallsModel {
 
     // accessor methods
 
-    // return data of all calls
+    // return display data of all calls
     async fetchAll() {
         const snapshot = await this.AllCallsRef.get();
         const allCalls = [];
         snapshot.forEach((doc) => {
             allCalls.push(doc.data());
         });
+        return await this.db.fetchDisplayData(allCalls);
+    }
+
+    // return AllCalls data of calls (name, group, category)
+    async fetchData() {
+        const snapshot = await this.AllCallsRef.get();
+        const allCalls = [];
+        snapshot.forEach((doc) => {
+            allCalls.push(doc.data());
+        });
         return allCalls;
+    }
+
+    // return just names of all the calls
+    async fetchNames() {
+        const calls = await this.fetchData();
+        return this.db.createNamesArray(calls);
     }
 
     // return data of all calls with a specific group
@@ -44,17 +60,17 @@ class CallsModel {
         snapshot.docs.forEach((callDoc) => {
             calls.push(callDoc.data());
         });
-        return calls;
+        return await this.db.fetchDisplayData(calls);
     }
 
-    // returns all calls in a given category
+    // return all calls in a given category
     async fetchByCategory(category) {
         const calls = [];
         const snapshot = await this.AllCallsRef.where("category", "==", category).get();
         snapshot.docs.forEach((callDoc) => {
             calls.push(callDoc.data());
         });
-        return calls;
+        return await this.db.fetchDisplayData(calls);
     }
         
 }

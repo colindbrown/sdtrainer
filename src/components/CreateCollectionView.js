@@ -32,9 +32,7 @@ class CreateCollectionView extends React.Component {
     async loadAllCalls() {
         this.setState({callsLoading: true})
         db.calls.fetchAll().then((allCalls) => {
-            db.fetchDisplayData(allCalls).then((displayData) => {
-                this.setState({ callList: displayData, callsLoading: false });
-            })
+            this.setState({ callList: allCalls, callsLoading: false });
         });
     }
 
@@ -52,9 +50,8 @@ class CreateCollectionView extends React.Component {
 
     async addSession(name) {
         this.setState({ collectionCallsLoading: true })
-        db.sessions.fetchCalls(name).then(async (sessionCalls) => {
-            const displayData = await db.fetchDisplayData(sessionCalls);
-            displayData.forEach(((call) => {
+        db.sessions.fetchCalls(name).then((sessionCalls) => {
+            sessionCalls.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
             this.setState({collectionCallsLoading: false })
@@ -63,9 +60,8 @@ class CreateCollectionView extends React.Component {
 
     async addTemplate(name) {
         this.setState({ collectionCallsLoading: true })
-        db.templates.fetchCalls(name).then(async (templateCalls) => {
-            const displayData = await db.fetchDisplayData(templateCalls);
-            displayData.forEach(((call) => {
+        db.templates.fetchCalls(name).then((templateCalls) => {
+            templateCalls.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
             this.setState({collectionCallsLoading: false })
@@ -147,9 +143,8 @@ class CreateCollectionView extends React.Component {
     addAllUsed = async (e) => {
         e.preventDefault();
         this.setState({collectionCallsLoading: true })
-        db.history.fetchByEverUsed(true).then(async (calls) => {
-            const displayData = await db.fetchDisplayData(calls);
-            displayData.forEach(((call) => {
+        db.history.fetchByEverUsed(true).then((calls) => {
+            calls.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
             this.setState({collectionCallsLoading: false })

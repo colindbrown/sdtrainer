@@ -80,7 +80,7 @@ class SessionModel {
             const call = doc.data();
             sessionCalls.push(call);
         });
-        return sessionCalls;
+        return await this.db.fetchDisplayData(sessionCalls);
     }
 
     // return an array of all unfinished sessions
