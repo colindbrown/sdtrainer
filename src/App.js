@@ -23,7 +23,7 @@ class App extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        db.users.setActiveUser(user).then(() => {
+        db.users.setActive(user).then(() => {
           this.setState({activeUser: user, loadingUser: false});
         });
       } else {
@@ -33,7 +33,7 @@ class App extends Component {
   }
 
   updateActiveClub = async (name) => {
-    const clubData = await db.clubs.setActiveClub(name);
+    const clubData = await db.clubs.setActive(name);
     this.setState({activeClub: clubData });
   }
 

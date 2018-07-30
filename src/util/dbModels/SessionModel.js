@@ -7,7 +7,7 @@ class SessionModel {
 
     // create or update a session with the provided calls
     async setSession(name, calls) {
-        var session = await this.fetchSessionRef(name);
+        var session = await this.fetchRef(name);
         if (session) {
             var batch = this.db.dbRef.batch();
             var snapshot = await session.collection("Calls").get();
@@ -35,8 +35,8 @@ class SessionModel {
     }
 
     // delete a session
-    async deleteSession(name) {
-        const ref = await this.fetchSessionRef(name);
+    async delete(name) {
+        const ref = await this.fetchRef(name);
         const snapshot = await ref.collection("Calls").get();
         snapshot.docs.forEach((doc) => doc.ref.delete());
         ref.delete();
@@ -45,7 +45,7 @@ class SessionModel {
     // accessor methods
 
     // return session data for a specific session
-    async fetchSessions() {
+    async fetchAll() {
         const snapshot = await this.db.activeClubRef.collection("Sessions").get();
         var sessions = [];
         snapshot.forEach((doc) => {
@@ -55,7 +55,7 @@ class SessionModel {
     }
 
     // return session (a DocumentSnapshot) if it exists, undefined if it doesnt
-    async fetchSessionRef(name) {
+    async fetchRef(name) {
         const sessionsRef = this.db.activeClubRef.collection("Sessions")
         const snapshot = await sessionsRef.where("name", "==", name).get();
         if (snapshot.size === 0) {
@@ -66,8 +66,8 @@ class SessionModel {
     }
 
     // return array of calls in a session with name, used, and timestamp
-    async fetchSessionCalls(name) {
-        const sessionRef = await this.fetchSessionRef(name);
+    async fetchCalls(name) {
+        const sessionRef = await this.fetchRef(name);
         const snapshot = await sessionRef.collection("Calls").get();
         var sessionCalls = []
         snapshot.forEach((doc) => {
@@ -78,7 +78,7 @@ class SessionModel {
     }
 
     // return an array of all unfinished sessions
-    async fetchUnfinishedSessions() {
+    async fetchPlans() {
         const snapshot = await this.db.activeClubRef.collection("Sessions").where("finished", "==", false).get();
         var sessions = [];
         snapshot.forEach((doc) => {
@@ -88,13 +88,19 @@ class SessionModel {
     }
 
     // returns an array of all finished sessions
-    async fetchfinishedSessions() {
+    async fetchFinished() {
         const snapshot = await this.db.activeClubRef.collection("Sessions").where("finished", "==", true).get();
         var sessions = [];
         snapshot.forEach((doc) => {
             sessions.push(doc.data());
         });
         return sessions;
+    }
+
+    // return if a session with the provided name exists
+    async check(name) {
+        const snapshot = await this.db.activeClubRef.collection("Sessions").where("name", "==", name).get();
+        return snapshot.size === 1;
     }
 
 }

@@ -83,7 +83,7 @@ class FormModal extends React.Component {
                     }
                 }).then((userCred) => {
                     userCred.user.updateProfile({displayName: `${firstName} ${lastName}`});
-                    db.users.createUser(userCred.user);
+                    db.users.create(userCred.user);
                 })
             }
         }

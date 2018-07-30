@@ -6,7 +6,7 @@ class UserModel {
     // lifecycle methods
 
     // create a user in the database
-    async createUser(user) {
+    async create(user) {
         const newUserRef = this.db.dbRef.collection("Users").doc();
         newUserRef.set({
             email: user.email
@@ -17,7 +17,7 @@ class UserModel {
     // setter methods
 
     // set references for clubs and templates of the active user
-    async setActiveUser(user) {
+    async setActive(user) {
         const dbRef = this.db.dbRef;
         const snapshot = await dbRef.collection("Users").where("email", "==", user.email).get();
         var activeUserId;

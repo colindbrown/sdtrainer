@@ -22,7 +22,7 @@ class RunSessionView extends React.Component {
 
     async loadSession(name) {
         this.setState({sessionCallsLoading: true});
-        db.sessions.fetchSessionCalls(name).then( async (sessionCalls) => {
+        db.sessions.fetchCalls(name).then( async (sessionCalls) => {
             const displayData = await db.fetchDisplayData(sessionCalls);
             sessionCalls.forEach(((call) => {
                 call.disabled = false;
@@ -34,7 +34,7 @@ class RunSessionView extends React.Component {
     }
 
     async loadSessionNames() {
-        db.sessions.fetchUnfinishedSessions().then((sessions) => {
+        db.sessions.fetchPlans().then((sessions) => {
             const sessionNames = db.createNamesArray(sessions);
             this.setState({ sessionNames });
         });
@@ -45,7 +45,7 @@ class RunSessionView extends React.Component {
         const sessionUpdate = this.state.sessionCalls.map((call) => ({ name: call.name, used: call.disabled, timestamp: call.timestamp}));
         db.sessions.setSession(this.state.activeSession, sessionUpdate).then(() => this.loadSessionNames());
         const historyUpdate = this.state.sessionCalls.map((call) => ({ name: call.name, everUsed: call.disabled, uses: [call.timestamp] }));
-        db.history.updateHistory(this.state.activeSession, historyUpdate);
+        db.history.update(this.state.activeSession, historyUpdate);
         this.setState({ activeSession: "", sessionCalls: [] });
         this.showAlert("alert-success", "Session saved");
     }

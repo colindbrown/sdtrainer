@@ -6,13 +6,13 @@ class ClubModel {
     // lifecycle methods
 
     // create a new club with a given name
-    async createNewClub(name) {
+    async create(name) {
         const docRef = await this.db.ClubsRef.add({
             name: name,
             createdAt: Date.now(),
             taught: 0
         })
-        const allCalls = await this.db.calls.fetchAllCalls();
+        const allCalls = await this.db.calls.fetchAll();
         allCalls.forEach((call) => {
             docRef.collection("History").add({
                 name: call.name,
@@ -23,7 +23,7 @@ class ClubModel {
     }
 
     // delete a club
-    async deleteClub(name) {
+    async delete(name) {
         const clubSnapshot = await this.db.ClubsRef.where("name", "==", name).get();
         const ref = clubSnapshot.docs[0].ref;
 
@@ -43,7 +43,7 @@ class ClubModel {
     // setter methods
 
     // set the active club, return the club
-    async setActiveClub(name) {
+    async setActive(name) {
         const snapshot = await this.db.ClubsRef.where("name", "==", name).get();
         this.db.activeClubRef = snapshot.docs[0].ref;
         return snapshot.docs[0].data();
@@ -52,7 +52,7 @@ class ClubModel {
     // accessor methods
 
     // get the data of all clubs
-    async fetchClubs() {
+    async fetchAll() {
         const snapshot = await this.db.ClubsRef.get();
         var clubs = [];
         snapshot.forEach((doc) => {
@@ -61,14 +61,10 @@ class ClubModel {
         return clubs;
     }
 
-    // return club (a DocumentSnapshot) if it exists, undefined if it doesnt
-    async checkClub(name) {
+    // return if club with a given name exists
+    async check(name) {
         const snapshot = await this.db.ClubsRef.where("name", "==", name).get();
-        if (snapshot.size === 0) {
-            return undefined;
-        } else {
-            return snapshot.docs[0].data();
-        }
+        return snapshot.size === 1;
     }
 }
 

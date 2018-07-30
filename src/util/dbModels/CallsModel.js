@@ -1,17 +1,17 @@
-import { totalCalls, AllCalls } from "../calls";
+import { callCount, AllCalls } from "../calls";
 
 class CallsModel {
 
     constructor(db) {
         this.db = db;
         this.AllCallsRef = db.dbRef.collection("AllCalls");
-        this.totalCalls = totalCalls;
+        this.count = callCount;
     }
 
     // lifecycle methods
 
     // add all calls to the database
-    async addAllCalls() {
+    async addAll() {
         Object.keys(AllCalls).forEach((category) => {
             Object.keys(AllCalls[category]).forEach((group) => {
                 AllCalls[category][group].forEach((name) => {
@@ -28,7 +28,7 @@ class CallsModel {
     // accessor methods
 
     // return data of all calls
-    async fetchAllCalls() {
+    async fetchAll() {
         const snapshot = await this.AllCallsRef.get();
         const allCalls = [];
         snapshot.forEach((doc) => {

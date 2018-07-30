@@ -5,10 +5,10 @@ class HistoryModel {
     }
 
     // updates the everUsed and uses data for all provided calls
-    async updateHistory(sessionName, calls) {
+    async update(sessionName, calls) {
         var batch = this.db.dbRef.batch();
         var snapshot = await this.db.activeClubRef.collection("History").get();
-        const sessionRef = await this.db.sessions.fetchSessionRef(sessionName);
+        const sessionRef = await this.db.sessions.fetchRef(sessionName);
         const session = await sessionRef.get()
         var newCalls = [];
         snapshot.docs.forEach((callDoc) => {
@@ -32,8 +32,18 @@ class HistoryModel {
         })
     }
 
+    // returns history of all calls
+    async fetchAll() {
+        const historySnapshot = await this.activeClubRef.collection("History").get();
+        var history = [];
+        historySnapshot.forEach(((doc) => {
+            history.push(doc.data());
+        }));
+        return history;
+    }
+
     // returns name, everUsed, and uses of a single call
-    async fetchCallHistory(name) {
+    async fetchCall(name) {
         const snapshot = await this.db.activeClubRef.collection("History").where("name", "==", name).get();
         return snapshot.docs[0].data();
     }

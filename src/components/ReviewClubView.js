@@ -25,7 +25,7 @@ class ReviewClubView extends React.Component {
     
     async loadAllCalls() {
         this.setState({ selectedCallsLoading: true });
-        db.calls.fetchAllCalls().then((allCalls) => {
+        db.calls.fetchAll().then((allCalls) => {
             db.fetchDisplayData(allCalls).then((displayData) => {
                 this.setState({ selectedCalls: displayData, activeFilter: {}, selectedCallsLoading: false });
             })
@@ -33,7 +33,7 @@ class ReviewClubView extends React.Component {
     }
 
     async loadSessionNames() {
-        db.sessions.fetchSessions().then((sessions) => {
+        db.sessions.fetchAll().then((sessions) => {
             const sessionNames = db.createNamesArray(sessions);
             this.setState({ sessionNames });
         });
@@ -41,7 +41,7 @@ class ReviewClubView extends React.Component {
 
     async loadSession(name) {
         this.setState({ selectedCallsLoading: true });
-        db.sessions.fetchSessionCalls(name).then(async (sessionCalls) => {
+        db.sessions.fetchCalls(name).then(async (sessionCalls) => {
             const displayData = await db.fetchDisplayData(sessionCalls);
             this.setState({ selectedCalls: displayData, activeFilter: {type: "session", name: name} });
             this.setState({ selectedCallsLoading: false });
@@ -50,8 +50,8 @@ class ReviewClubView extends React.Component {
 
     async showCall(name) {
         this.setState({ modalData: { loading: true }});
-        db.history.fetchCallHistory(name).then(async (call) => {
-            const sessionData = await db.sessions.fetchSessions();
+        db.history.fetchCall(name).then(async (call) => {
+            const sessionData = await db.sessions.fetchAll();
             var body = "";
             if (call.uses.length > 0) {
                 body = "Uses:"
