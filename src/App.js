@@ -8,7 +8,7 @@ import RunSessionView from "./components/RunSessionView";
 import ReviewClubView from "./components/ReviewClubView";
 import Loader from "./components/Loader";
 import ClubDashboard from "./components/ClubDashboard";
-import * as db from "./util/dbfunctions";
+import { db } from "./util/dbfunctions";
 import firebase from "firebase";
 import './App.css';
 
@@ -23,7 +23,7 @@ class App extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        db.setActiveUser(user).then(() => {
+        db.users.setActiveUser(user).then(() => {
           this.setState({activeUser: user, loadingUser: false});
         });
       } else {
@@ -33,7 +33,7 @@ class App extends Component {
   }
 
   updateActiveClub = async (name) => {
-    const clubData = await db.setActiveClub(name);
+    const clubData = await db.clubs.setActiveClub(name);
     this.setState({activeClub: clubData });
   }
 

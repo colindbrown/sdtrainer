@@ -1,5 +1,5 @@
 import React from 'react';
-import * as db from "../util/dbfunctions";
+import { db } from "../util/dbfunctions";
 import Alerts from "./Alerts";
 import Loader from "./Loader";
 import { NavLink } from "react-router-dom";
@@ -22,14 +22,14 @@ class ClubDashboard extends React.Component {
     }
 
     loadSessions = async () => {
-        const finished = await db.fetchfinishedSessions();
-        const plans = await db.fetchUnfinishedSessions();
+        const finished = await db.sessions.fetchfinishedSessions();
+        const plans = await db.sessions.fetchUnfinishedSessions();
         this.setState({finishedSessions: finished, sessionPlans: plans, loadingFinishedSessions: false, loadingSessionPlans: false});
     }
 
-    deleteSession = async (id) => {
+    deleteSession = async (name) => {
         this.setState({loadingSessionPlans: true});
-        db.deleteSession(id).then(() => {
+        db.sessions.deleteSession(name).then(() => {
             this.loadSessions().then(() => {
                 this.showAlert("alert-success", "Session deleted");
             })
@@ -56,7 +56,7 @@ class ClubDashboard extends React.Component {
             finishedListItems = <Loader/>;
         } else {
             finishedListItems = this.state.finishedSessions.length ? this.state.finishedSessions.map((session) => 
-            <li className="list-group-item d-flex" key={session.id}>
+            <li className="list-group-item d-flex" key={session.name}>
                 <div className="float-left"><strong>{session.name}</strong></div>
                 <div className="ml-auto">Finished on {(new Date(session.finishedAt)).toDateString()}</div>
             </li>
@@ -67,21 +67,21 @@ class ClubDashboard extends React.Component {
             unfinishedListItems = <Loader/>;
         } else {
             unfinishedListItems = this.state.sessionPlans.length ? this.state.sessionPlans.map((session) => 
-            <li className="list-group-item d-flex justify-content-end" key={session.id}>
+            <li className="list-group-item d-flex justify-content-end" key={session.name}>
                 <div className="list-item-name"><p><strong>{session.name}</strong></p></div>
                 <div className="mr-5">Created on {(new Date(session.createdAt)).toDateString()}</div>
                 <button className="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmModal" onClick={() => this.deleteItem(session.name)}>Delete</button>
             </li>
         ) : <li><Placeholder content={{title: "Session Plans", text: "You don't have any session plans to display at the moment.", rel: "/create", destination: "Plan a Session"}}/></li>;
         }
-        const percentTaught = 100*activeClub.taught/db.totalCalls;
+        const percentTaught = 100*activeClub.taught/db.calls.totalCalls;
         return (
             <div className="container below-navbar">
                 <section className="jumbotron text-center club-jumbotron">
                     <div className="container">
                         <h1 className="jumbotron-heading">{activeClub.name}</h1>
                         <hr/>
-                        <p className="lead text-muted">{activeClub.taught} calls out of {db.totalCalls} taught</p>
+                        <p className="lead text-muted">{activeClub.taught} calls out of {db.calls.totalCalls} taught</p>
                         <div className="progress">
                             <div className="progress-bar bg-info" style={{ width: `${percentTaught}%` }} role="progressbar"></div>
                         </div>
