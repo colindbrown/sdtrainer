@@ -5,7 +5,7 @@ const AllCalls = {
             "Alamo style",
             "Circle left/right",
             "Dopaso",
-            "Allemende thar",
+            "Allemande thar",
             "Wrong way thar",
             "Shoot the star",
             "Shoot star full around",
@@ -151,4 +151,6 @@ const AllCalls = {
         ]
     }
 }
-export { AllCalls };
+
+const callCount = 121;
+export { callCount, AllCalls };

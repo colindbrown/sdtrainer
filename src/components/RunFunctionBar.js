@@ -4,7 +4,7 @@ class RunFunctionBar extends React.Component {
 
     render() {
         const activeSession = this.props.activeSession || "Select session plan";
-        const sessionListItems = this.props.sessionNames.map((name) =>
+        const planListItems = this.props.planNames.map((name) =>
             <button className="dropdown-item" key={name} onClick={() => this.props.selectActiveSession(name)}>{name}</button>
         );
         const disableFunctions = (!this.props.activeSession) ? "disabled" : "";
@@ -18,7 +18,7 @@ class RunFunctionBar extends React.Component {
                             {activeSession}
                         </button>
                         <div className="dropdown-menu">
-                            {sessionListItems}
+                            {planListItems}
                         </div>
                     </div>
                     <div className="dropdown mr-2">

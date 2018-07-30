@@ -1,15 +1,16 @@
 import React from "react";
 import List from "./List";
 import Alerts from "./Alerts";
-import * as db from "../util/dbfunctions";
+import { db } from "../util/dbfunctions";
 import RunFunctionBar from "./RunFunctionBar";
 
 class RunSessionView extends React.Component {
 
     state = {
         sessionCalls: [],
+        sessionCallsLoading: false,
         alerts: [],
-        sessionNames: [],
+        planNames: [],
         activeSession: "",
         sort: "userPosition"
     }
@@ -20,27 +21,28 @@ class RunSessionView extends React.Component {
     }
 
     async loadSession(name) {
-        db.fetchSessionCalls(name).then( async (sessionCalls) => {
-            const displayData = await db.displayData(sessionCalls);
+        this.setState({sessionCallsLoading: true});
+        db.sessions.fetchCalls(name).then((sessionCalls) => {
             sessionCalls.forEach(((call) => {
                 call.disabled = false;
                 call.timestamp = Date.now();
-                call.group = displayData.find((iterator) => (iterator.name === call.name)).group;
             }));
-            this.setState({ sessionCalls: sessionCalls, activeSession: name });
+            this.setState({ sessionCalls: sessionCalls, activeSession: name, sessionCallsLoading: false });
         });
     }
 
     async loadSessionNames() {
-        db.fetchUnfinishedSessionNames().then((sessionNames) => { this.setState({ sessionNames }) });
+        db.sessions.fetchPlanNames().then((planNames) => {
+            this.setState({ planNames });
+        });
     }
 
     finishSession(e) {
         e.preventDefault();
         const sessionUpdate = this.state.sessionCalls.map((call) => ({ name: call.name, used: call.disabled, timestamp: call.timestamp}));
-        db.setSession(this.state.activeSession, sessionUpdate).then(() => this.loadSessionNames());
+        db.sessions.finish(this.state.activeSession, sessionUpdate).then(() => this.loadSessionNames());
         const historyUpdate = this.state.sessionCalls.map((call) => ({ name: call.name, everUsed: call.disabled, uses: [call.timestamp] }));
-        db.updateHistory(this.state.activeSession, historyUpdate);
+        db.history.update(this.state.activeSession, historyUpdate);
         this.setState({ activeSession: "", sessionCalls: [] });
         this.showAlert("alert-success", "Session saved");
     }
@@ -76,10 +78,16 @@ class RunSessionView extends React.Component {
 
 
     render() {
+        var placeholderContent = {};
+        if (this.state.planNames.length > 0) {
+            placeholderContent={title: "Run a Session", text: "Select a session plan to run from the function bar above. Once you're done, finish the session using the button on the right."};
+        } else {
+            placeholderContent={title: "Run a Session", text: "You don't have any session plans to run at the moment.", rel: "/create", destination: "Plan a Session"};
+        }
         return (
             <div>
                 <RunFunctionBar
-                    sessionNames={this.state.sessionNames}
+                    planNames={this.state.planNames}
                     activeSession={this.state.activeSession}
                     selectActiveSession={(session) => this.selectActiveSession(session)}
                     changeSort={(sort) => this.changeSort(sort)}
@@ -87,7 +95,16 @@ class RunSessionView extends React.Component {
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-12" id="runList" columns={4} calls={this.state.sessionCalls} sort={this.state.sort} onClick={(name) => this.toggleCall(name)} />
+                    <List 
+                        size="col-md-12" 
+                        id="runList" 
+                        columns={4} 
+                        calls={this.state.sessionCalls} 
+                        loading={this.state.sessionCallsLoading}
+                        sort={this.state.sort} 
+                        placeholderContent={placeholderContent}
+                        onClick={(name) => this.toggleCall(name)} 
+                    />
                 </div>
             </div>
         )

@@ -5,38 +5,40 @@ import UserDashboard from "./components/UserDashboard";
 import { Switch, Route, HashRouter} from "react-router-dom";
 import CreateCollectionView from "./components/CreateCollectionView";
 import RunSessionView from "./components/RunSessionView";
-import ReviewClassView from "./components/ReviewClassView";
-import ClassDashboard from "./components/ClassDashboard";
-import * as db from "./util/dbfunctions";
+import ReviewClubView from "./components/ReviewClubView";
+import Loader from "./components/Loader";
+import ClubDashboard from "./components/ClubDashboard";
+import { db } from "./util/dbfunctions";
 import firebase from "firebase";
 import './App.css';
 
 class App extends Component {
 
   state = {
-    activeClass: {},
-    activeUser: ""
+    activeClub: {},
+    activeUser: "",
+    loadingUser: true
   }
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        db.setActiveUser(user).then(() => {
-          this.setState({activeUser: user});
+        db.users.setActive(user).then(() => {
+          this.setState({activeUser: user, loadingUser: false});
         });
       } else {
-        this.setState({activeUser: ""});
+        this.setState({activeUser: "", loadingUser: false});
       }
     });
   }
 
-  updateActiveClass = async (name) => {
-    const classData = await db.setActiveClass(name);
-    this.setState({activeClass: classData});
+  updateActiveClub = async (name) => {
+    const clubData = await db.clubs.setActive(name);
+    this.setState({activeClub: clubData });
   }
 
-  resetClass = () => {
-    this.setState({activeClass: {}});
+  resetClub = () => {
+    this.setState({activeClub: {}});
   }
 
   signOut = () => {
@@ -54,22 +56,24 @@ class App extends Component {
 
   render() {
     var routes;
-    if (!this.state.activeUser) {
+    if (this.state.loadingUser) {
+      routes = <Loader/>;
+    } else if (!this.state.activeUser) {
       routes = <Route path="/" component={Home}/>
-    } else if (this.state.activeClass.name) {
+    } else if (this.state.activeClub.name) {
       routes = <Switch>
-          <Route path="/class" render={(routeProps) => (
-            <ClassDashboard {...routeProps} 
-              activeClass={this.state.activeClass} 
+          <Route path="/club" render={(routeProps) => (
+            <ClubDashboard {...routeProps} 
+              activeClub={this.state.activeClub} 
               activeUser={this.state.activeUser}
-              updateActiveClass={(name) => this.updateActiveClass(name)}
-              resetClass={() => this.resetClass()}
+              updateActiveClub={(name) => this.updateActiveClub(name)}
+              resetClub={() => this.resetClub()} 
               setPassedCollection={(type, name) => this.setPassedCollection(type, name)}
             />
           )}/>
           <Route path="/create" render={() => (
             <CreateCollectionView
-              activeClass={this.state.activeClass}
+              activeClub={this.state.activeClub}
               passedCollection={this.state.passedCollection}
               resetPassedCollection={() => this.resetPassedCollection()} 
             />
@@ -81,16 +85,16 @@ class App extends Component {
             />
           )}/>
           <Route path="/review" render={() => (
-            <ReviewClassView
+            <ReviewClubView
               passedCollection={this.state.passedCollection}
               resetPassedCollection={() => this.resetPassedCollection()} 
             />
           )}/>
           <Route path="/" render={() => (
             <UserDashboard
-              activeClass={this.state.activeClass} 
+              activeClub={this.state.activeClub} 
               activeUser={this.state.activeUser}
-              updateActiveClass={(name) => this.updateActiveClass(name)}
+              updateActiveClub={(name) => this.updateActiveClub(name)}
               setPassedCollection={(type, name) => this.setPassedCollection(type, name)} 
             />
           )}/>
@@ -99,16 +103,16 @@ class App extends Component {
       routes = <Switch>
         <Route path="/create" render={() => (
           <CreateCollectionView
-            activeClass={this.state.activeClass}
+            activeClub={this.state.activeClub}
             passedCollection={this.state.passedCollection}
             resetPassedCollection={() => this.resetPassedCollection()} 
           />
         )}/>
         <Route path="/" render={() => (
         <UserDashboard
-              activeClass={this.state.activeClass} 
+              activeClub={this.state.activeClub} 
               activeUser={this.state.activeUser}
-              updateActiveClass={(name) => this.updateActiveClass(name)}
+              updateActiveClub={(name) => this.updateActiveClub(name)}s
               setPassedCollection={(type, name) => this.setPassedCollection(type, name)} 
               />
       )}/>
@@ -117,7 +121,7 @@ class App extends Component {
     return (
       <HashRouter>
         <div className="App">
-          <Header activeClass={this.state.activeClass} activeUser={this.state.activeUser} signOut={() => this.signOut()} resetClass={() => this.resetClass()}/>
+          <Header activeClub={this.state.activeClub} activeUser={this.state.activeUser} signOut={() => this.signOut()} resetClub={() => this.resetClub()}/>
           {routes}
         </div>
       </HashRouter>

@@ -6,8 +6,8 @@ $green: #62E062;
 $teal: #4FE9D9;
 $violet: #3E3CC9;
 $dark-purple: #251938;
-$lightest-grey: #fefefe;
-$lighter-grey: #eee;
+$lightest-grey: #fdfdfd;
+$lighter-grey: #e9ecef;
 $light-grey: #ccc;
 $medium-grey: #999;
 $dark-grey: #666;
@@ -57,6 +57,7 @@ span.empty {
 .carousel-item {
   border: 1px solid darkgrey;
   border-radius: 5px;
+  z-index: 0;
 }
 
 .carousel {
@@ -86,6 +87,7 @@ span.empty {
 }
 
 .page {
+  position: relative;
   height: 780px;
 }
 
@@ -161,30 +163,40 @@ span.empty {
   box-shadow: inset 0px 0px 9px 1px  $medium-grey;
 }
 
-.class-jumbotron {
+.club-jumbotron {
   margin-bottom: 15px;
 }
 
 .card-container {
+  position: relative;
   margin-top: 0;
-  height: 550px;
+  height: 400px;
   overflow-y: scroll;
-  border: 1px solid  $lighter-grey;
+  border: 1px solid  $light-grey;
+  border-top: 0 solid transparent;
+  background-color: $white
 }
 
-.class-card {
+.club-card {
   margin-top: 13px;
   margin-bottom: 12px;
   height: 250px;
+
+  & .card-text {
+    font-size: 18px;
+  }
+  & .text-secondary {
+    font-size: 16px;
+  }
 }
 
-.class-card-title {
+.club-card-title {
   height: 50px;
   padding-top: 10px;
 }
 
-.class-card-button {
-  margin-top: 23px;
+.club-card-button {
+  margin-top: 10px;
 }
 
 .below-navbar {
@@ -226,7 +238,9 @@ hr {
 .modal-content {
   width:inherit;
   max-width:inherit; 
+  min-width: 300px;
   height:inherit;
+  min-height: 200px;
   margin: 0 auto;
   pointer-events:all;
 }
@@ -248,22 +262,66 @@ hr {
   left: auto; 
 }
 
-.pills-row {
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #5bc0de;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  z-index: 1;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -25px;
+  margin-left: -25px;
+}
+
+.tabs-row {
   margin-right: 0;
   margin-left: 0;
   border-radius: 5px 5px 0 0;
+  border: 0 solid transparent;
+  background: $lighter-grey;
 
+  & > .nav-item {
+    border-color: $light-grey;
+    margin-bottom: 0;
+    
+    & > .nav-link {
+      border-bottom: 1px solid $light-grey;
+    }
+    & > .active {
+      background: $white;
+      border-bottom: 1px solid $white;
+    }
+  }
 }
 
 .collections-list {
+  position: relative;
   height: 400px;
   overflow-y: scroll;
   margin-right: 0;
   margin-left: 0;
-  border: 1px solid  $lighter-grey;
+  border: 1px solid $light-grey;
+  border-top: 0 solid transparent;
+  background-color: $white;
 
   .list-group-item {
     border-radius: 0;
+    background-color: $lightest-grey;
+    border: 1px solid $lighter-grey;
+    border-right: 0 solid transparent;
+    border-left: 0 solid transparent;
 
     div {
       margin-top: 4px;
@@ -276,4 +334,58 @@ hr {
   position: absolute;
   left: 15px;
   top: 12px;
+}
+
+.progress {
+  position: relative;
+  max-width: 600px;
+  border: 1px solid $light-grey;
+  left: 50%;
+  -webkit-transform: translateX(-300px);
+  transform: translateX(-300px);
+  margin-bottom: 16px;
+}
+
+.confirm-modal {
+  position: relative;
+  width: 400px;
+  height: 200px;
+
+  & .modal-text {
+    position: absolute;
+    width: 300px;
+    top: 40px;
+    left: 50%;
+    -webkit-transform: translateX(-150px);
+    transform: translateX(-150px);
+  }
+
+  & .row {
+    position: absolute;
+    width: 200px;
+    bottom: 40px;
+    left: 50%;
+    margin: 0;
+    -webkit-transform: translateX(-100px);
+    transform: translateX(-100px);
+  }
+}
+
+.placeholder {
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 250px;
+  width: 400px;
+  margin: -125px 0 0 -200px;
+  padding: 40px;
+
+  h6 {
+    line-height: 1.6;
+  }
+}
+
+.tab-content {
+  position: relative;
 }

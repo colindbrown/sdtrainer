@@ -3,7 +3,8 @@ import React from "react";
 class CreateFunctionBar extends React.Component {
 
     state = {
-        newCollectionName: ""
+        newCollectionName: "",
+        filterString: ""
     }
 
     handleChange = (e) => {
@@ -25,15 +26,30 @@ class CreateFunctionBar extends React.Component {
         
     }
 
-    handleRemove = (e) => {
+    handleReset = (e) => {
         e.preventDefault();
         this.props.removeAll();
+        //this.setState({ filterString: "" });
+        this.props.updateFilterString("");
     }
 
+    handleFilterChange = (e) => {
+        //this.setState({ filterString: e.target.value });
+        this.props.updateFilterString(e.target.value);
+    }
+
+    handleEnter = (e) => {
+        if (e.key === 'Enter') {
+          if (this.props.filterEnter()) {
+              e.target.value = "";
+              this.props.updateFilterString("");
+          }
+        }
+      }
 
     render() {
         var sessionListItems = [];
-        if (this.props.activeClass) {
+        if (this.props.activeClub) {
             sessionListItems = this.props.sessionNames.map((name) =>
                 <button className="dropdown-item" key={name} onClick={() => this.props.addSession(name)}>{name}</button>
             );
@@ -42,11 +58,11 @@ class CreateFunctionBar extends React.Component {
             <button className="dropdown-item" key={name} onClick={() => this.props.addTemplate(name)}>{name}</button>
         );
 
-        const disableSessionMenu = (this.props.activeClass && (this.props.sessionNames.length > 0)) ? "" : "disabled";
-        const disableSaveSession = (this.props.activeClass) ? "" : "disabled";
+        const disableSessionMenu = (this.props.activeClub && (this.props.sessionNames.length > 0)) ? "" : "disabled";
+        const disableSaveSession = (this.props.activeClub) ? "" : "disabled";
         const disableTemplateMenu = (this.props.templateNames.length > 0) ? "" : "disabled";
 
-        const usedButton = this.props.activeClass ? 
+        const usedButton = this.props.activeClub ? 
             <button className={`btn btn-secondary mr-2`} onClick={this.props.addAllUsed}>Add all used calls</button> :
             <button className={`btn btn-secondary disabled mr-2`}>Add all used calls</button>;
             
@@ -55,6 +71,7 @@ class CreateFunctionBar extends React.Component {
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
+                    <input className="form-control mr-sm-2" placeholder="Filter Calls" onKeyDown={this.handleEnter} onChange={this.handleFilterChange} />
                     {usedButton}
                     <div className="dropdown mr-2">
                         <button className={`${disableTemplateMenu} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -84,7 +101,7 @@ class CreateFunctionBar extends React.Component {
                             <button className="dropdown-item" onClick={() => this.props.changeSort("group")}>Group</button>
                         </div>
                     </div>
-                    <button className="btn btn-secondary" href="#" onClick={this.handleRemove}>Reset</button>
+                    <button className="btn btn-secondary" href="#" onClick={this.handleReset}>Reset</button>
                 </div>
                 <form className="form-inline">
                     <input className="form-control mr-sm-2" placeholder="Name" value={this.state.newCollectionName} onChange={this.handleChange} />

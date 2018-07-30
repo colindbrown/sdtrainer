@@ -1,6 +1,7 @@
 import React from "react";
 import Call from "./Call";
 import Page from "./Page";
+import Placeholder from "./Placeholder";
 
 class List extends React.Component {
 
@@ -15,77 +16,36 @@ class List extends React.Component {
     getSort() {
         switch (this.props.sort) {
             case "lastUsed":
-                return (a,b) => this.lastUsedSort(a,b);
+                return (a,b) => this.sortBy(a,b, "lastUsed", "name");
             case "numUses":
-                return (a,b) => this.mostUsedSort(a,b);
+                return (a,b) => this.sortBy(a,b, "uses", "name");
             case "group":
-                return (a,b) => this.groupSort(a,b);
+                return (a,b) => this.sortBy(a,b, "group", "name");
             case "plus/basic":
-                return (a,b) => this.plusBasicSort(a,b);
+                return (a,b) => this.sortBy(a,b, "category", "name");
             case "userPosition":
-                return (a,b) => this.userSort(a,b);
+                return (a,b) => this.sortBy(a,b, "position", "");
             default:
-                return (a,b) => this.alphabeticalSort(a,b);
+                return (a,b) => this.sortBy(a,b, "name", "");
         }
     }
 
-    alphabeticalSort(a, b) {
-        if (a.name < b.name) {
-            return -1;
-        } else if (a.name > b.name) {
-            return 1;
-        } else {
-            return 0;
+    sortBy(a,b, attribute, subAttribute) {
+        var reverse = false;
+        if (attribute === "name") {
+            reverse = true;
         }
-    }
 
-    groupSort(a, b) {
-        if (a.group < b.group) {
-            return 1;
-        } else if (a.group > b.group) {
-            return -1;
+        if (a[attribute] < b[attribute]) {
+            return reverse ? -1 : 1;
+        } else if (a[attribute] > b[attribute]) {
+            return reverse ? 1 : -1;
         } else {
-            return this.alphabeticalSort(a,b);
-        }
-    }
-
-    plusBasicSort(a, b) {
-        if (a.category === b.category) {
-            return this.alphabeticalSort(a,b);
-        } else if (a.category === "plus") {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
-
-    mostUsedSort(a, b) {
-        if (a.uses < b.uses) {
-            return 1;
-        } else if (a.uses > b.uses) {
-            return -1;
-        } else {
-            return this.alphabeticalSort(a,b);
-        }
-    }
-
-    lastUsedSort(a, b) {
-        if (a.lastUsed < b.lastUsed) {
-            return 1;
-        } else if (a.lastUsed > b.lastUsed) {
-            return -1;
-        } else {
-            return this.alphabeticalSort(a,b);
-        }
-    }
-
-    userSort(a, b) {
-        if (a.position < b.position) {
-            return 1;
-        } else if (a.position > b.position) {
-            return -1;
-        } else {
-            return 0;
+            if (subAttribute) {
+                return this.sortBy(a,b, subAttribute, "");
+            } else {
+                return 0;
+            }
         }
     }
 
@@ -94,9 +54,21 @@ class List extends React.Component {
 
         const id = this.props.id || "listCarousel";
         if (window.$(`div#${id}`).find(`.active.carousel-item`).length === 0) {
-            window.$(`div#${id}`).find(`.carousel-item`).last().addClass("active");
+            window.$(`div#${id}`).find(`.carousel-item`).last().addClub("active");
         }
 
+    }
+
+    filterCalls(calls) {
+        if (this.props.filter) {
+            const filtered = calls.filter((call) => call.name.toLowerCase().startsWith(this.props.filter.toLowerCase()));
+            if (filtered.length === 1) {
+                this.props.returnSingle(filtered[0]);
+            }
+            return filtered;
+        } else {
+            return calls;
+        }
     }
 
     render() {
@@ -106,7 +78,9 @@ class List extends React.Component {
 
         const id = this.props.id || "listCarousel";
 
-        const sortedCalls = this.props.sort === "arrayOrder" ? this.props.calls : this.props.calls.sort(sort);
+        const filteredCalls = this.filterCalls(this.props.calls);
+        const sortedCalls = this.props.sort === "arrayOrder" ? filteredCalls : filteredCalls.sort(sort);
+
         var listItems = [];
         for (var i = 0; i < sortedCalls.length; i++) {
             const call = sortedCalls[i];
@@ -118,21 +92,24 @@ class List extends React.Component {
         }
 
         var pages = [];
-        for (var i = 0; i < (listItems.length / (NUMCOLUMNS*COLUMNSIZE)); i++) {
+        for (var j = 0; j < (listItems.length / (NUMCOLUMNS*COLUMNSIZE)); j++) {
             pages.push(
                 <Page 
-                    key={i} 
-                    active={i === 0 ? "active" : ""} 
+                    key={j} 
+                    active={j === 0 ? "active" : ""} 
+                    loading={this.props.loading}
                     columns={NUMCOLUMNS} columnSize={COLUMNSIZE} 
-                    calls={listItems.slice(i*(NUMCOLUMNS*COLUMNSIZE), (i+1)*(NUMCOLUMNS*COLUMNSIZE))} 
+                    calls={listItems.slice(j*(NUMCOLUMNS*COLUMNSIZE), (j+1)*(NUMCOLUMNS*COLUMNSIZE))} 
                 />
             );
         }
+        const placeholder = !this.props.calls.length && this.props.placeholderContent && !this.props.loading? <Placeholder content={this.props.placeholderContent} /> : "";
 
         return (
 
             <div id={id} className={`carousel slide ${this.props.size}`} data-wrap="false" data-interval="false">
                 <div className="carousel-inner container">
+                    {placeholder || ""}
                     {pages}
                 </div>
                 <a className="carousel-control-prev btn btn-secondary" href={`#${id}`} role="button" data-slide="prev">

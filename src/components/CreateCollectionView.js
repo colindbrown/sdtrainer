@@ -1,61 +1,70 @@
 import React from "react";
 import List from "./List";
 import Alerts from "./Alerts";
-import * as db from "../util/dbfunctions";
+import { db } from "../util/dbfunctions";
 import CreateFunctionBar from "./CreateFunctionBar";
 
 class CreateCollectionView extends React.Component {
 
     state = {
         callList: [],
+        callsLoading: false,
         collectionList: [],
+        collectionCallsLoading: false,
         alerts: [],
         sessionNames: [],
         templateNames: [],
-        sort: ""
+        sort: "",
+        filterString: "",
+        single: {}
     }
 
     // Lifecycle methods
     componentDidMount() {
         this.loadAllCalls();
         this.loadTemplateNames();
-        if (this.props.activeClass.name) {
+        if (this.props.activeClub.name) {
             this.loadSessionNames();
         }
     }
 
     // Async methods
     async loadAllCalls() {
-        db.fetchAllCalls().then((allCalls) => {
-            db.displayData(allCalls).then((displayData) => {
-                this.setState({ callList: displayData });
-            })
+        this.setState({callsLoading: true})
+        db.calls.fetchAll().then((allCalls) => {
+            this.setState({ callList: allCalls, callsLoading: false });
         });
     }
 
     async loadSessionNames() {
-        db.fetchSessionNames().then((sessionNames) => { this.setState({ sessionNames }) });
+        db.sessions.fetchNames().then((sessionNames) => {
+            this.setState({ sessionNames });
+        });
     }
 
     async loadTemplateNames() {
-        db.fetchTemplateNames().then((templateNames) => { this.setState({ templateNames }) });
+        db.templates.fetchNames().then((templateNames) => {
+            this.setState({ templateNames });
+        });
     }
 
     async addSession(name) {
-        db.fetchSessionCalls(name).then(async (sessionCalls) => {
-            const displayData = await db.displayData(sessionCalls);
-            displayData.forEach(((call) => {
+        this.setState({ collectionCallsLoading: true })
+        db.sessions.fetchCalls(name).then((sessionCalls) => {
+            sessionCalls.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
+            this.setState({collectionCallsLoading: false })
         });
     }
 
     async addTemplate(name) {
-        db.fetchTemplateCalls(name).then(async (templateCalls) => {
-            const displayData = await db.displayData(templateCalls);
-            displayData.forEach(((call) => {
+        this.setState({ collectionCallsLoading: true })
+        db.templates.fetchCalls(name).then((templateCalls) => {
+            templateCalls.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
+            this.setState({collectionCallsLoading: false })
         });
     }
 
@@ -65,12 +74,12 @@ class CreateCollectionView extends React.Component {
         } else if (this.state.collectionList.length === 0) {
             this.showAlert("alert-warning", "Please add some calls to your session");
         } else {
-            const session = await db.fetchSessionRef(name);
-            if (session) {
+            const sessionExists = await db.sessions.check(name);
+            if (sessionExists) {
                 this.showAlert("alert-warning", "A session with that name already exists");
             } else {
                 const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
-                await db.setSession(name, sessionCalls);
+                await db.sessions.create(name, sessionCalls);
                 this.showAlert("alert-success", "Session saved");
                 this.removeAll();
                 this.loadSessionNames();
@@ -86,12 +95,12 @@ class CreateCollectionView extends React.Component {
         } else if (this.state.collectionList.length === 0) {
             this.showAlert("alert-warning", "Please add some calls to your template");
         } else {
-            const template = await db.fetchTemplateRef(name);
-            if (template) {
+            const templateExists = await db.templates.check(name);
+            if (templateExists) {
                 this.showAlert("alert-warning", "A template with that name already exists");
             } else {
                 const templateCalls = this.state.collectionList.map((call) => ({ name: call.name }));
-                await db.setTemplate(name, templateCalls);
+                await db.templates.create(name, templateCalls);
                 this.showAlert("alert-success", "Template saved");
                 this.removeAll();
                 this.loadTemplateNames();
@@ -133,11 +142,12 @@ class CreateCollectionView extends React.Component {
     // Props methods
     addAllUsed = async (e) => {
         e.preventDefault();
-        db.fetchByEverUsed(true).then(async (calls) => {
-            const displayData = await db.displayData(calls);
-            displayData.forEach(((call) => {
+        this.setState({collectionCallsLoading: true })
+        db.history.fetchByEverUsed(true).then((calls) => {
+            calls.forEach(((call) => {
                 this.moveCall(call.name, "collectionList");
             }));
+            this.setState({collectionCallsLoading: false })
         })
     }
 
@@ -150,11 +160,29 @@ class CreateCollectionView extends React.Component {
         this.setState({sort});
     }
 
+    updateFilterString(string) {
+        this.setState({filterString: string});
+    }
+
+    filterEnter() {
+        if (this.state.single.name) {
+            this.moveCall(this.state.single.name, "collectionList");
+            return true;
+        }  
+        return false;
+    }
+
+    returnSingle(call) {
+        if (this.state.single !== call) {
+            this.setState({single: call});
+        }
+    }
+
     render() {
         return (
             <div>
                 <CreateFunctionBar
-                    activeClass={this.props.activeClass.name}
+                    activeClub={this.props.activeClub.name}
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
                     saveNewSession={(name) => this.saveNewSession(name)}
@@ -164,11 +192,33 @@ class CreateCollectionView extends React.Component {
                     addTemplate={(name) => this.addTemplate(name)}
                     templateNames={this.state.templateNames}
                     changeSort={(sort) => this.changeSort(sort)}
+                    updateFilterString={(string) => this.updateFilterString(string)}
+                    filterEnter={() => this.filterEnter()}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
-                    <List size="col-md-6" id="callList" columns={2} calls={this.state.callList} sort={this.state.sort} onClick={(name) => this.moveCall(name, "collectionList")} />
-                    <List size="col-md-6" id="collectionList" columns={2} calls={this.state.collectionList} sort={"arrayOrder"} onClick={(name) => this.moveCall(name, "callList")} />
+                    <List
+                        size="col-md-6"
+                        id="callList"
+                        columns={2}
+                        calls={this.state.callList}
+                        sort={this.state.sort}
+                        loading={this.state.callsLoading}
+                        onClick={(name) => this.moveCall(name, "collectionList")} 
+                        filter={this.state.filterString}
+                        returnSingle={(call) => this.returnSingle(call)}
+                    />
+                    <List
+                        size="col-md-6"
+                        id="collectionList"
+                        columns={2}
+                        calls={this.state.collectionList}
+                        sort={"arrayOrder"}
+                        loading={this.state.collectionCallsLoading}
+                        placeholderContent={{title: "Create a Collection", 
+                            text: "Add calls to your collection using the function bar or the list to the left. Once you're done, save your collection as either a session plan or a template."}}
+                        onClick={(name) => this.moveCall(name, "callList")} 
+                    />
                 </div>
             </div>
         )
