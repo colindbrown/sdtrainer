@@ -40,7 +40,7 @@ class RunSessionView extends React.Component {
     finishSession(e) {
         e.preventDefault();
         const sessionUpdate = this.state.sessionCalls.map((call) => ({ name: call.name, used: call.disabled, timestamp: call.timestamp}));
-        db.sessions.setSession(this.state.activeSession, sessionUpdate).then(() => this.loadSessionNames());
+        db.sessions.finish(this.state.activeSession, sessionUpdate).then(() => this.loadSessionNames());
         const historyUpdate = this.state.sessionCalls.map((call) => ({ name: call.name, everUsed: call.disabled, uses: [call.timestamp] }));
         db.history.update(this.state.activeSession, historyUpdate);
         this.setState({ activeSession: "", sessionCalls: [] });

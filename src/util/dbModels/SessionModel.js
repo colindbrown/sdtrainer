@@ -5,33 +5,33 @@ class SessionModel {
 
     // lifecycle methods
 
-    // create or update a session with the provided calls
-    async setSession(name, calls) {
-        var session = await this.fetchRef(name);
-        if (session) {
-            var batch = this.db.dbRef.batch();
-            var snapshot = await session.collection("Calls").get();
-            snapshot.docs.forEach((callDoc) => {
-                const call = calls.find((callIterator) => (callIterator.name === callDoc.data().name));
-                batch.update(callDoc.ref, {
-                    used: call.used,
-                    timestamp: call.timestamp
-                });
-            });
-            batch.update(session, {
-                finished: true,
-                finishedAt: Date.now()
-            });
-            batch.commit();
-        } else {
-            const newSession = this.db.activeClubRef.collection("Sessions").doc();
-            const activeClub = await this.db.activeClubRef.get();
-            newSession.set({ name: name, createdAt: Date.now(), finished: false });
-            for (var i = 0; i < calls.length; i++) {
-                const ref = await newSession.collection("Calls").add(calls[i]);
-                ref.update({position: i});
-            }
+    // create session with the provided calls
+    async create(name, calls) {
+        const newSession = this.db.activeClubRef.collection("Sessions").doc();
+        newSession.set({ name: name, createdAt: Date.now(), finished: false });
+        for (var i = 0; i < calls.length; i++) {
+            const ref = await newSession.collection("Calls").add(calls[i]);
+            ref.update({position: i});
         }
+    }
+
+    // finish a session
+    async finish(name, calls) {
+        const session = await this.fetchRef(name);
+        var batch = this.db.dbRef.batch();
+        var snapshot = await session.collection("Calls").get();
+        snapshot.docs.forEach((callDoc) => {
+            const call = calls.find((callIterator) => (callIterator.name === callDoc.data().name));
+            batch.update(callDoc.ref, {
+                used: call.used,
+                timestamp: call.timestamp
+            });
+        });
+        batch.update(session, {
+            finished: true,
+            finishedAt: Date.now()
+        });
+        batch.commit();
     }
 
     // delete a session

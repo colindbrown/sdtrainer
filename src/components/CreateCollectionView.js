@@ -79,7 +79,7 @@ class CreateCollectionView extends React.Component {
                 this.showAlert("alert-warning", "A session with that name already exists");
             } else {
                 const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
-                await db.sessions.setSession(name, sessionCalls);
+                await db.sessions.create(name, sessionCalls);
                 this.showAlert("alert-success", "Session saved");
                 this.removeAll();
                 this.loadSessionNames();
