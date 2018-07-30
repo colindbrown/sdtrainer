@@ -54,6 +54,12 @@ class SessionModel {
         return sessions;
     }
 
+    // returns an array of all session names
+    async fetchNames() {
+        const sessions = await this.fetchAll();
+        return this.db.createNamesArray(sessions);
+    }
+
     // return session (a DocumentSnapshot) if it exists, undefined if it doesnt
     async fetchRef(name) {
         const sessionsRef = this.db.activeClubRef.collection("Sessions")
@@ -85,6 +91,12 @@ class SessionModel {
             sessions.push(doc.data());
         });
         return sessions;
+    }
+
+    // return an array of all plan names
+    async fetchPlanNames() {
+        const plans = await this.fetchPlans();
+        return this.db.createNamesArray(plans);
     }
 
     // returns an array of all finished sessions

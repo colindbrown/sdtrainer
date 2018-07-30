@@ -39,15 +39,13 @@ class CreateCollectionView extends React.Component {
     }
 
     async loadSessionNames() {
-        db.sessions.fetchAll().then((sessions) => { 
-            const sessionNames = db.createNamesArray(sessions);
+        db.sessions.fetchNames().then((sessionNames) => {
             this.setState({ sessionNames });
         });
     }
 
     async loadTemplateNames() {
-        db.templates.fetchAll().then((templates) => { 
-            const templateNames = db.createNamesArray(templates);
+        db.templates.fetchNames().then((templateNames) => {
             this.setState({ templateNames });
         });
     }

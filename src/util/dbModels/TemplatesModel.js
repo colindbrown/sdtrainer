@@ -36,6 +36,12 @@ class TemplatesModel {
         return templates;
     }
 
+    // returns an array of all template names
+    async fetchNames() {
+        const templates = await this.fetchAll();
+        return this.db.createNamesArray(templates);
+    }
+
     // return template (a DocumentSnapshot) if it exists, undefined if it doesnt
     async fetchRef(name) {
         const snapshot = await this.db.TemplatesRef.where("name", "==", name).get();

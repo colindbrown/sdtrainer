@@ -10,7 +10,7 @@ class RunSessionView extends React.Component {
         sessionCalls: [],
         sessionCallsLoading: false,
         alerts: [],
-        sessionNames: [],
+        planNames: [],
         activeSession: "",
         sort: "userPosition"
     }
@@ -34,9 +34,8 @@ class RunSessionView extends React.Component {
     }
 
     async loadSessionNames() {
-        db.sessions.fetchPlans().then((sessions) => {
-            const sessionNames = db.createNamesArray(sessions);
-            this.setState({ sessionNames });
+        db.sessions.fetchPlanNames().then((planNames) => {
+            this.setState({ planNames });
         });
     }
 
@@ -82,7 +81,7 @@ class RunSessionView extends React.Component {
 
     render() {
         var placeholderContent = {};
-        if (this.state.sessionNames.length > 0) {
+        if (this.state.planNames.length > 0) {
             placeholderContent={title: "Run a Session", text: "Select a session plan to run from the function bar above. Once you're done, finish the session using the button on the right."};
         } else {
             placeholderContent={title: "Run a Session", text: "You don't have any session plans to run at the moment.", rel: "/create", destination: "Plan a Session"};
@@ -90,7 +89,7 @@ class RunSessionView extends React.Component {
         return (
             <div>
                 <RunFunctionBar
-                    sessionNames={this.state.sessionNames}
+                    planNames={this.state.planNames}
                     activeSession={this.state.activeSession}
                     selectActiveSession={(session) => this.selectActiveSession(session)}
                     changeSort={(sort) => this.changeSort(sort)}

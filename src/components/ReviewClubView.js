@@ -33,8 +33,7 @@ class ReviewClubView extends React.Component {
     }
 
     async loadSessionNames() {
-        db.sessions.fetchAll().then((sessions) => {
-            const sessionNames = db.createNamesArray(sessions);
+        db.sessions.fetchNames().then((sessionNames) => {
             this.setState({ sessionNames });
         });
     }
