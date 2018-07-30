@@ -37,7 +37,9 @@ class SessionModel {
     // delete a session
     async deleteSession(name) {
         const ref = await this.fetchSessionRef(name);
-        this.db.activeClubRef.collection("Sessions").doc(ref.id).delete();
+        const snapshot = await ref.collection("Calls").get();
+        snapshot.docs.forEach((doc) => doc.ref.delete());
+        ref.delete();
     }
 
     // accessor methods

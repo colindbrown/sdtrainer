@@ -19,7 +19,9 @@ class TemplatesModel {
     // delete template
     async deleteTemplate(name) {
         const templateRef = await this.fetchTemplateRef(name);
-        this.db.TemplatesRef.doc(templateRef.id).delete();
+        const snapshot = await templateRef.collection("Calls").get();
+        snapshot.docs.forEach((doc) => doc.ref.delete());
+        templateRef.delete();
     }
 
     // accessor methods

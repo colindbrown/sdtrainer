@@ -41,7 +41,7 @@ class ReviewClubView extends React.Component {
 
     async loadSession(name) {
         this.setState({ selectedCallsLoading: true });
-        db.calls.fetchSessionCalls(name).then(async (sessionCalls) => {
+        db.sessions.fetchSessionCalls(name).then(async (sessionCalls) => {
             const displayData = await db.fetchDisplayData(sessionCalls);
             this.setState({ selectedCalls: displayData, activeFilter: {type: "session", name: name} });
             this.setState({ selectedCallsLoading: false });

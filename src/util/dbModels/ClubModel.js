@@ -24,10 +24,20 @@ class ClubModel {
 
     // delete a club
     async deleteClub(name) {
-        const snapshot = await this.db.ClubsRef.where("name", "==", name).get();
-        if (snapshot.size === 1) {
-            snapshot.docs[0].ref.delete();
-        }
+        const clubSnapshot = await this.db.ClubsRef.where("name", "==", name).get();
+        const ref = clubSnapshot.docs[0].ref;
+
+        var snapshot = await ref.collection("History").get();
+        snapshot.docs.forEach((doc) => doc.ref.delete());
+
+        snapshot = await ref.collection("Sessions").get();
+        snapshot.docs.forEach(async (session) => {
+            const sessionSnapshot = await session.ref.collection("Calls").get();
+            sessionSnapshot.docs.forEach((doc) => doc.ref.delete());
+            session.ref.delete();
+        });
+
+        ref.delete();
     }
 
     // setter methods
