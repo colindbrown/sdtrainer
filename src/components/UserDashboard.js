@@ -74,7 +74,8 @@ class UserDashboard extends React.Component {
     passTemplate = (name) => {
         console.log("load template")
         // modal with clubs
-        //this.props.setPassedCollection("load", name);
+        //this.props.setPassedCollection("loadTemplate", name);
+        // redirect to create
     }
 
     render() {
@@ -107,7 +108,7 @@ class UserDashboard extends React.Component {
                 <div className="mr-2">{template.count} calls</div>
                 <div className="mr-2">|</div>
                 <div className="mr-4">Created on {(new Date(template.createdAt)).toDateString()}</div>
-                <NavLink className="btn btn-sm btn-secondary mr-2" to={'/create'} onClick={() => this.props.setPassedCollection("edit", template.name)}>Edit</NavLink>
+                <NavLink className="btn btn-sm btn-secondary mr-2" to={'/create'} onClick={() => this.props.setPassedCollection("editTemplate", template.name)}>Edit</NavLink>
                 <button className="btn btn-sm btn-info mr-2" data-toggle="modal" data-target="#clubsModal" onClick={() => this.passTemplate(template.name)}>Load</button>
                 <button className="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmModal" onClick={() => this.deleteItem("template", template.name)}>Delete</button>
             </li>

@@ -21,7 +21,11 @@ class CreateCollectionView extends React.Component {
 
     // Lifecycle methods
     componentDidMount() {
-        this.loadAllCalls();
+        this.loadAllCalls().then(() => {
+            if (this.props.passedCollection) {
+                this.loadPassedCollection();
+            }
+        })
         this.loadTemplateNames();
         if (this.props.activeClub.name) {
             this.loadSessionNames();
@@ -46,6 +50,19 @@ class CreateCollectionView extends React.Component {
         db.templates.fetchNames().then((templateNames) => {
             this.setState({ templateNames });
         });
+    }
+
+    async loadPassedCollection() {
+        const {type, name} = this.props.passedCollection;
+        if (type.substring(0,4) === "edit") {
+            this.setState({ initialCollectionName: name });
+        }
+        if (type.substring(4,) === "Session") {
+            this.addSession(name);
+        } else {
+            this.addTemplate(name);
+        }
+        this.props.resetPassedCollection();
     }
 
     async addSession(name) {
@@ -183,6 +200,7 @@ class CreateCollectionView extends React.Component {
             <div>
                 <CreateFunctionBar
                     activeClub={this.props.activeClub.name}
+                    initialCollectionName={this.state.initialCollectionName}
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
                     saveNewSession={(name) => this.saveNewSession(name)}

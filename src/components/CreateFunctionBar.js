@@ -7,6 +7,12 @@ class CreateFunctionBar extends React.Component {
         filterString: ""
     }
 
+    componentWillReceiveProps() {
+        if (this.props.initialCollectionName) {
+            this.setState({ newCollectionName: this.props.initialCollectionName });
+        }
+    }
+
     handleChange = (e) => {
         this.setState({ newCollectionName: e.target.value });
     }
@@ -29,12 +35,10 @@ class CreateFunctionBar extends React.Component {
     handleReset = (e) => {
         e.preventDefault();
         this.props.removeAll();
-        //this.setState({ filterString: "" });
         this.props.updateFilterString("");
     }
 
     handleFilterChange = (e) => {
-        //this.setState({ filterString: e.target.value });
         this.props.updateFilterString(e.target.value);
     }
 
@@ -104,7 +108,7 @@ class CreateFunctionBar extends React.Component {
                     <button className="btn btn-secondary" href="#" onClick={this.handleReset}>Reset</button>
                 </div>
                 <form className="form-inline">
-                    <input className="form-control mr-sm-2" placeholder="Name" value={this.state.newCollectionName} onChange={this.handleChange} />
+                    <input className="form-control mr-sm-2" type="text" placeholder="Name" value={this.state.newCollectionName} onChange={this.handleChange} />
                     <div className="dropdown mr-2">
                         <button className={`btn btn-info dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Save As 
