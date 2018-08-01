@@ -25,7 +25,7 @@ class CreateCollectionView extends React.Component {
             if (this.props.passedCollection) {
                 this.loadPassedCollection();
             }
-        })
+        });
         this.loadTemplateNames();
         if (this.props.activeClub.name) {
             this.loadSessionNames();

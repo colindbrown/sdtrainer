@@ -18,6 +18,9 @@ class RunSessionView extends React.Component {
 
     componentDidMount() {
         this.loadSessionNames();
+        if (this.props.passedCollection) {
+            this.loadPassedCollection();
+        }
     }
 
     async loadSession(name) {
@@ -35,6 +38,11 @@ class RunSessionView extends React.Component {
         db.sessions.fetchPlanNames().then((planNames) => {
             this.setState({ planNames });
         });
+    }
+
+    async loadPassedCollection() {
+        this.loadSession(this.props.passedCollection.name);
+        this.props.resetPassedCollection();
     }
 
     finishSession(e) {
