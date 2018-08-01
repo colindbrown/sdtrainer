@@ -16,6 +16,18 @@ class TemplatesModel {
         }
     }
 
+    // edit template with new calls
+    async edit(name, calls) {
+        const template = await this.fetchRef(name);
+        template.update({ count: calls.length });
+        const snapshot = await template.collection("Calls").get();
+        snapshot.docs.forEach((doc) => doc.ref.delete());
+        for (var i = 0; i < calls.length; i++) {
+            const ref = await template.collection("Calls").add(calls[i]);
+            ref.update({position: i});
+        }
+    }
+
     // delete template
     async delete(name) {
         const templateRef = await this.fetchRef(name);

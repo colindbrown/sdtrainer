@@ -15,6 +15,18 @@ class SessionModel {
         }
     }
 
+    // edit session with new calls
+    async edit(name, calls) {
+        const session = await this.fetchRef(name);
+        session.update({ count: calls.length });
+        const snapshot = await session.collection("Calls").get();
+        snapshot.docs.forEach((doc) => doc.ref.delete());
+        for (var i = 0; i < calls.length; i++) {
+            const ref = await session.collection("Calls").add(calls[i]);
+            ref.update({position: i});
+        }
+    }
+
     // finish a session
     async finish(name, calls) {
         const session = await this.fetchRef(name);

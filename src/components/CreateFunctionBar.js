@@ -7,9 +7,9 @@ class CreateFunctionBar extends React.Component {
         filterString: ""
     }
 
-    componentWillReceiveProps() {
-        if (this.props.initialCollectionName) {
-            this.setState({ newCollectionName: this.props.initialCollectionName });
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.initialCollectionName || nextProps.initialCollectionName === "") {
+            this.setState({ newCollectionName: nextProps.initialCollectionName });
         }
     }
 

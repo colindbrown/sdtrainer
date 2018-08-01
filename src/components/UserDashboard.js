@@ -126,7 +126,7 @@ class UserDashboard extends React.Component {
                     </div>
                 </section>
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
-                <ConfirmModal onClick={this.state.modalFunction} />
+                <ConfirmModal type="delete" onClick={this.state.modalFunction} />
                 <section>
                     <ul className="nav nav-tabs nav-fill row tabs-row" id="myTab" role="tablist">
                         <li className="nav-item">

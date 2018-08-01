@@ -1,6 +1,7 @@
 import React from "react";
 import List from "./List";
 import Alerts from "./Alerts";
+import ConfirmModal from "./ConfirmModal";
 import { db } from "../util/dbfunctions";
 import CreateFunctionBar from "./CreateFunctionBar";
 
@@ -93,7 +94,15 @@ class CreateCollectionView extends React.Component {
         } else {
             const sessionExists = await db.sessions.check(name);
             if (sessionExists) {
-                this.showAlert("alert-warning", "A session with that name already exists");
+                this.setState({ onConfirm: async () => {
+                    const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
+                    await db.sessions.edit(name, sessionCalls);
+                    this.showAlert("alert-success", "Session edited");
+                    this.removeAll();
+                    this.setState({initialCollectionName: ""});
+                    }});
+                window.$('#confirmModal').modal('show');
+                return false;
             } else {
                 const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
                 await db.sessions.create(name, sessionCalls);
@@ -114,7 +123,15 @@ class CreateCollectionView extends React.Component {
         } else {
             const templateExists = await db.templates.check(name);
             if (templateExists) {
-                this.showAlert("alert-warning", "A template with that name already exists");
+                this.setState({ onConfirm: async () => {
+                    const templateCalls = this.state.collectionList.map((call) => ({ name: call.name }));
+                    await db.templates.edit(name, templateCalls);
+                    this.showAlert("alert-success", "Template saved");
+                    this.removeAll();
+                    this.setState({initialCollectionName: ""});
+                    }});
+                window.$('#confirmModal').modal('show');
+                return false;
             } else {
                 const templateCalls = this.state.collectionList.map((call) => ({ name: call.name }));
                 await db.templates.create(name, templateCalls);
@@ -214,6 +231,7 @@ class CreateCollectionView extends React.Component {
                     filterEnter={() => this.filterEnter()}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
+                <ConfirmModal type="edit" onClick={() => this.state.onConfirm()} />
                 <div className="row">
                     <List
                         size="col-md-6"
