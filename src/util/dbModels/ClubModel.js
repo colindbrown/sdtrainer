@@ -10,7 +10,8 @@ class ClubModel {
         const docRef = await this.db.ClubsRef.add({
             name: name,
             createdAt: Date.now(),
-            taught: 0
+            taught: 0,
+            sessions: 0
         })
         const callNames = await this.db.calls.fetchNames();
         callNames.forEach((name) => {
