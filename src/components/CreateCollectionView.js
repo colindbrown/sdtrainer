@@ -92,17 +92,21 @@ class CreateCollectionView extends React.Component {
         } else if (this.state.collectionList.length === 0) {
             this.showAlert("alert-warning", "Please add some calls to your session");
         } else {
-            const sessionExists = await db.sessions.check(name);
+            const {sessionExists, finished} = await db.sessions.check(name);
             if (sessionExists) {
-                this.setState({ onConfirm: async () => {
-                    const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
-                    await db.sessions.edit(name, sessionCalls);
-                    this.showAlert("alert-success", "Session edited");
-                    this.removeAll();
-                    this.setState({initialCollectionName: ""});
-                    }});
-                window.$('#confirmModal').modal('show');
-                return false;
+                if (finished) {
+                    this.showAlert("alert-warning", "You can't modify a finished session");
+                } else {
+                    this.setState({ onConfirm: async () => {
+                        const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
+                        await db.sessions.edit(name, sessionCalls);
+                        this.showAlert("alert-success", "Session edited");
+                        this.removeAll();
+                        this.setState({initialCollectionName: ""});
+                        }});
+                    window.$('#confirmModal').modal('show');
+                    return false;
+                }
             } else {
                 const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
                 await db.sessions.create(name, sessionCalls);

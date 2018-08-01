@@ -133,7 +133,9 @@ class SessionModel {
     // return if a session with the provided name exists
     async check(name) {
         const snapshot = await this.db.activeClubRef.collection("Sessions").where("name", "==", name).get();
-        return snapshot.size === 1;
+        const sessionExists = snapshot.size === 1;
+        const finished = sessionExists ? snapshot.docs[0].data().finished : undefined;
+        return {sessionExists, finished};
     }
 
 }
