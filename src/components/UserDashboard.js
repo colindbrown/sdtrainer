@@ -71,6 +71,12 @@ class UserDashboard extends React.Component {
         }
     }
 
+    passTemplate = (name) => {
+        console.log("load template")
+        // modal with clubs
+        //this.props.setPassedCollection("load", name);
+    }
+
     render() {
         const firstName = this.props.activeUser.displayName.split(" ")[0];
         var clubCards;
@@ -98,7 +104,11 @@ class UserDashboard extends React.Component {
             templateListItems = this.state.templates.length ? this.state.templates.map((template) => 
             <li className="list-group-item d-flex justify-content-end" key={template.name}>
                 <div className="list-item-name"><p><strong>{template.name}</strong></p></div>
-                <div className="mr-5">Created on {(new Date(template.createdAt)).toDateString()}</div>
+                <div className="mr-2">{template.count} calls</div>
+                <div className="mr-2">|</div>
+                <div className="mr-4">Created on {(new Date(template.createdAt)).toDateString()}</div>
+                <NavLink className="btn btn-sm btn-secondary mr-2" to={'/create'} onClick={() => this.props.setPassedCollection("edit", template.name)}>Edit</NavLink>
+                <button className="btn btn-sm btn-info mr-2" data-toggle="modal" data-target="#clubsModal" onClick={() => this.passTemplate(template.name)}>Load</button>
                 <button className="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmModal" onClick={() => this.deleteItem("template", template.name)}>Delete</button>
             </li>
         ) : <li><Placeholder content={{title: "Templates", text: "You don't have any templates to display at the moment.", rel: "/create", destination: "Create a Template"}}/></li>;

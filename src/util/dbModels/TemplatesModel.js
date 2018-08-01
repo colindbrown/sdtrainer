@@ -9,7 +9,7 @@ class TemplatesModel {
     // create a template with the provided calls
     async create(name, calls) {
         const newTemplate = this.db.TemplatesRef.doc();
-        newTemplate.set({ name: name, createdAt: Date.now() });
+        newTemplate.set({ name: name, createdAt: Date.now(), count: calls.length });
         for (var i = 0; i < calls.length; i++) {
             const ref = await newTemplate.collection("Calls").add(calls[i]);
             ref.update({position: i});
