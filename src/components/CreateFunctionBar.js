@@ -47,6 +47,11 @@ class CreateFunctionBar extends React.Component {
         }
       }
 
+      handleFilterReset = () => {
+        window.$("#filterBar").val("");
+        this.props.updateFilterString("");
+      }
+
     render() {
         var sessionListItems = [];
         if (this.props.activeClub) {
@@ -71,7 +76,10 @@ class CreateFunctionBar extends React.Component {
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
-                    <input className="form-control mr-sm-2" placeholder="Filter Calls" onKeyDown={this.handleEnter} onChange={this.handleFilterChange} />
+                    <div className="input-group mr-2">
+                        <input className="form-control" id="filterBar" type="search" placeholder="Filter Calls" onKeyDown={this.handleEnter} onChange={this.handleFilterChange} ></input>
+                        <button class="input-group-addon btn" onClick={this.handleFilterReset}>x</button>
+                    </div>
                     {usedButton}
                     <div className="dropdown mr-2">
                         <button className={`${disableTemplateMenu} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
