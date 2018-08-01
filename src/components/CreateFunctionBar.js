@@ -17,15 +17,15 @@ class CreateFunctionBar extends React.Component {
         this.setState({ newCollectionName: e.target.value });
     }
 
-    handleSubmit = (type) => {
+    handleSubmit = async (type) => {
         if (type === "session") {
-            const result = this.props.saveNewSession(this.state.newCollectionName);
-            if (result) {
+            const success = await this.props.saveNewSession(this.state.newCollectionName);
+            if (success) {
                 this.setState({ newCollectionName: "" });
             };
         } else {
-            const result = this.props.saveNewTemplate(this.state.newCollectionName);
-            if (result) {
+            const success = await this.props.saveNewTemplate(this.state.newCollectionName);
+            if (success) {
                 this.setState({ newCollectionName: "" });
             };
         }
