@@ -4,9 +4,10 @@ import { db } from "../util/dbfunctions";
 import AddClubCard from './AddClubCard';
 import Alerts from "./Alerts";
 import ConfirmModal from "./ConfirmModal";
+import ClubModal from "./ClubModal";
 import Loader from "./Loader";
 import Placeholder from './Placeholder';
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 
 
 class UserDashboard extends React.Component {
@@ -72,10 +73,13 @@ class UserDashboard extends React.Component {
     }
 
     passTemplate = (name) => {
-        console.log("load template")
-        // modal with clubs
-        //this.props.setPassedCollection("loadTemplate", name);
-        // redirect to create
+        if (this.state.clubs === [] && !this.state.clubsLoading) {
+            this.props.setPassedCollection("loadTemplate", name);
+            this.setState({ redirect: "/create" });
+        } else {
+            this.setState({ passedTemplateName: name });
+            window.$("#clubModal").modal("show");
+        }
     }
 
     render() {
@@ -125,7 +129,9 @@ class UserDashboard extends React.Component {
                         <NavLink className={`btn btn-info`} to={`/create`}>Create a Template</NavLink>
                     </div>
                 </section>
+                {this.state.redirect ? <Redirect to={this.state.redirect}/> : ""}
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
+                <ClubModal name={this.state.passedTemplateName} clubs={this.state.clubs} setPassedCollection={(name) => this.props.setPassedCollection("loadTemplate", name)} updateActiveClub={(name) => this.props.updateActiveClub(name)} />
                 <ConfirmModal type="delete" onClick={this.state.modalFunction} />
                 <section>
                     <ul className="nav nav-tabs nav-fill row tabs-row" id="myTab" role="tablist">

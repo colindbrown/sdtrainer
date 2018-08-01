@@ -313,3 +313,14 @@ hr {
 
 .tab-content {
   position: relative; }
+
+.club-modal .modal-body {
+  padding: 0; }
+  .club-modal .modal-body .list-group-item {
+    border-radius: 0;
+    border-color: #e9ecef;
+    color: #000; }
+    .club-modal .modal-body .list-group-item:first-child {
+      border-top: 0 solid transparent; }
+    .club-modal .modal-body .list-group-item:last-child {
+      border-bottom: 0 solid transparent; }

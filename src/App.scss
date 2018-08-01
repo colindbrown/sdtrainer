@@ -1,4 +1,5 @@
 // Colors
+$black: #000;
 $info: #5bc0de;
 $red: #E23C3C;
 $yellow: #E2D843;
@@ -388,4 +389,21 @@ hr {
 
 .tab-content {
   position: relative;
+}
+
+.club-modal {
+  & .modal-body {
+    padding: 0;
+    & .list-group-item {
+      border-radius: 0;
+      border-color: $lighter-grey;
+      color: $black;
+      &:first-child {
+        border-top: 0 solid transparent;
+      }
+      &:last-child {
+        border-bottom: 0 solid transparent;
+      }
+    }
+  }
 }
