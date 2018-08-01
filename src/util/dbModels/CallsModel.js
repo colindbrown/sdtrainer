@@ -17,7 +17,7 @@ class CallsModel {
                 AllCalls[category][group].forEach((name) => {
                     this.AllCallsRef.add({
                         name: name,
-                        group: parseInt(group),
+                        group: parseInt(group, 10),
                         category: category
                     })
                 })
