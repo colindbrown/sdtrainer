@@ -65,16 +65,12 @@ class CreateFunctionBar extends React.Component {
             {text: "Template", onClick: () => this.handleSubmit("template")}
         ]
 
-        const usedButton = this.props.activeClub ? 
-            <button className={`btn btn-secondary mr-2`} onClick={this.props.addAllUsed}>Add all used calls</button> :
-            <button className={`btn btn-secondary disabled mr-2`}>Add all used calls</button>;
-
         return (
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
                     <input className="form-control mr-sm-2" placeholder="Filter Calls" onKeyDown={this.handleEnter} onChange={this.handleFilterChange} />
-                    {usedButton}
+                    <button className={`btn btn-secondary mr-2`} disabled={!this.props.activeClub} onClick={this.props.addAllUsed}>Add all used calls</button>
                     <Dropdown label="Add template" items={templateListItems} type="secondary"/>
                     <Dropdown label="Add session" items={sessionListItems} type="secondary" disabled={!this.props.activeClub}/>
                     <Dropdown label="Sort by" items={sortOptions} type="secondary"/>

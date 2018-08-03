@@ -1,8 +1,17 @@
 import React from "react";
+import Dropdown from "./Dropdown";
 
 class ReviewFunctionBar extends React.Component {
 
     render() {
+        const filterListItems = [
+            { text: "Used", onClick: () => this.props.selectFilter("Used", "") },
+            { text: "Unused", onClick: () => this.props.selectFilter("Unused", "") },
+            { text: "New", onClick: () => this.props.selectFilter("New", "") },
+            { text: "Basic", onClick: () => this.props.selectFilter("Basic", "") },
+            { text: "Plus", onClick: () => this.props.selectFilter("Plus", "") }
+        ]
+
         const sessionListItems = this.props.sessionNames.map((name) =>
             <button className="dropdown-item" key={name} onClick={() => this.props.selectFilter("session", name)}>{name}</button>
         );
@@ -14,18 +23,7 @@ class ReviewFunctionBar extends React.Component {
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
-                    <div className="dropdown mr-2">
-                        <button className={`${filter.type === "filter" ? "active" : ""} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {filter.type === "filter" ? filter.name : "Filter"}
-                        </button>
-                        <div className="dropdown-menu">
-                            <button className="dropdown-item" key={"used"} onClick={() => this.props.selectFilter("Used", "")}>Used</button>
-                            <button className="dropdown-item" key={"unused"} onClick={() => this.props.selectFilter("Unused", "")}>Unused</button>
-                            <button className="dropdown-item" key={"new"} onClick={() => this.props.selectFilter("New", "")}>New</button>
-                            <button className="dropdown-item" key={"basic"} onClick={() => this.props.selectFilter("Basic", "")}>Basic</button>
-                            <button className="dropdown-item" key={"plus"} onClick={() => this.props.selectFilter("Plus", "")}>Plus</button>
-                        </div>
-                    </div>
+                    <Dropdown label={filter.type === "filter" ? filter.name : "Filter"} items={filterListItems} type="secondary" />
                     <div className="dropdown mr-2">
                         <button className={`${filter.type === "session" ? "active" : ""} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {filter.type === "session" ? filter.name : "Sessions"}
