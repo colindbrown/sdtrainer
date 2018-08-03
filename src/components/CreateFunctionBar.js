@@ -1,4 +1,5 @@
 import React from "react";
+import Dropdown from "./Dropdown";
 
 class CreateFunctionBar extends React.Component {
 
@@ -48,24 +49,25 @@ class CreateFunctionBar extends React.Component {
       }
 
     render() {
-        var sessionListItems = [];
-        if (this.props.activeClub) {
-            sessionListItems = this.props.sessionNames.map((name) =>
-                <button className="dropdown-item" key={name} onClick={() => this.props.addSession(name)}>{name}</button>
-            );
-        }
-        const templateListItems = this.props.templateNames.map((name) =>
-            <button className="dropdown-item" key={name} onClick={() => this.props.addTemplate(name)}>{name}</button>
-        );
+        const sessionListItems = this.props.sessionNames.map((name) => ({ text: name, onClick: () => this.props.addSession(name) }));
+        const templateListItems = this.props.templateNames.map((name) => ({ text: name, onClick: () => this.props.addTemplate(name) }));
 
-        const disableSessionMenu = (this.props.activeClub && (this.props.sessionNames.length > 0)) ? "" : "disabled";
-        const disableSaveSession = (this.props.activeClub) ? "" : "disabled";
-        const disableTemplateMenu = (this.props.templateNames.length > 0) ? "" : "disabled";
+        const sortOptions = [
+            { text: "Alphabetical", onClick: () => this.props.changeSort("") },
+            { text: "Plus/Basic", onClick: () => this.props.changeSort("plus/basic") },
+            { text: "Most Used", onClick: () => this.props.changeSort("numUses") },
+            { text: "Last Used", onClick: () => this.props.changeSort("lastUsed") },
+            { text: "Group", onClick: () => this.props.changeSort("group") }
+        ];
+
+        const saveListItems = [
+            {text: "Session Plan", onClick: () => this.handleSubmit("session"), disabled: !this.props.activeClub},
+            {text: "Template", onClick: () => this.handleSubmit("template")}
+        ]
 
         const usedButton = this.props.activeClub ? 
             <button className={`btn btn-secondary mr-2`} onClick={this.props.addAllUsed}>Add all used calls</button> :
             <button className={`btn btn-secondary disabled mr-2`}>Add all used calls</button>;
-            
 
         return (
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
@@ -73,47 +75,14 @@ class CreateFunctionBar extends React.Component {
                 <div className="navbar-nav mr-auto ml-2">
                     <input className="form-control mr-sm-2" placeholder="Filter Calls" onKeyDown={this.handleEnter} onChange={this.handleFilterChange} />
                     {usedButton}
-                    <div className="dropdown mr-2">
-                        <button className={`${disableTemplateMenu} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Add template
-                        </button>
-                        <div className="dropdown-menu">
-                            {templateListItems}
-                        </div>
-                    </div>
-                    <div className="dropdown mr-2">
-                        <button className={`${disableSessionMenu} btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Add session
-                        </button>
-                        <div className="dropdown-menu">
-                            {sessionListItems}
-                        </div>
-                    </div>
-                    <div className="dropdown mr-2">
-                        <button className={` btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Sort by
-                        </button>
-                        <div className="dropdown-menu">
-                            <button className="dropdown-item" onClick={() => this.props.changeSort("")}>Alphabetical</button>
-                            <button className="dropdown-item" onClick={() => this.props.changeSort("plus/basic")}>Plus/Basic</button>
-                            <button className="dropdown-item" onClick={() => this.props.changeSort("numUses")}>Most Used</button>
-                            <button className="dropdown-item" onClick={() => this.props.changeSort("lastUsed")}>Last Used</button>
-                            <button className="dropdown-item" onClick={() => this.props.changeSort("group")}>Group</button>
-                        </div>
-                    </div>
+                    <Dropdown label="Add template" items={templateListItems} type="secondary"/>
+                    <Dropdown label="Add session" items={sessionListItems} type="secondary" disabled={!this.props.activeClub}/>
+                    <Dropdown label="Sort by" items={sortOptions} type="secondary"/>
                     <button className="btn btn-secondary" href="#" onClick={this.handleReset}>Reset</button>
                 </div>
                 <form className="form-inline">
                     <input className="form-control mr-sm-2" placeholder="Name" value={this.state.newCollectionName} onChange={this.handleChange} />
-                    <div className="dropdown mr-2">
-                        <button className={`btn btn-info dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Save As 
-                        </button>
-                        <div className="dropdown-menu dropdown-menu-right">
-                            <button className={`${disableSaveSession} dropdown-item`} key={"session"} onClick={() => this.handleSubmit("session")}>Session Plan</button>
-                            <button className="dropdown-item" key={"template"} onClick={() => this.handleSubmit("template")}>Template</button>
-                        </div>
-                    </div>
+                    <Dropdown label="Save as" items={saveListItems} type="info" />
                 </form>
 
             </nav>
