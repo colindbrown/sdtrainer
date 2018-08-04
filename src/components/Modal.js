@@ -14,7 +14,7 @@ class Modal extends React.Component {
                                 <div className="modal-header d-flex justify-content-center">
                                     <h4 className="modal-title">{title}</h4>
                                 </div>
-                                <pre className="modal-body">
+                                <pre className="modal-body text-left d-flex justify-content-center">
                                     {body}
                                 </pre>
                                 <div className="modal-footer">

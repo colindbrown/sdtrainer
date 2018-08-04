@@ -8,7 +8,7 @@ class RunSessionView extends React.Component {
 
     state = {
         sessionCalls: [],
-        sessionCallsLoading: false,
+        loading: false,
         alerts: [],
         planNames: [],
         activeSession: "",
@@ -21,19 +21,22 @@ class RunSessionView extends React.Component {
     }
 
     async loadSession(name) {
-        this.setState({sessionCallsLoading: true});
+        this.setState({loading: true});
+        const positions = await db.sessions.fetchPositions(name);
         db.sessions.fetchCalls(name).then((sessionCalls) => {
             sessionCalls.forEach(((call) => {
+                call.position = positions.find((iterator) => iterator.name === call.name).position;
                 call.disabled = false;
                 call.timestamp = Date.now();
             }));
-            this.setState({ sessionCalls: sessionCalls, activeSession: name, sessionCallsLoading: false });
+            this.setState({ sessionCalls: sessionCalls, activeSession: name, loading: false });
         });
     }
 
     async loadSessionNames() {
+        this.setState({loading: true});
         db.sessions.fetchPlanNames().then((planNames) => {
-            this.setState({ planNames });
+            this.setState({ planNames, loading: false });
         });
     }
 
@@ -100,7 +103,7 @@ class RunSessionView extends React.Component {
                         id="runList" 
                         columns={4} 
                         calls={this.state.sessionCalls} 
-                        loading={this.state.sessionCallsLoading}
+                        loading={this.state.loading}
                         sort={this.state.sort} 
                         placeholderContent={placeholderContent}
                         onClick={(name) => this.toggleCall(name)} 

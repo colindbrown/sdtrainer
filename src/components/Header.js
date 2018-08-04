@@ -59,7 +59,7 @@ const Header = ({activeClub, activeUser, signOut, resetClub}) => (
         </ul>
         }
         <div className="nav-item dropdown">
-            <a className={`nav-item nav-link dropdown-toggle text-info`} href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+            <a className={`nav-item nav-link dropdown-toggle text-info`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{activeUser.displayName.split(" ")[0]}</a>
             <div className="dropdown-menu dropdown-menu-right">
             <button className="dropdown-item" onClick={() => signOut()}>Sign Out</button>
             </div>
