@@ -43,6 +43,7 @@ class App extends Component {
 
   signOut = () => {
     firebase.auth().signOut();
+    this.resetClub();
   }
 
 

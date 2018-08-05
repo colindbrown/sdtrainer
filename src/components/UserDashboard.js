@@ -25,6 +25,7 @@ class UserDashboard extends React.Component {
     }
 
     loadClubs = async () => {
+        this.setState({clubsLoading: true})
         const clubs = await db.clubs.fetchAll();
         this.setState({ clubs, clubsLoading: false });
     }
@@ -90,6 +91,7 @@ class UserDashboard extends React.Component {
             clubCards.push(<AddClubCard 
                 key="addClubCard" 
                 updateActiveClub={(name) => this.props.updateActiveClub(name)}
+                loadClubs={() => this.loadClubs()}
                 showAlert={(type,text) => this.showAlert(type, text)} 
                 clearAlerts={() => this.clearAlerts()}
             />);

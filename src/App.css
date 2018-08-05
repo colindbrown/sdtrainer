@@ -140,7 +140,7 @@ span.empty {
 .card-container {
   position: relative;
   margin-top: 0;
-  height: 400px;
+  height: 575px;
   overflow-y: scroll;
   border: 1px solid #ccc;
   border-top: 0 solid transparent;
@@ -177,7 +177,7 @@ hr {
   margin: auto; }
 
 .full-page {
-  height: 90vh;
+  height: calc(100vh - 55px);
   box-sizing: border-box; }
 
 .modal-form {
@@ -330,3 +330,23 @@ hr {
   top: 50px;
   width: 100%;
   z-index: 2; }
+
+body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 55px;
+  min-height: 100%; }
+
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 55px;
+  text-align: center; }
+  .footer hr {
+    margin-top: 15px;
+    margin-bottom: 10px; }
+  .footer p {
+    margin-bottom: 10px; }
