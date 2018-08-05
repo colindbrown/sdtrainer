@@ -324,3 +324,9 @@ hr {
 .input-group-addon:hover {
   border: 1px solid #999 !important;
   background-color: #e9ecef; }
+
+.alerts-bar {
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  z-index: 2; }

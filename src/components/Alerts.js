@@ -14,7 +14,7 @@ class Alerts extends React.Component {
             </div>
         );
         return (
-            <div>
+            <div className="alerts-bar">
                 {alerts}
             </div>
         )
