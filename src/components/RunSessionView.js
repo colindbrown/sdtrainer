@@ -88,7 +88,7 @@ class RunSessionView extends React.Component {
             placeholderContent={title: "Run a Session", text: "You don't have any session plans to run at the moment.", rel: "/create", destination: "Plan a Session"};
         }
         return (
-            <div>
+            <div className="navbar-offset">
                 <RunFunctionBar
                     planNames={this.state.planNames}
                     activeSession={this.state.activeSession}

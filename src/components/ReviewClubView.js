@@ -141,7 +141,7 @@ class ReviewClubView extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="navbar-offset">
                 <Modal data={this.state.modalData}/>
                 <ReviewFunctionBar
                     sessionNames={this.state.sessionNames}

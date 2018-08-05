@@ -76,7 +76,7 @@ class ClubDashboard extends React.Component {
         }
         const percentTaught = 100*activeClub.taught/db.calls.count;
         return (
-            <div className="container below-navbar">
+            <div className="container navbar-extra-offset">
                 <section className="jumbotron text-center club-jumbotron">
                     <div className="container">
                         <h1 className="jumbotron-heading">{activeClub.name}</h1>

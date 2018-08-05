@@ -23,7 +23,11 @@
     transform: rotate(360deg); } }
 
 .main-bar {
-  background: #373842; }
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #373842;
+  height: 55px; }
 
 span.empty {
   opacity: 0; }
@@ -158,8 +162,11 @@ span.empty {
 .club-card-button {
   margin-top: 10px; }
 
-.below-navbar {
-  margin-top: 20px; }
+.navbar-extra-offset {
+  margin-top: 75px; }
+
+.navbar-offset {
+  padding-top: 55px; }
 
 hr {
   margin: 20px; }

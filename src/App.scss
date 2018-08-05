@@ -43,7 +43,11 @@ $white: #fff;
 }
 
 .main-bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
   background: $midnight;
+  height: 55px;
 }
 
 span.empty {
@@ -199,8 +203,12 @@ span.empty {
   margin-top: 10px;
 }
 
-.below-navbar {
-  margin-top: 20px;
+.navbar-extra-offset {
+  margin-top: 75px;
+}
+
+.navbar-offset {
+  padding-top: 55px;
 }
 
 hr {
