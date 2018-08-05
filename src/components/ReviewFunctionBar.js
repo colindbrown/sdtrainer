@@ -4,7 +4,7 @@ import Dropdown from "./Dropdown";
 class ReviewFunctionBar extends React.Component {
 
     render() {
-        const filterListItems = [
+        const filterDropdownItems = [
             { text: "Used", onClick: () => this.props.selectFilter("Used", "") },
             { text: "Unused", onClick: () => this.props.selectFilter("Unused", "") },
             { text: "New", onClick: () => this.props.selectFilter("New", "") },
@@ -12,8 +12,8 @@ class ReviewFunctionBar extends React.Component {
             { text: "Plus", onClick: () => this.props.selectFilter("Plus", "") }
         ]
 
-        const sessionListItems = this.props.sessionNames.map((name) => ({ text: name, onClick: () => this.props.selectFilter("session", name) }));
-        const groupListItems = [...Array(7).keys()].map((number) => ({ text: `Group ${number}`, onClick: () => this.props.selectFilter("group", number) }));
+        const sessionDropdownItems = this.props.sessionNames.map((name) => ({ text: name, onClick: () => this.props.selectFilter("session", name) }));
+        const groupDropdownItems = [...Array(7).keys()].map((number) => ({ text: `Group ${number}`, onClick: () => this.props.selectFilter("group", number) }));
 
         const sortOptions = [
             { text: "Alphabetical", onClick: () => this.props.changeSort("") },
@@ -28,9 +28,9 @@ class ReviewFunctionBar extends React.Component {
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
-                    <Dropdown label={"Filter"} items={filterListItems} type="secondary" active={filter.type === "filter"} activeLabel={filter.name}/>
-                    <Dropdown label={"Sessions"} items={sessionListItems} type="secondary" active={filter.type === "session"} activeLabel={filter.name}/>
-                    <Dropdown label={"Groups"} items={groupListItems} type="secondary" active={filter.type === "group"} activeLabel={filter.name}/>
+                    <Dropdown label={"Filter"} items={filterDropdownItems} type="secondary" active={filter.type === "filter"} activeLabel={filter.name}/>
+                    <Dropdown label={"Sessions"} items={sessionDropdownItems} type="secondary" active={filter.type === "session"} activeLabel={filter.name}/>
+                    <Dropdown label={"Groups"} items={groupDropdownItems} type="secondary" active={filter.type === "group"} activeLabel={filter.name}/>
                     <Dropdown label="Sort by" items={sortOptions} type="secondary"/>
                     <button className="btn btn-secondary" disabled={!filter.name} onClick={this.props.resetFilters}>Reset filters</button>
                 </div>

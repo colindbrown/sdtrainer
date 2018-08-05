@@ -4,7 +4,7 @@ import Dropdown from "./Dropdown";
 class RunFunctionBar extends React.Component {
 
     render() {
-        const planListItems = this.props.planNames.map((name) => ({ text: name, onClick: () => this.props.selectActiveSession(name) }));
+        const planDropdownItems = this.props.planNames.map((name) => ({ text: name, onClick: () => this.props.selectActiveSession(name) }));
 
         const sortOptions = [
             { text: "User Order", onClick: () => this.props.changeSort("userPosition") },
@@ -19,7 +19,7 @@ class RunFunctionBar extends React.Component {
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
-                    <Dropdown label={"Select session plan"} items={planListItems} type="info" active={this.props.activeSession} activeLabel={this.props.activeSession}/>
+                    <Dropdown label={"Select session plan"} items={planDropdownItems} type="info" active={this.props.activeSession} activeLabel={this.props.activeSession}/>
                     <Dropdown label="Sort by" items={sortOptions} type="secondary"/>
                 </div>
                 <button className="btn btn-info" disabled={!this.props.activeSession} onClick={this.props.finishSession}>Finish running session</button>

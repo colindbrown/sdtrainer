@@ -30,12 +30,10 @@ class CreateFunctionBar extends React.Component {
     handleReset = (e) => {
         e.preventDefault();
         this.props.removeAll();
-        //this.setState({ filterString: "" });
         this.props.updateFilterString("");
     }
 
     handleFilterChange = (e) => {
-        //this.setState({ filterString: e.target.value });
         this.props.updateFilterString(e.target.value);
     }
 
@@ -54,8 +52,8 @@ class CreateFunctionBar extends React.Component {
       }
 
     render() {
-        const sessionListItems = this.props.sessionNames.map((name) => ({ text: name, onClick: () => this.props.addSession(name) }));
-        const templateListItems = this.props.templateNames.map((name) => ({ text: name, onClick: () => this.props.addTemplate(name) }));
+        const sessionDropdownItems = this.props.sessionNames.map((name) => ({ text: name, onClick: () => this.props.addSession(name) }));
+        const templateDropdownItems = this.props.templateNames.map((name) => ({ text: name, onClick: () => this.props.addTemplate(name) }));
 
         const sortOptions = [
             { text: "Alphabetical", onClick: () => this.props.changeSort("") },
@@ -65,7 +63,7 @@ class CreateFunctionBar extends React.Component {
             { text: "Group", onClick: () => this.props.changeSort("group") }
         ];
 
-        const saveListItems = [
+        const saveAsDropdownItems = [
             {text: "Session Plan", onClick: () => this.handleSubmit("session"), disabled: !this.props.activeClub},
             {text: "Template", onClick: () => this.handleSubmit("template")}
         ]
@@ -79,14 +77,14 @@ class CreateFunctionBar extends React.Component {
                         <button class="input-group-addon btn" onClick={this.handleFilterReset}>x</button>
                     </div>
                     <button className={`btn btn-secondary mr-2`} disabled={!this.props.activeClub} onClick={this.props.addAllUsed}>Add all used calls</button>
-                    <Dropdown label="Add template" items={templateListItems} type="secondary"/>
-                    <Dropdown label="Add session" items={sessionListItems} type="secondary" disabled={!this.props.activeClub}/>
+                    <Dropdown label="Add template" items={templateDropdownItems} type="secondary"/>
+                    <Dropdown label="Add session" items={sessionDropdownItems} type="secondary"/>
                     <Dropdown label="Sort by" items={sortOptions} type="secondary"/>
                     <button className="btn btn-secondary" href="#" onClick={this.handleReset}>Reset</button>
                 </div>
                 <form className="form-inline">
                     <input className="form-control mr-sm-2" placeholder="Name" value={this.state.newCollectionName} onChange={this.handleChange} />
-                    <Dropdown label="Save as" items={saveListItems} type="info" />
+                    <Dropdown label="Save as" items={saveAsDropdownItems} type="info" />
                 </form>
 
             </nav>
