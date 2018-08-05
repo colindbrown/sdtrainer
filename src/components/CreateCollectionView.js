@@ -1,6 +1,6 @@
 import React from "react";
 import List from "./List";
-import Alerts from "./Alerts";
+import {AlertsContext} from "./Alerts";
 import { db } from "../util/dbfunctions";
 import CreateFunctionBar from "./CreateFunctionBar";
 
@@ -11,7 +11,6 @@ class CreateCollectionView extends React.Component {
         callsLoading: false,
         collectionList: [],
         collectionCallsLoading: false,
-        alerts: [],
         sessionNames: [],
         templateNames: [],
         sort: "",
@@ -26,6 +25,7 @@ class CreateCollectionView extends React.Component {
         if (this.props.activeClub.name) {
             this.loadSessionNames();
         }
+        console.log(this.props.functions)
     }
 
     // Async methods
@@ -70,17 +70,17 @@ class CreateCollectionView extends React.Component {
 
     async saveNewSession(name) {
         if (!name) {
-            this.showAlert("alert-warning", "Please name your session");
+            this.props.functions.showAlert("alert-warning", "Please name your session");
         } else if (this.state.collectionList.length === 0) {
-            this.showAlert("alert-warning", "Please add some calls to your session");
+            this.props.functions.showAlert("alert-warning", "Please add some calls to your session");
         } else {
             const sessionExists = await db.sessions.check(name);
             if (sessionExists) {
-                this.showAlert("alert-warning", "A session with that name already exists");
+                this.props.functions.showAlert("alert-warning", "A session with that name already exists");
             } else {
                 const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
                 await db.sessions.create(name, sessionCalls);
-                this.showAlert("alert-success", "Session saved");
+                this.props.functions.showAlert("alert-success", "Session saved");
                 this.removeAll();
                 this.loadSessionNames();
                 return true;
@@ -91,17 +91,17 @@ class CreateCollectionView extends React.Component {
 
     async saveNewTemplate(name) {
         if (!name) {
-            this.showAlert("alert-warning", "Please name your template");
+            this.props.functions.showAlert("alert-warning", "Please name your template");
         } else if (this.state.collectionList.length === 0) {
-            this.showAlert("alert-warning", "Please add some calls to your template");
+            this.props.functions.showAlert("alert-warning", "Please add some calls to your template");
         } else {
             const templateExists = await db.templates.check(name);
             if (templateExists) {
-                this.showAlert("alert-warning", "A template with that name already exists");
+                this.props.functions.showAlert("alert-warning", "A template with that name already exists");
             } else {
                 const templateCalls = this.state.collectionList.map((call) => ({ name: call.name }));
                 await db.templates.create(name, templateCalls);
-                this.showAlert("alert-success", "Template saved");
+                this.props.functions.showAlert("alert-success", "Template saved");
                 this.removeAll();
                 this.loadTemplateNames();
                 return true;
@@ -128,15 +128,6 @@ class CreateCollectionView extends React.Component {
             }
         }
         this.setState({ callList, collectionList });
-    }
-
-    showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
-    }
-
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
     }
 
     // Props methods
@@ -195,7 +186,6 @@ class CreateCollectionView extends React.Component {
                     updateFilterString={(string) => this.updateFilterString(string)}
                     filterEnter={() => this.filterEnter()}
                 />
-                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
                     <List
                         size="col-md-6"
@@ -225,5 +215,8 @@ class CreateCollectionView extends React.Component {
     }
 
 }
-
-export default CreateCollectionView;
+export default props => (
+    <AlertsContext.Consumer>
+      {functions => <CreateCollectionView {...props} functions={functions}/>}
+    </AlertsContext.Consumer>
+  );

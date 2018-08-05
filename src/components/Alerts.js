@@ -21,4 +21,10 @@ class Alerts extends React.Component {
     }
 }
 
+const AlertsContext = React.createContext({
+    showAlert: (type, text) => console.log(`${type} alert: ${text}`),
+    clearAlerts: () => console.log("clear alerts")
+});
+
+export {AlertsContext};
 export default Alerts;
