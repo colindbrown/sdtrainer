@@ -1,6 +1,6 @@
 import React from "react";
 import List from "./List";
-import Alerts from "./Alerts";
+import { AlertsContext } from "./Alerts";
 import { db } from "../util/dbfunctions";
 import RunFunctionBar from "./RunFunctionBar";
 
@@ -9,7 +9,6 @@ class RunSessionView extends React.Component {
     state = {
         sessionCalls: [],
         sessionCallsLoading: false,
-        alerts: [],
         planNames: [],
         activeSession: "",
         sort: "userPosition"
@@ -44,7 +43,7 @@ class RunSessionView extends React.Component {
         const historyUpdate = this.state.sessionCalls.map((call) => ({ name: call.name, everUsed: call.disabled, uses: [call.timestamp] }));
         db.history.update(this.state.activeSession, historyUpdate);
         this.setState({ activeSession: "", sessionCalls: [] });
-        this.showAlert("alert-success", "Session saved");
+        this.props.showAlert("alert-success", "Session finished");
     }
 
     toggleCall(name) {
@@ -57,15 +56,6 @@ class RunSessionView extends React.Component {
             sessionCalls[index] = call;
             this.setState({ sessionCalls });
         }
-    }
-
-    showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
-    }
-
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
     }
 
     selectActiveSession = (name) => {
@@ -93,7 +83,6 @@ class RunSessionView extends React.Component {
                     changeSort={(sort) => this.changeSort(sort)}
                     finishSession={(e) => this.finishSession(e)}
                 />
-                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
                     <List 
                         size="col-md-12" 
@@ -112,4 +101,8 @@ class RunSessionView extends React.Component {
 
 }
 
-export default RunSessionView;
+export default props => (
+    <AlertsContext.Consumer>
+      {functions => <RunSessionView {...props} showAlert={functions.showAlert}/>}
+    </AlertsContext.Consumer>
+  );

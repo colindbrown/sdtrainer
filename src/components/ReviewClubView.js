@@ -3,12 +3,10 @@ import ReviewFunctionBar from "./ReviewFunctionBar";
 import { db } from "../util/dbfunctions";
 import List from "./List";
 import Modal from "./Modal";
-import Alerts from "./Alerts";
 
 class ReviewClubView extends React.Component {
 
     state = {
-        alerts: [],
         selectedCalls: [],
         selectedCallsLoading: false,
         sessionNames: [],
@@ -60,15 +58,6 @@ class ReviewClubView extends React.Component {
             }
             this.setState({modalData: {title: call.name, body: body}})
         })
-    }
-
-    showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
-    }
-
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
     }
 
     resetFilters() {
@@ -151,7 +140,6 @@ class ReviewClubView extends React.Component {
                     resetFilters={() => this.resetFilters()}
                     changeSort={(sort) => this.changeSort(sort)}
                 />
-                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row">
                     <List 
                         size="col-md-12" 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { db } from "../util/dbfunctions";
-import {AlertsContext} from "./Alerts";
+import { AlertsContext } from "./Alerts";
 import Loader from "./Loader";
 import { NavLink } from "react-router-dom";
 import ConfirmModal from "./ConfirmModal";
@@ -30,7 +30,7 @@ class ClubDashboard extends React.Component {
         this.setState({loadingSessionPlans: true});
         db.sessions.delete(name).then(() => {
             this.loadSessions().then(() => {
-                this.props.functions.showAlert("alert-success", "Session deleted");
+                this.props.showAlert("alert-success", "Session deleted");
             })
         });
     }
@@ -109,6 +109,6 @@ class ClubDashboard extends React.Component {
 
 export default props => (
     <AlertsContext.Consumer>
-      {functions => <ClubDashboard {...props} functions={functions}/>}
+      {functions => <ClubDashboard {...props} showAlert={functions.showAlert}/>}
     </AlertsContext.Consumer>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import List from "./List";
-import {AlertsContext} from "./Alerts";
+import { AlertsContext } from "./Alerts";
 import { db } from "../util/dbfunctions";
 import CreateFunctionBar from "./CreateFunctionBar";
 
@@ -70,17 +70,17 @@ class CreateCollectionView extends React.Component {
 
     async saveNewSession(name) {
         if (!name) {
-            this.props.functions.showAlert("alert-warning", "Please name your session");
+            this.props.showAlert("alert-warning", "Please name your session");
         } else if (this.state.collectionList.length === 0) {
-            this.props.functions.showAlert("alert-warning", "Please add some calls to your session");
+            this.props.showAlert("alert-warning", "Please add some calls to your session");
         } else {
             const sessionExists = await db.sessions.check(name);
             if (sessionExists) {
-                this.props.functions.showAlert("alert-warning", "A session with that name already exists");
+                this.props.showAlert("alert-warning", "A session with that name already exists");
             } else {
                 const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
                 await db.sessions.create(name, sessionCalls);
-                this.props.functions.showAlert("alert-success", "Session saved");
+                this.props.showAlert("alert-success", "Session saved");
                 this.removeAll();
                 this.loadSessionNames();
                 return true;
@@ -91,17 +91,17 @@ class CreateCollectionView extends React.Component {
 
     async saveNewTemplate(name) {
         if (!name) {
-            this.props.functions.showAlert("alert-warning", "Please name your template");
+            this.props.showAlert("alert-warning", "Please name your template");
         } else if (this.state.collectionList.length === 0) {
-            this.props.functions.showAlert("alert-warning", "Please add some calls to your template");
+            this.props.showAlert("alert-warning", "Please add some calls to your template");
         } else {
             const templateExists = await db.templates.check(name);
             if (templateExists) {
-                this.props.functions.showAlert("alert-warning", "A template with that name already exists");
+                this.props.showAlert("alert-warning", "A template with that name already exists");
             } else {
                 const templateCalls = this.state.collectionList.map((call) => ({ name: call.name }));
                 await db.templates.create(name, templateCalls);
-                this.props.functions.showAlert("alert-success", "Template saved");
+                this.props.showAlert("alert-success", "Template saved");
                 this.removeAll();
                 this.loadTemplateNames();
                 return true;
@@ -217,6 +217,6 @@ class CreateCollectionView extends React.Component {
 }
 export default props => (
     <AlertsContext.Consumer>
-      {functions => <CreateCollectionView {...props} functions={functions}/>}
+      {functions => <CreateCollectionView {...props} showAlert={functions.showAlert}/>}
     </AlertsContext.Consumer>
   );
