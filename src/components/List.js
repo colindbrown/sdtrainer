@@ -2,6 +2,7 @@ import React from "react";
 import Call from "./Call";
 import Page from "./Page";
 import Placeholder from "./Placeholder";
+import { WindowContext } from "../App";
 
 class List extends React.Component {
 
@@ -126,4 +127,8 @@ class List extends React.Component {
 
 }
 
-export default List;
+export default props => (
+    <WindowContext.Consumer>
+      {window => <List {...props} windowWidth={window.width} windowHeight={window.height} />}
+    </WindowContext.Consumer>
+  );
