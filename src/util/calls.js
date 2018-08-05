@@ -25,9 +25,9 @@ const AllCalls = {
             "Grand square"
         ],
         2: [
-            "(…) trade",
-            "(…) run",
-            "(…) fold",
+            "Trade (Named)",
+            "Run (Named)",
+            "Fold (Named)",
             "California twirl",
             "Partner trade",
             "Star thru",
@@ -70,7 +70,7 @@ const AllCalls = {
             "Quarter tag",
             "Step to a wave",
             "Recycle",
-            "(…) circulate",
+            "Circulate (Named)",
             "Split circulate",
             "Spin the top",
             "Spin chain thru",

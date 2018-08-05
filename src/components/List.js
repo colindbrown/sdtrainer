@@ -32,7 +32,7 @@ class List extends React.Component {
 
     sortBy(a,b, attribute, subAttribute) {
         var reverse = false;
-        if (attribute === "name") {
+        if (attribute === "name" || attribute === "position") {
             reverse = true;
         }
 

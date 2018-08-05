@@ -313,3 +313,7 @@ hr {
 
 .tab-content {
   position: relative; }
+
+.input-group-addon:hover {
+  border: 1px solid #999 !important;
+  background-color: #e9ecef; }
