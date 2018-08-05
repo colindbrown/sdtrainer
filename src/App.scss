@@ -389,3 +389,10 @@ hr {
 .tab-content {
   position: relative;
 }
+
+.input-group-addon {
+  &:hover {
+    border: 1px solid $medium-grey !important;
+    background-color: $lighter-grey;
+  }
+}

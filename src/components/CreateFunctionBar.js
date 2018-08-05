@@ -48,6 +48,11 @@ class CreateFunctionBar extends React.Component {
         }
       }
 
+      handleFilterReset = () => {
+        window.$("#filterBar").val("");
+        this.props.updateFilterString("");
+      }
+
     render() {
         const sessionListItems = this.props.sessionNames.map((name) => ({ text: name, onClick: () => this.props.addSession(name) }));
         const templateListItems = this.props.templateNames.map((name) => ({ text: name, onClick: () => this.props.addTemplate(name) }));
@@ -69,7 +74,10 @@ class CreateFunctionBar extends React.Component {
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
-                    <input className="form-control mr-sm-2" placeholder="Filter Calls" onKeyDown={this.handleEnter} onChange={this.handleFilterChange} />
+                    <div className="input-group mr-2">
+                        <input className="form-control" id="filterBar" type="search" placeholder="Filter Calls" onKeyDown={this.handleEnter} onChange={this.handleFilterChange} ></input>
+                        <button class="input-group-addon btn" onClick={this.handleFilterReset}>x</button>
+                    </div>
                     <button className={`btn btn-secondary mr-2`} disabled={!this.props.activeClub} onClick={this.props.addAllUsed}>Add all used calls</button>
                     <Dropdown label="Add template" items={templateListItems} type="secondary"/>
                     <Dropdown label="Add session" items={sessionListItems} type="secondary" disabled={!this.props.activeClub}/>

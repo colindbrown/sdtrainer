@@ -68,6 +68,9 @@ class UserDashboard extends React.Component {
             case "template":
                 this.setState({modalFunction: () => this.deleteTemplate(name)});
                 break;
+            default: 
+                this.setState({modalFunction: undefined});
+                break;
         }
     }
 

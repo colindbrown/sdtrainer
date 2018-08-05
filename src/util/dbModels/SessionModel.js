@@ -75,12 +75,24 @@ class SessionModel {
     async fetchCalls(name) {
         const sessionRef = await this.fetchRef(name);
         const snapshot = await sessionRef.collection("Calls").get();
-        var sessionCalls = []
+        var sessionCalls = [];
         snapshot.forEach((doc) => {
             const call = doc.data();
             sessionCalls.push(call);
         });
         return await this.db.fetchDisplayData(sessionCalls);
+    }
+
+    // return an array of just the names and positions of the calls
+    async fetchPositions(name) {
+        const sessionRef = await this.fetchRef(name);
+        const snapshot = await sessionRef.collection("Calls").get();
+        var sessionCalls = [];
+        snapshot.forEach((doc) => {
+            const call = doc.data();
+            sessionCalls.push({name: call.name, position: call.position});
+        });
+        return await sessionCalls;
     }
 
     // return an array of all unfinished sessions
