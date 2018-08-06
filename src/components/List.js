@@ -73,7 +73,12 @@ class List extends React.Component {
     }
 
     render() {
-        const callSize = {height: 60, width: 280};
+        var callSize;
+        if (this.props.callSize === "large") {
+            callSize = {height: 60, width: 240};
+        } else {
+            callSize = {height: 50, width: 200};
+        }
         const navHeight = 179;
 
         const NUMCOLUMNS = this.props.columns;

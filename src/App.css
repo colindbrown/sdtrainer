@@ -83,7 +83,9 @@ span.empty {
     border-radius: 0rem 0rem .25rem 0rem; }
   .call span {
     position: absolute;
-    top: 15px; }
+    top: 50%;
+    -webkit-transform: translateY(-13px);
+    transform: translateY(-13px); }
 
 .call-empty {
   border: 1px solid #e9ecef;
