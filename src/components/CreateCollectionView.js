@@ -25,7 +25,6 @@ class CreateCollectionView extends React.Component {
         if (this.props.activeClub.name) {
             this.loadSessionNames();
         }
-        console.log(this.props.functions)
     }
 
     // Async methods

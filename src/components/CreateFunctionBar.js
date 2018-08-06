@@ -78,7 +78,7 @@ class CreateFunctionBar extends React.Component {
                 <div className="navbar-nav mr-auto ml-2">
                     <div className="input-group mr-2">
                         <input className="form-control" id="filterBar" type="search" placeholder="Filter Calls" onKeyDown={this.handleEnter} onChange={this.handleFilterChange} ></input>
-                        <button class="input-group-addon btn" onClick={this.handleFilterReset}>x</button>
+                        <button className="input-group-addon btn" onClick={this.handleFilterReset}>x</button>
                     </div>
                     {usedButton}
                     <div className="dropdown mr-2">

@@ -3,19 +3,15 @@ import React from "react";
 class Alerts extends React.Component {
 
     render() {
-        const alerts = this.props.alerts.map((alert) =>
+        const alert = this.props.alert;
+        return (
             <div className={`alert ${alert.type} m-2`} role="alert" key={alert.text}>
                 <span className="mr-auto">
                     {alert.text}
                 </span>
-                <button type="button" className="close" aria-label="Close" onClick={this.props.clearAlerts}>
+                <button type="button" className="close" aria-label="Close" onClick={this.props.clearAlert}>
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div>
-        );
-        return (
-            <div>
-                {alerts}
             </div>
         )
     }
@@ -23,7 +19,7 @@ class Alerts extends React.Component {
 
 const AlertsContext = React.createContext({
     showAlert: (type, text) => console.log(`${type} alert: ${text}`),
-    clearAlerts: () => console.log("clear alerts")
+    clearAlert: () => console.log("clear alert")
 });
 
 export {AlertsContext};
