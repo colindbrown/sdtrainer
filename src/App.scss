@@ -61,42 +61,43 @@ span.empty {
 .carousel-item {
   border: 1px solid darkgrey;
   border-radius: 5px;
-  z-index: 0;
+  z-index: 1;
 }
 
 .carousel {
+  padding: 0;
   margin-top: 30px;
 
   .carousel-inner {
+
     width: 80%;
     padding: 0px;
+    margin: 0;
   }
 }
 
 .carousel-control-prev, .carousel-control-next{
   width: 50px;
   height: 80%;
-  margin-bottom: auto;
   margin-top: auto;
-
+  margin-bottom: auto;
+  position: relative;
 }
 
 .carousel-control-prev {
-  left: 25px;
-
+  margin-right: 20px;
 }
 
 .carousel-control-next {
-  right: 25px;
+  margin-left: 20px;
 }
 
 .page {
   position: relative;
-  height: 780px;
+  z-index: 0;
 }
 
 .call {
-  height: 65px;
   box-sizing: border-box;
   color:  $dark-grey;
   font-family: 'Bree Serif';
@@ -118,7 +119,7 @@ span.empty {
 
   span {
     position: absolute;
-    top: 18px;
+    top: 15px;
   }
 
 }
@@ -380,7 +381,7 @@ hr {
 }
 
 .placeholder {
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -417,7 +418,7 @@ body {
   margin:0;
   padding:0;
   padding-bottom: 55px;
-  min-height: 100%;
+  min-height: 100vh;
 }
 
 .footer {

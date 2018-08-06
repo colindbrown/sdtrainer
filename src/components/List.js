@@ -73,8 +73,11 @@ class List extends React.Component {
     }
 
     render() {
+        const callSize = {height: 60, width: 280};
+        const navHeight = 179;
+
         const NUMCOLUMNS = this.props.columns;
-        const COLUMNSIZE = 12;
+        const COLUMNSIZE = Math.floor((this.props.windowHeight-navHeight)/callSize.height);
         const sort = this.getSort();
 
         const id = this.props.id || "listCarousel";
@@ -85,11 +88,15 @@ class List extends React.Component {
         var listItems = [];
         for (var i = 0; i < sortedCalls.length; i++) {
             const call = sortedCalls[i];
-            listItems.push(<Call {...call} key={call.name} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.handleClick(call.name)} />)
+            listItems.push(<Call {...call} key={call.name} 
+                callSize={callSize}
+                rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} 
+                onClick={() => this.handleClick(call.name)}
+            />);
         }
         while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
             const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
-            listItems.push(<Call empty={true} rounded={roundedCorners} group={0} key={`${id}, ${listItems.length}`} />)
+            listItems.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`${id}, ${listItems.length}`} />)
         }
 
         var pages = [];
@@ -99,8 +106,9 @@ class List extends React.Component {
                     key={j} 
                     active={j === 0 ? "active" : ""} 
                     loading={this.props.loading}
-                    columns={NUMCOLUMNS} columnSize={COLUMNSIZE} 
-                    calls={listItems.slice(j*(NUMCOLUMNS*COLUMNSIZE), (j+1)*(NUMCOLUMNS*COLUMNSIZE))} 
+                    columns={NUMCOLUMNS} columnSize={COLUMNSIZE}
+                    callSize={callSize}
+                    calls={listItems.slice(j*(NUMCOLUMNS*COLUMNSIZE), (j+1)*(NUMCOLUMNS*COLUMNSIZE))}
                 />
             );
         }
@@ -108,15 +116,15 @@ class List extends React.Component {
 
         return (
 
-            <div id={id} className={`carousel slide ${this.props.size}`} data-wrap="false" data-interval="false">
-                <div className="carousel-inner container">
-                    {placeholder || ""}
-                    {pages}
-                </div>
+            <div id={id} className={`carousel slide ${this.props.size} d-flex justify-content-center`} data-wrap="false" data-interval="false">
                 <a className="carousel-control-prev btn btn-secondary" href={`#${id}`} role="button" data-slide="prev">
                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span className="sr-only">Previous</span>
                 </a>
+                <div className="carousel-inner container" style={{width: `${NUMCOLUMNS*callSize.width + 2}px`}}>
+                    {placeholder || ""}
+                    {pages}
+                </div>
                 <a className="btn btn-secondary carousel-control-next" href={`#${id}`} role="button" data-slide="next">
                     <span className="carousel-control-next-icon" aria-hidden="true"></span>
                     <span className="sr-only">Next</span>
