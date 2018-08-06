@@ -10,19 +10,10 @@ class Dropdown extends React.Component {
             <button className="dropdown-item" disabled={item.disabled} key={item.text} onClick={item.onClick}>{item.text}</button>
         );
 
-        var active, label;
-        if (this.props.active) {
-            active = "active";
-            label = this.props.activeLabel;
-        } else {
-            active = "";
-            label = this.props.label;
-        }
-
         return (
             <div className="dropdown mr-2">
-                <button className={` btn btn-${this.props.type} dropdown-toggle ${active}`} disabled={disabled} data-toggle="dropdown">
-                    {label}
+                <button className={` btn btn-${this.props.type} dropdown-toggle`} disabled={disabled} data-toggle="dropdown">
+                    {this.props.label}
                 </button>
                 <div className="dropdown-menu">
                     {dropdownItems}

@@ -28,9 +28,9 @@ class ReviewFunctionBar extends React.Component {
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
-                    <Dropdown label={"Filter"} items={filterDropdownItems} type="secondary" active={filter.type === "filter"} activeLabel={filter.name}/>
-                    <Dropdown label={"Sessions"} items={sessionDropdownItems} type="secondary" active={filter.type === "session"} activeLabel={filter.name}/>
-                    <Dropdown label={"Groups"} items={groupDropdownItems} type="secondary" active={filter.type === "group"} activeLabel={filter.name}/>
+                    <Dropdown label={"Filter"} items={filterDropdownItems} type="secondary" />
+                    <Dropdown label={"Sessions"} items={sessionDropdownItems} type="secondary" />
+                    <Dropdown label={"Groups"} items={groupDropdownItems} type="secondary" />
                     <Dropdown label="Sort by" items={sortOptions} type="secondary"/>
                     <button className="btn btn-secondary" disabled={!filter.name} onClick={this.props.resetFilters}>Reset filters</button>
                 </div>
