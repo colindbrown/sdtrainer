@@ -356,3 +356,7 @@ body {
     margin-bottom: 10px; }
   .footer p {
     margin-bottom: 10px; }
+
+.save-as-name {
+  width: 200px !important;
+  font-size: 16px; }
