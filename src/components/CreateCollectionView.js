@@ -196,9 +196,9 @@ class CreateCollectionView extends React.Component {
                     filterEnter={() => this.filterEnter()}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
-                <div className="row">
+                <div className="row no-gutters">
                     <List
-                        size="col-md-6"
+                        size="half"
                         id="callList"
                         columns={2}
                         calls={this.state.callList}
@@ -209,7 +209,7 @@ class CreateCollectionView extends React.Component {
                         returnSingle={(call) => this.returnSingle(call)}
                     />
                     <List
-                        size="col-md-6"
+                        size="half"
                         id="collectionList"
                         columns={2}
                         calls={this.state.collectionList}

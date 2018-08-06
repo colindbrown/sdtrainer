@@ -56,10 +56,12 @@ span.empty {
   position: relative; }
 
 .carousel-control-prev {
-  margin-right: 20px; }
+  margin-right: 15px;
+  margin-left: 5px; }
 
 .carousel-control-next {
-  margin-left: 20px; }
+  margin-right: 5px;
+  margin-left: 15px; }
 
 .page {
   position: relative;

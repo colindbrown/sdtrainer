@@ -75,14 +75,23 @@ class List extends React.Component {
     render() {
         var callSize;
         if (this.props.callSize === "large") {
-            callSize = {height: 60, width: 240};
+            callSize = {height: 60, width: 260};
         } else {
-            callSize = {height: 50, width: 200};
+            callSize = {height: 50, width: 220};
         }
-        const navHeight = 179;
 
-        const NUMCOLUMNS = this.props.columns;
-        const COLUMNSIZE = Math.floor((this.props.windowHeight-navHeight)/callSize.height);
+        const navHeight = 179;
+        var availableWidth, flexWidth;
+        if (this.props.size === "half") {
+            availableWidth = Math.min(this.props.windowWidth/2, 1200);
+            flexWidth = "col-md-6";
+        } else {
+            availableWidth = Math.min(this.props.windowWidth, 1300);
+            flexWidth = "col-md-12";
+        }
+
+        const NUMCOLUMNS = Math.floor((availableWidth-140)/callSize.width) || 1;
+        const COLUMNSIZE = Math.floor((this.props.windowHeight-navHeight)/callSize.height) || 1;
         const sort = this.getSort();
 
         const id = this.props.id || "listCarousel";
@@ -121,7 +130,7 @@ class List extends React.Component {
 
         return (
 
-            <div id={id} className={`carousel slide ${this.props.size} d-flex justify-content-center`} data-wrap="false" data-interval="false">
+            <div id={id} className={`carousel slide ${flexWidth} d-flex justify-content-center`} data-wrap="false" data-interval="false">
                 <a className="carousel-control-prev btn btn-secondary" href={`#${id}`} role="button" data-slide="prev">
                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span className="sr-only">Previous</span>

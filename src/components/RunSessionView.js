@@ -97,9 +97,8 @@ class RunSessionView extends React.Component {
                     finishSession={(e) => this.finishSession(e)}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
-                <div className="row">
-                    <List 
-                        size="col-md-12"
+                <div className="row no-gutters">
+                    <List
                         callSize="large"
                         id="runList" 
                         columns={4} 

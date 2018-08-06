@@ -152,9 +152,8 @@ class ReviewClubView extends React.Component {
                     changeSort={(sort) => this.changeSort(sort)}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
-                <div className="row">
-                    <List 
-                        size="col-md-12" 
+                <div className="row no-gutters">
+                    <List
                         id="reviewList" 
                         columns={4} 
                         calls={this.state.selectedCalls} 
