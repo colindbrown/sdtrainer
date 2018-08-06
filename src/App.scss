@@ -54,6 +54,11 @@ span.empty {
   opacity: 0;
 }
 
+.list-header {
+  margin: 10px 0 5px 0;
+  height: 30px;
+}
+
 .carousel-item ul {
   margin: 0;
 }
@@ -65,11 +70,10 @@ span.empty {
 }
 
 .carousel {
+  position: relative;
   padding: 0;
-  margin-top: 30px;
 
   .carousel-inner {
-
     width: 80%;
     padding: 0px;
     margin: 0;
@@ -78,7 +82,7 @@ span.empty {
 
 .carousel-control-prev, .carousel-control-next{
   width: 50px;
-  height: 80%;
+  height: calc(100vh - 300px);
   margin-top: auto;
   margin-bottom: auto;
   position: relative;
@@ -421,7 +425,7 @@ body {
   position: relative;
   margin:0;
   padding:0;
-  padding-bottom: 55px;
+  padding-bottom: 60px;
   min-height: 100vh;
 }
 
@@ -430,7 +434,7 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  height: 55px;
+  height: 60px;
   text-align: center;
 
   & hr {

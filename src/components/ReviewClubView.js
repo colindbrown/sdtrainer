@@ -72,7 +72,7 @@ class ReviewClubView extends React.Component {
     }
 
     resetFilters() {
-        this.setState({ activeFilter: {}});
+        this.setState({ activeFilter: {}, sort: ""});
         this.loadAllCalls();
     }
 
@@ -114,7 +114,7 @@ class ReviewClubView extends React.Component {
         case "group":
             this.setState({ selectedCallsLoading: true });
             db.calls.fetchByGroup(name).then((calls) => {
-                this.setState({ selectedCalls: calls, selectedCallsLoading: false, activeFilter: {type: "group", name: "Group " + name} });
+                this.setState({ selectedCalls: calls, selectedCallsLoading: false, activeFilter: {type: "group", name: "group " + name} });
             });
             break;
         default:
@@ -138,14 +138,51 @@ class ReviewClubView extends React.Component {
     changeSort(sort) {
         this.setState({sort});
     }
+    
+    getHeader() {
+        const {type, name} = this.state.activeFilter;
+        var header;
+        switch (type) {
+            case "filter":
+                header = "Viewing " + name + " calls";
+                break;
+            case "session":
+                header = "Viewing session " + name;
+                break;
+            case "group":
+                header = "Viewing " + name;
+                break;
+            default:
+                header = "Viewing all calls";
+                break;
+        }
+        switch (this.state.sort) {
+            case "lastUsed":
+                header += ", sorted by Last Used";
+                break;
+            case "numUses":
+                header += ", sorted by Most Used";
+                break;
+            case "group":
+                header += ", sorted by Group";
+                break;
+            case "plus/basic":
+                header += ", sorted by Plus/Basic";
+                break;
+            default:
+                break;
+        }
+        return header;
+    }
 
     render() {
+        const listHeader = this.getHeader();
         return (
             <div className="navbar-offset">
                 <Modal data={this.state.modalData}/>
                 <ReviewFunctionBar
-                    sessionNames={this.state.sessionNames}
                     activeFilter={this.state.activeFilter}
+                    sessionNames={this.state.sessionNames}
                     selectFilter={(type, name) => this.selectFilter(type, name)}
                     exportSelection={() => {this.exportSelection()}}
                     resetFilters={() => this.resetFilters()}
@@ -154,8 +191,8 @@ class ReviewClubView extends React.Component {
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <div className="row no-gutters">
                     <List
-                        id="reviewList" 
-                        columns={4} 
+                        id="reviewList"
+                        header={listHeader}
                         calls={this.state.selectedCalls} 
                         loading={this.state.selectedCallsLoading}
                         sort={this.state.sort} 

@@ -87,6 +87,7 @@ class RunSessionView extends React.Component {
         } else {
             placeholderContent={title: "Run a Session", text: "You don't have any session plans to run at the moment.", rel: "/create", destination: "Plan a Session"};
         }
+        const listHeader = this.state.activeSession ? "Running session: " + this.state.activeSession : "";
         return (
             <div className="navbar-offset">
                 <RunFunctionBar
@@ -100,8 +101,8 @@ class RunSessionView extends React.Component {
                 <div className="row no-gutters">
                     <List
                         callSize="large"
-                        id="runList" 
-                        columns={4} 
+                        id="runList"
+                        header={listHeader}
                         calls={this.state.sessionCalls} 
                         loading={this.state.loading}
                         sort={this.state.sort} 

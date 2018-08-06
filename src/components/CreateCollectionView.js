@@ -200,7 +200,7 @@ class CreateCollectionView extends React.Component {
                     <List
                         size="half"
                         id="callList"
-                        columns={2}
+                        header="Available Calls"
                         calls={this.state.callList}
                         sort={this.state.sort}
                         loading={this.state.callsLoading}
@@ -211,7 +211,7 @@ class CreateCollectionView extends React.Component {
                     <List
                         size="half"
                         id="collectionList"
-                        columns={2}
+                        header="Selected Calls"
                         calls={this.state.collectionList}
                         sort={"arrayOrder"}
                         loading={this.state.collectionCallsLoading}

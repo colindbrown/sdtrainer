@@ -80,7 +80,7 @@ class List extends React.Component {
             callSize = {height: 50, width: 220};
         }
 
-        const navHeight = 179;
+        const navHeight = 215;
         var availableWidth, flexWidth;
         if (this.props.size === "half") {
             availableWidth = Math.min(this.props.windowWidth/2, 1200);
@@ -129,20 +129,22 @@ class List extends React.Component {
         const placeholder = !this.props.calls.length && this.props.placeholderContent && !this.props.loading? <Placeholder content={this.props.placeholderContent} /> : "";
 
         return (
-
-            <div id={id} className={`carousel slide ${flexWidth} d-flex justify-content-center`} data-wrap="false" data-interval="false">
-                <a className="carousel-control-prev btn btn-secondary" href={`#${id}`} role="button" data-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span className="sr-only">Previous</span>
-                </a>
-                <div className="carousel-inner container" style={{width: `${NUMCOLUMNS*callSize.width + 2}px`}}>
-                    {placeholder || ""}
-                    {pages}
+            <div className={`${flexWidth}`}>
+                <h4 className="list-header text-secondary">{this.props.header}</h4>
+                <div id={id} className={`carousel slide d-flex justify-content-center`} data-wrap="false" data-interval="false">
+                    <a className="carousel-control-prev btn btn-secondary" href={`#${id}`} role="button" data-slide="prev">
+                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span className="sr-only">Previous</span>
+                    </a>
+                    <div className="carousel-inner container" style={{width: `${NUMCOLUMNS*callSize.width + 2}px`}}>
+                        {placeholder || ""}
+                        {pages}
+                    </div>
+                    <a className="btn btn-secondary carousel-control-next" href={`#${id}`} role="button" data-slide="next">
+                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span className="sr-only">Next</span>
+                    </a>
                 </div>
-                <a className="btn btn-secondary carousel-control-next" href={`#${id}`} role="button" data-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span className="sr-only">Next</span>
-                </a>
             </div>
         )
     }
