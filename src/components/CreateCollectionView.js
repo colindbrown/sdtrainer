@@ -182,6 +182,14 @@ class CreateCollectionView extends React.Component {
         this.moveCall(name, destination);
     }
 
+    bookmarkCall() {
+
+    }
+
+    replaceCall() {
+
+    }
+
     render() {
         return (
             <div>

@@ -8,9 +8,16 @@ const ItemTypes = {
 
 const callSource = {
     beginDrag(props) {
-      return {
-          name: props.name
-      };
+        props.bookmarkCall(props.name);
+        return {
+            name: props.name,
+            position: props.position
+        };
+    },
+    endDrag(props, monitor) {
+        if (!monitor.didDrop()) {
+            props.replaceCall();
+        }
     }
   };
 
@@ -26,7 +33,7 @@ class DragCall extends React.Component {
     render() {
         return this.props.connectDragSource(
             <div>
-                <Call {...this.props} />
+                <Call {...this.props} empty={this.props.isDragging}/>
             </div>
         );
     }
