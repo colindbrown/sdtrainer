@@ -1,5 +1,5 @@
 import React from "react";
-import List from "./List";
+import DropList from "./DropList";
 import Alerts from "./Alerts";
 import { db } from "../util/dbfunctions";
 import CreateFunctionBar from "./CreateFunctionBar";
@@ -178,6 +178,10 @@ class CreateCollectionView extends React.Component {
         }
     }
 
+    addCallAt(name, index, destination) {
+        this.moveCall(name, destination);
+    }
+
     render() {
         return (
             <div>
@@ -196,8 +200,8 @@ class CreateCollectionView extends React.Component {
                     filterEnter={() => this.filterEnter()}
                 />
                 <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
-                <div className="row">
-                    <List
+                <div className="row no-gutters">
+                    <DropList
                         size="col-md-6"
                         id="callList"
                         columns={2}
@@ -205,10 +209,11 @@ class CreateCollectionView extends React.Component {
                         sort={this.state.sort}
                         loading={this.state.callsLoading}
                         onClick={(name) => this.moveCall(name, "collectionList")} 
+                        addCallAt={(name, index) => this.addCallAt(name, index, "callList")}
                         filter={this.state.filterString}
                         returnSingle={(call) => this.returnSingle(call)}
                     />
-                    <List
+                    <DropList
                         size="col-md-6"
                         id="collectionList"
                         columns={2}
@@ -218,6 +223,7 @@ class CreateCollectionView extends React.Component {
                         placeholderContent={{title: "Create a Collection", 
                             text: "Add calls to your collection using the function bar or the list to the left. Once you're done, save your collection as either a session plan or a template."}}
                         onClick={(name) => this.moveCall(name, "callList")} 
+                        addCallAt={(name, index) => this.addCallAt(name, index, "collectionList")}
                     />
                 </div>
             </div>

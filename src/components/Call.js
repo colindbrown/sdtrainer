@@ -1,24 +1,4 @@
 import React from "react";
-import { DragSource } from 'react-dnd';
-
-const ItemTypes = {
-    CALL: 'call'
-}
-
-const callSource = {
-    beginDrag(props) {
-      return {
-          name: props.name
-      };
-    }
-  };
-
-  function collect(connect, monitor) {
-    return {
-      connectDragSource: connect.dragSource(),
-      isDragging: monitor.isDragging()
-    }
-  }
 
 class Call extends React.Component {
 
@@ -34,7 +14,7 @@ class Call extends React.Component {
             styling = `btn-outline-light group-${this.props.group}`;
         }
         const name = this.props.category === "plus" ? this.props.name + " +" : this.props.name;
-        return this.props.connectDragSource(
+        return (
             <li 
             data-toggle="modal" 
             data-target={dataTarget} 
@@ -42,10 +22,9 @@ class Call extends React.Component {
             onClick={this.props.onClick}>
                 <span className={`${this.props.empty ? "empty" : ""}`}>{name}</span>
             </li>
-        );
+        )
     }
 
 }
 
-export default DragSource(ItemTypes.CALL, callSource, collect)(Call);
-export {ItemTypes};
+export default Call;
