@@ -10,6 +10,8 @@ import Loader from "./components/Loader";
 import ClubDashboard from "./components/ClubDashboard";
 import { db } from "./util/dbfunctions";
 import firebase from "firebase";
+import { DragDropContext } from  "react-dnd";
+import HTML5Backend from 'react-dnd-html5-backend';
 import './App.css';
 
 class App extends Component {
@@ -104,4 +106,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default DragDropContext(HTML5Backend)(App);
