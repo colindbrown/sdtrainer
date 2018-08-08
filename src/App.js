@@ -8,6 +8,7 @@ import RunSessionView from "./components/RunSessionView";
 import ReviewClubView from "./components/ReviewClubView";
 import Loader from "./components/Loader";
 import ClubDashboard from "./components/ClubDashboard";
+import Alerts, { AlertsContext } from "./components/Alerts";
 import { db } from "./util/dbfunctions";
 import firebase from "firebase";
 import './App.css';
@@ -21,7 +22,8 @@ class App extends Component {
     activeUser: "",
     loadingUser: true,
     windowWidth: 0,
-    windowHeight: 0
+    windowHeight: 0,
+    alert: []
   }
 
   componentDidMount() {
@@ -50,6 +52,10 @@ class App extends Component {
   signOut = () => {
     firebase.auth().signOut();
     this.resetClub();
+  }
+  
+  clearAlert = () => {
+    this.setState({ alert: [] });
   }
 
   updateWindowDimensions() {
@@ -112,7 +118,17 @@ class App extends Component {
         <WindowContext.Provider value={{width: this.state.windowWidth, height: this.state.windowHeight }} >
         <div className="App">
           <Header activeClub={this.state.activeClub} activeUser={this.state.activeUser} signOut={() => this.signOut()} resetClub={() => this.resetClub()}/>
+          {this.state.alert.text ? <Alerts alert={this.state.alert} clearAlert={() => this.clearAlert()} /> : ""}
+          <AlertsContext.Provider value={{ 
+            showAlert: (type, text) => {
+              const alert = { type: type, text: text };
+              this.setState({ alert });
+            },
+            clearAlert: () => {
+                this.setState({ alert: {} });
+            }}}>
           {routes}
+          </AlertsContext.Provider>
         </div>
         </WindowContext.Provider>
       </HashRouter>
