@@ -32,6 +32,7 @@ class App extends Component {
         this.setState({activeUser: "", loadingUser: false});
       }
     });
+    window.$('[data-toggle="tooltip"]').tooltip()
   }
 
   updateActiveClub = async (name) => {

@@ -317,3 +317,17 @@ hr {
 .input-group-addon:hover {
   border: 1px solid #999 !important;
   background-color: #e9ecef; }
+
+.text-silver {
+  color: #e9ecef; }
+
+.header-breadcrumbs {
+  margin-bottom: 0px;
+  background: #373842;
+  padding: 0px; }
+  .header-breadcrumbs .small-crumb {
+    padding-top: 9px;
+    padding-bottom: 6px; }
+
+.navbar-brand {
+  display: inline-flex; }
