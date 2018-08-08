@@ -23,16 +23,16 @@ class ReviewFunctionBar extends React.Component {
             { text: "Group", onClick: () => this.props.changeSort("group") }
         ];
 
-        const filter = this.props.activeFilter;
+        const filterType = this.props.activeFilter.type;
         return (
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
-                    <Dropdown label={"Filter"} items={filterDropdownItems} type="secondary" />
-                    <Dropdown label={"Sessions"} items={sessionDropdownItems} type="secondary" />
-                    <Dropdown label={"Groups"} items={groupDropdownItems} type="secondary" />
+                    <Dropdown label={"Filter"} items={filterDropdownItems} type="secondary" active={filterType === "filter"} />
+                    <Dropdown label={"Sessions"} items={sessionDropdownItems} type="secondary" active={filterType === "session"} />
+                    <Dropdown label={"Groups"} items={groupDropdownItems} type="secondary" active={filterType === "group"} />
                     <Dropdown label="Sort by" items={sortOptions} type="secondary"/>
-                    <button className="btn btn-secondary" disabled={!filter.name} onClick={this.props.resetFilters}>Reset filters</button>
+                    <button className="btn btn-secondary" disabled={!filterType} onClick={this.props.resetFilters}>Reset filters</button>
                 </div>
                 <button className={` btn btn-info`} data-toggle="modal" data-target="#exportModal" onClick={this.props.exportSelection} >Export current selection</button>
             </nav>
