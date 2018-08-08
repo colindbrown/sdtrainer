@@ -2,7 +2,7 @@ import React from 'react';
 import ClubCard from "./ClubCard";
 import { db } from "../util/dbfunctions";
 import AddClubCard from './AddClubCard';
-import Alerts from "./Alerts";
+import { AlertsContext } from "./Alerts";
 import ConfirmModal from "./ConfirmModal";
 import Loader from "./Loader";
 import Placeholder from './Placeholder';
@@ -14,7 +14,6 @@ class UserDashboard extends React.Component {
     state = {
         clubs: [],
         clubsLoading: true,
-        alerts: [],
         templates: [],
         templatesLoading: true
     }
@@ -38,7 +37,7 @@ class UserDashboard extends React.Component {
         this.setState({ templatesLoading: true });
         db.templates.delete(name).then(() => {
             this.loadTemplates().then(() => {
-                this.showAlert("alert-success", "Template deleted");
+                this.props.showAlert("alert-success", "Template deleted");
             })
         });
     }
@@ -46,18 +45,9 @@ class UserDashboard extends React.Component {
     deleteClub = async (name) => {
         db.clubs.delete(name).then(() => {
             this.loadClubs().then(() => {
-                this.showAlert("alert-success", "Club deleted");
+                this.props.showAlert("alert-success", "Club deleted");
             })
         });
-    }
-
-    showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
-    }
-
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
     }
 
     deleteItem = (type, name) => {
@@ -90,8 +80,7 @@ class UserDashboard extends React.Component {
             clubCards.push(<AddClubCard 
                 key="addClubCard" 
                 updateActiveClub={(name) => this.props.updateActiveClub(name)}
-                showAlert={(type,text) => this.showAlert(type, text)} 
-                clearAlerts={() => this.clearAlerts()}
+                showAlert={(type,text) => this.props.showAlert(type, text)}
             />);
         }
         var templateListItems;
@@ -117,7 +106,6 @@ class UserDashboard extends React.Component {
                         <NavLink className={`btn btn-info`} to={`/create`}>Create a Template</NavLink>
                     </div>
                 </section>
-                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <ConfirmModal onClick={this.state.modalFunction} />
                 <section>
                     <ul className="nav nav-tabs nav-fill row tabs-row" id="myTab" role="tablist">
@@ -147,4 +135,8 @@ class UserDashboard extends React.Component {
     
 }
 
-export default UserDashboard;
+export default props => (
+    <AlertsContext.Consumer>
+      {functions => <UserDashboard {...props} showAlert={functions.showAlert}/>}
+    </AlertsContext.Consumer>
+  );
