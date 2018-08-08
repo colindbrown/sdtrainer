@@ -1,41 +1,28 @@
 import React from "react";
+import Dropdown from "./Dropdown";
 
 class RunFunctionBar extends React.Component {
 
     render() {
-        const activeSession = this.props.activeSession || "Select session plan";
-        const planListItems = this.props.planNames.map((name) =>
-            <button className="dropdown-item" key={name} onClick={() => this.props.selectActiveSession(name)}>{name}</button>
-        );
-        const disableFunctions = (!this.props.activeSession) ? "disabled" : "";
+        const planDropdownItems = this.props.planNames.map((name) => ({ text: name, onClick: () => this.props.selectActiveSession(name) }));
 
+        const sortOptions = [
+            { text: "User Order", onClick: () => this.props.changeSort("userPosition") },
+            { text: "Alphabetical", onClick: () => this.props.changeSort("") },
+            { text: "Plus/Basic", onClick: () => this.props.changeSort("plus/basic") },
+            { text: "Most Used", onClick: () => this.props.changeSort("numUses") },
+            { text: "Last Used", onClick: () => this.props.changeSort("lastUsed") },
+            { text: "Group", onClick: () => this.props.changeSort("group") }
+        ];
+        
         return (
             <nav className="navbar navbar-light navbar-expand-sm bg-light">
 
                 <div className="navbar-nav mr-auto ml-2">
-                    <div className="dropdown mr-2">
-                        <button className={` btn btn-info dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {activeSession}
-                        </button>
-                        <div className="dropdown-menu">
-                            {planListItems}
-                        </div>
-                    </div>
-                    <div className="dropdown mr-2">
-                        <button className={` btn btn-secondary dropdown-toggle`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Sort by
-                        </button>
-                        <div className="dropdown-menu">
-                            <button className="dropdown-item" onClick={() => this.props.changeSort("userPosition")}>User Order</button>
-                            <button className="dropdown-item" onClick={() => this.props.changeSort("")}>Alphabetical</button>
-                            <button className="dropdown-item" onClick={() => this.props.changeSort("plus/basic")}>Plus/Basic</button>
-                            <button className="dropdown-item" onClick={() => this.props.changeSort("numUses")}>Most Used</button>
-                            <button className="dropdown-item" onClick={() => this.props.changeSort("lastUsed")}>Last Used</button>
-                            <button className="dropdown-item" onClick={() => this.props.changeSort("group")}>Group</button>
-                        </div>
-                    </div>
+                    <Dropdown label={"Select session plan"} items={planDropdownItems} active={this.props.activeSession} type="info"/>
+                    <Dropdown label="Sort by" items={sortOptions} type="secondary"/>
                 </div>
-                <button className={`${disableFunctions} btn btn-info`} onClick={this.props.finishSession}>Finish running session</button>
+                <button className="btn btn-info" disabled={!this.props.activeSession} onClick={this.props.finishSession}>Finish running session</button>
             </nav>
         )
     }
