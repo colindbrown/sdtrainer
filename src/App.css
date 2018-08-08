@@ -262,6 +262,8 @@ hr {
     border: 1px solid #e9ecef;
     border-right: 0 solid transparent;
     border-left: 0 solid transparent; }
+    .collections-list .list-group-item:first-child {
+      border-top: 0 solid transparent; }
     .collections-list .list-group-item div {
       margin-top: 4px; }
 
@@ -324,3 +326,7 @@ hr {
       border-top: 0 solid transparent; }
     .club-modal .modal-body .list-group-item:last-child {
       border-bottom: 0 solid transparent; }
+
+.input-group-addon:hover {
+  border: 1px solid #999 !important;
+  background-color: #e9ecef; }

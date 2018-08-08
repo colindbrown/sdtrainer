@@ -1,6 +1,6 @@
 import React from 'react';
 import { db } from "../util/dbfunctions";
-import Alerts from "./Alerts";
+import { AlertsContext } from "./Alerts";
 import Loader from "./Loader";
 import { NavLink } from "react-router-dom";
 import ConfirmModal from "./ConfirmModal";
@@ -10,7 +10,6 @@ import Placeholder from './Placeholder';
 class ClubDashboard extends React.Component {
 
     state = {
-        alerts: [],
         finishedSessions: [],
         loadingFinishedSessions: true,
         sessionPlans: [],
@@ -31,18 +30,9 @@ class ClubDashboard extends React.Component {
         this.setState({loadingSessionPlans: true});
         db.sessions.delete(name).then(() => {
             this.loadSessions().then(() => {
-                this.showAlert("alert-success", "Session deleted");
+                this.props.showAlert("alert-success", "Session deleted");
             })
         });
-    }
-
-    showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
-    }
-
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
     }
 
     deleteItem = (name) => {
@@ -99,7 +89,6 @@ class ClubDashboard extends React.Component {
                         <NavLink className={`btn btn-secondary`} to={`/`} onClick={() => this.props.resetClub()}>Select another Club</NavLink>
                     </div>
                 </section>
-                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <ConfirmModal type="delete" onClick={this.state.modalFunction} />
                 <section>
                     <ul className="nav nav-tabs nav-fill row tabs-row" id="myTab" role="tablist">
@@ -126,4 +115,8 @@ class ClubDashboard extends React.Component {
     
 }
 
-export default ClubDashboard;
+export default props => (
+    <AlertsContext.Consumer>
+      {functions => <ClubDashboard {...props} showAlert={functions.showAlert}/>}
+    </AlertsContext.Consumer>
+  );

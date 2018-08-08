@@ -324,6 +324,10 @@ hr {
     border-right: 0 solid transparent;
     border-left: 0 solid transparent;
 
+    &:first-child {
+      border-top: 0 solid transparent;
+    }
+
     div {
       margin-top: 4px;
     }
@@ -405,5 +409,12 @@ hr {
         border-bottom: 0 solid transparent;
       }
     }
+  }
+}
+
+.input-group-addon {
+  &:hover {
+    border: 1px solid $medium-grey !important;
+    background-color: $lighter-grey;
   }
 }

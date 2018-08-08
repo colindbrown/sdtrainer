@@ -1,7 +1,7 @@
 import React from "react";
 import List from "./List";
-import Alerts from "./Alerts";
 import ConfirmModal from "./ConfirmModal";
+import { AlertsContext } from "./Alerts";
 import { db } from "../util/dbfunctions";
 import CreateFunctionBar from "./CreateFunctionBar";
 
@@ -12,7 +12,6 @@ class CreateCollectionView extends React.Component {
         callsLoading: false,
         collectionList: [],
         collectionCallsLoading: false,
-        alerts: [],
         sessionNames: [],
         templateNames: [],
         sort: "",
@@ -88,19 +87,19 @@ class CreateCollectionView extends React.Component {
 
     async saveNewSession(name) {
         if (!name) {
-            this.showAlert("alert-warning", "Please name your session");
+            this.props.showAlert("alert-warning", "Please name your session");
         } else if (this.state.collectionList.length === 0) {
-            this.showAlert("alert-warning", "Please add some calls to your session");
+            this.props.showAlert("alert-warning", "Please add some calls to your session");
         } else {
             const {sessionExists, finished} = await db.sessions.check(name);
             if (sessionExists) {
                 if (finished) {
-                    this.showAlert("alert-warning", "You can't modify a finished session");
+                    this.props.showAlert("alert-warning", "You can't modify a finished session");
                 } else {
                     this.setState({ onConfirm: async () => {
                         const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
                         await db.sessions.edit(name, sessionCalls);
-                        this.showAlert("alert-success", "Session edited");
+                        this.props.showAlert("alert-success", "Session edited");
                         this.removeAll();
                         this.setState({initialCollectionName: ""});
                         }});
@@ -110,7 +109,7 @@ class CreateCollectionView extends React.Component {
             } else {
                 const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
                 await db.sessions.create(name, sessionCalls);
-                this.showAlert("alert-success", "Session saved");
+                this.props.showAlert("alert-success", "Session saved");
                 this.removeAll();
                 this.loadSessionNames();
                 return true;
@@ -121,16 +120,16 @@ class CreateCollectionView extends React.Component {
 
     async saveNewTemplate(name) {
         if (!name) {
-            this.showAlert("alert-warning", "Please name your template");
+            this.props.showAlert("alert-warning", "Please name your template");
         } else if (this.state.collectionList.length === 0) {
-            this.showAlert("alert-warning", "Please add some calls to your template");
+            this.props.showAlert("alert-warning", "Please add some calls to your template");
         } else {
             const templateExists = await db.templates.check(name);
             if (templateExists) {
                 this.setState({ onConfirm: async () => {
                     const templateCalls = this.state.collectionList.map((call) => ({ name: call.name }));
                     await db.templates.edit(name, templateCalls);
-                    this.showAlert("alert-success", "Template saved");
+                    this.props.showAlert("alert-success", "Template saved");
                     this.removeAll();
                     this.setState({initialCollectionName: ""});
                     }});
@@ -139,7 +138,7 @@ class CreateCollectionView extends React.Component {
             } else {
                 const templateCalls = this.state.collectionList.map((call) => ({ name: call.name }));
                 await db.templates.create(name, templateCalls);
-                this.showAlert("alert-success", "Template saved");
+                this.props.showAlert("alert-success", "Template saved");
                 this.removeAll();
                 this.loadTemplateNames();
                 return true;
@@ -166,15 +165,6 @@ class CreateCollectionView extends React.Component {
             }
         }
         this.setState({ callList, collectionList });
-    }
-
-    showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
-    }
-
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
     }
 
     // Props methods
@@ -234,7 +224,6 @@ class CreateCollectionView extends React.Component {
                     updateFilterString={(string) => this.updateFilterString(string)}
                     filterEnter={() => this.filterEnter()}
                 />
-                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <ConfirmModal type="edit" onClick={() => this.state.onConfirm()} />
                 <div className="row">
                     <List
@@ -265,5 +254,8 @@ class CreateCollectionView extends React.Component {
     }
 
 }
-
-export default CreateCollectionView;
+export default props => (
+    <AlertsContext.Consumer>
+      {functions => <CreateCollectionView {...props} showAlert={functions.showAlert}/>}
+    </AlertsContext.Consumer>
+  );

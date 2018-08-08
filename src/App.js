@@ -8,6 +8,7 @@ import RunSessionView from "./components/RunSessionView";
 import ReviewClubView from "./components/ReviewClubView";
 import Loader from "./components/Loader";
 import ClubDashboard from "./components/ClubDashboard";
+import Alerts, { AlertsContext } from "./components/Alerts";
 import { db } from "./util/dbfunctions";
 import firebase from "firebase";
 import './App.css';
@@ -17,7 +18,8 @@ class App extends Component {
   state = {
     activeClub: {},
     activeUser: "",
-    loadingUser: true
+    loadingUser: true,
+    alert: []
   }
 
   componentDidMount() {
@@ -43,6 +45,10 @@ class App extends Component {
 
   signOut = () => {
     firebase.auth().signOut();
+  }
+  
+  clearAlert = () => {
+    this.setState({ alert: [] });
   }
 
   setPassedCollection = (type, name) => {
@@ -122,7 +128,17 @@ class App extends Component {
       <HashRouter>
         <div className="App">
           <Header activeClub={this.state.activeClub} activeUser={this.state.activeUser} signOut={() => this.signOut()} resetClub={() => this.resetClub()}/>
+          {this.state.alert.text ? <Alerts alert={this.state.alert} clearAlert={() => this.clearAlert()} /> : ""}
+          <AlertsContext.Provider value={{ 
+            showAlert: (type, text) => {
+              const alert = { type: type, text: text };
+              this.setState({ alert });
+            },
+            clearAlert: () => {
+                this.setState({ alert: {} });
+            }}}>
           {routes}
+          </AlertsContext.Provider>
         </div>
       </HashRouter>
     );

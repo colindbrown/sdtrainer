@@ -2,7 +2,7 @@ import React from 'react';
 import ClubCard from "./ClubCard";
 import { db } from "../util/dbfunctions";
 import AddClubCard from './AddClubCard';
-import Alerts from "./Alerts";
+import { AlertsContext } from "./Alerts";
 import ConfirmModal from "./ConfirmModal";
 import ClubModal from "./ClubModal";
 import Loader from "./Loader";
@@ -15,7 +15,6 @@ class UserDashboard extends React.Component {
     state = {
         clubs: [],
         clubsLoading: true,
-        alerts: [],
         templates: [],
         templatesLoading: true
     }
@@ -39,7 +38,7 @@ class UserDashboard extends React.Component {
         this.setState({ templatesLoading: true });
         db.templates.delete(name).then(() => {
             this.loadTemplates().then(() => {
-                this.showAlert("alert-success", "Template deleted");
+                this.props.showAlert("alert-success", "Template deleted");
             })
         });
     }
@@ -47,18 +46,9 @@ class UserDashboard extends React.Component {
     deleteClub = async (name) => {
         db.clubs.delete(name).then(() => {
             this.loadClubs().then(() => {
-                this.showAlert("alert-success", "Club deleted");
+                this.props.showAlert("alert-success", "Club deleted");
             })
         });
-    }
-
-    showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
-    }
-
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
     }
 
     deleteItem = (type, name) => {
@@ -68,6 +58,9 @@ class UserDashboard extends React.Component {
                 break;
             case "template":
                 this.setState({modalFunction: () => this.deleteTemplate(name)});
+                break;
+            default: 
+                this.setState({modalFunction: undefined});
                 break;
         }
     }
@@ -98,8 +91,7 @@ class UserDashboard extends React.Component {
             clubCards.push(<AddClubCard 
                 key="addClubCard" 
                 updateActiveClub={(name) => this.props.updateActiveClub(name)}
-                showAlert={(type,text) => this.showAlert(type, text)} 
-                clearAlerts={() => this.clearAlerts()}
+                showAlert={(type,text) => this.props.showAlert(type, text)}
             />);
         }
         var templateListItems;
@@ -130,7 +122,6 @@ class UserDashboard extends React.Component {
                     </div>
                 </section>
                 {this.state.redirect ? <Redirect to={this.state.redirect}/> : ""}
-                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
                 <ClubModal name={this.state.passedTemplateName} clubs={this.state.clubs} setPassedCollection={(name) => this.props.setPassedCollection("loadTemplate", name)} updateActiveClub={(name) => this.props.updateActiveClub(name)} />
                 <ConfirmModal type="delete" onClick={this.state.modalFunction} />
                 <section>
@@ -161,4 +152,8 @@ class UserDashboard extends React.Component {
     
 }
 
-export default UserDashboard;
+export default props => (
+    <AlertsContext.Consumer>
+      {functions => <UserDashboard {...props} showAlert={functions.showAlert}/>}
+    </AlertsContext.Consumer>
+  );

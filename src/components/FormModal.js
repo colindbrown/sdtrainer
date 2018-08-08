@@ -10,7 +10,7 @@ class FormModal extends React.Component {
         password: "",
         firstName: "",
         lastName: "",
-        alerts: []
+        alert: []
     }
 
     componentWillUnmount() {
@@ -90,12 +90,12 @@ class FormModal extends React.Component {
     }
 
     showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
+        const alert = { type: type, text: text };
+        this.setState({ alert });
     }
 
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
+    clearAlert = () => {
+        this.setState({ alert: {} });
     }
 
     render() {
@@ -121,7 +121,7 @@ class FormModal extends React.Component {
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
+                            <Alerts alert={this.state.alert} clearAlert={() => this.clearAlert()} />
                             <form className="modal-form" onSubmit={this.handleSubmit}>
                                 {nameInput}
                                 <div className="form-group">
