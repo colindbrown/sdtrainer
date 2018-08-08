@@ -16,9 +16,6 @@ const Header = ({activeClub, activeUser, signOut, resetClub}) => (
               height="30"
               className="d-inline-block align-top mr-3"
               alt=""
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Created by Colin Brown"
             />
             {activeUser ? <div>
               <span className="text-silver">SD</span>

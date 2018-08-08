@@ -23,7 +23,8 @@
     transform: rotate(360deg); } }
 
 .main-bar {
-  background: #373842; }
+  background: #373842;
+  height: 55px; }
 
 span.empty {
   opacity: 0; }
@@ -324,7 +325,8 @@ hr {
 .header-breadcrumbs {
   margin-bottom: 0px;
   background: #373842;
-  padding: 0px; }
+  padding: 0px;
+  height: 40px; }
   .header-breadcrumbs .small-crumb {
     padding-top: 9px;
     padding-bottom: 6px; }
