@@ -80,7 +80,7 @@ class List extends React.Component {
             callSize = {height: 50, width: 220};
         }
 
-        const navHeight = 215;
+        const navHeight = 160;
         var availableWidth, flexWidth;
         if (this.props.size === "half") {
             availableWidth = Math.min(this.props.windowWidth/2, 1200);

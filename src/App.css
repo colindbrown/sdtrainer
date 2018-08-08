@@ -345,21 +345,7 @@ body {
   position: relative;
   margin: 0;
   padding: 0;
-  padding-bottom: 60px;
   min-height: 100vh; }
-
-.footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 60px;
-  text-align: center; }
-  .footer hr {
-    margin-top: 15px;
-    margin-bottom: 10px; }
-  .footer p {
-    margin-bottom: 10px; }
 
 .save-as-name {
   width: 200px !important;
