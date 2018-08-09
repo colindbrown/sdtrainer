@@ -8,9 +8,21 @@ class SessionModel {
     // create session with the provided calls
     async create(name, calls) {
         const newSession = this.db.activeClubRef.collection("Sessions").doc();
-        newSession.set({ name: name, createdAt: Date.now(), finished: false });
+        newSession.set({ name: name, createdAt: Date.now(), finished: false, count: calls.length });
         for (var i = 0; i < calls.length; i++) {
             const ref = await newSession.collection("Calls").add(calls[i]);
+            ref.update({position: i});
+        }
+    }
+
+    // edit session with new calls
+    async edit(name, calls) {
+        const session = await this.fetchRef(name);
+        session.update({ count: calls.length });
+        const snapshot = await session.collection("Calls").get();
+        snapshot.docs.forEach((doc) => doc.ref.delete());
+        for (var i = 0; i < calls.length; i++) {
+            const ref = await session.collection("Calls").add(calls[i]);
             ref.update({position: i});
         }
     }
@@ -20,8 +32,12 @@ class SessionModel {
         const session = await this.fetchRef(name);
         var batch = this.db.dbRef.batch();
         var snapshot = await session.collection("Calls").get();
+        var used = 0;
         snapshot.docs.forEach((callDoc) => {
             const call = calls.find((callIterator) => (callIterator.name === callDoc.data().name));
+            if (call.used) {
+                used++;
+            }
             batch.update(callDoc.ref, {
                 used: call.used,
                 timestamp: call.timestamp
@@ -29,8 +45,13 @@ class SessionModel {
         });
         batch.update(session, {
             finished: true,
-            finishedAt: Date.now()
+            finishedAt: Date.now(),
+            used: used
         });
+        const club = await this.db.activeClubRef.get();
+        batch.update(this.db.activeClubRef, {
+            sessions: club.data().sessions + 1
+        })
         batch.commit();
     }
 
@@ -124,7 +145,9 @@ class SessionModel {
     // return if a session with the provided name exists
     async check(name) {
         const snapshot = await this.db.activeClubRef.collection("Sessions").where("name", "==", name).get();
-        return snapshot.size === 1;
+        const sessionExists = snapshot.size === 1;
+        const finished = sessionExists ? snapshot.docs[0].data().finished : undefined;
+        return {sessionExists, finished};
     }
 
 }

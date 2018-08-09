@@ -110,6 +110,7 @@ class FormModal extends React.Component {
             </div>;
         
         const signIn = this.props.signInForm;
+        const formMargin = this.state.alert.text ? "mt-1" : "";
         return (
             <div className="modal fade" id="formModal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="vertical-alignment-helper">
@@ -121,8 +122,8 @@ class FormModal extends React.Component {
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <Alerts alert={this.state.alert} clearAlert={() => this.clearAlert()} modal={true}/>
-                            <form className="modal-form" onSubmit={this.handleSubmit}>
+                            {this.state.alert.text ? <Alerts alert={this.state.alert} clearAlert={() => this.clearAlert()} modal={true} /> : ""}
+                            <form className={`modal-form ${formMargin}`} onSubmit={this.handleSubmit}>
                                 {nameInput}
                                 <div className="form-group">
                                     <input type="email" className="form-control" onChange={this.handleEmailChange} placeholder="Email Address" />

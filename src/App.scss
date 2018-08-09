@@ -1,4 +1,5 @@
 // Colors
+$black: #000;
 $info: #5bc0de;
 $red: #E23C3C;
 $yellow: #E2D843;
@@ -46,12 +47,17 @@ $white: #fff;
   position: fixed;
   top: 0;
   width: 100%;
-  background: #373842;
-  height: 55px; 
+  background: $midnight;
+  height: 55px;
 }
 
 span.empty {
   opacity: 0;
+}
+
+.list-header {
+  margin: 10px 0 5px 0;
+  height: 30px;
 }
 
 .carousel-item ul {
@@ -61,42 +67,44 @@ span.empty {
 .carousel-item {
   border: 1px solid darkgrey;
   border-radius: 5px;
-  z-index: 0;
+  z-index: 1;
 }
 
 .carousel {
-  margin-top: 30px;
+  position: relative;
+  padding: 0;
 
   .carousel-inner {
     width: 80%;
     padding: 0px;
+    margin: 0;
   }
 }
 
 .carousel-control-prev, .carousel-control-next{
   width: 50px;
-  height: 80%;
-  margin-bottom: auto;
+  height: calc(100vh - 300px);
   margin-top: auto;
-
+  margin-bottom: auto;
+  position: relative;
 }
 
 .carousel-control-prev {
-  left: 25px;
-
+  margin-right: 15px;
+  margin-left: 5px;
 }
 
 .carousel-control-next {
-  right: 25px;
+  margin-right: 5px;
+  margin-left: 15px;
 }
 
 .page {
   position: relative;
-  height: 780px;
+  z-index: 0;
 }
 
 .call {
-  height: 65px;
   box-sizing: border-box;
   color:  $dark-grey;
   font-family: 'Bree Serif';
@@ -118,7 +126,9 @@ span.empty {
 
   span {
     position: absolute;
-    top: 18px;
+    top: 50%;
+    -webkit-transform: translateY(-13px);
+    transform: translateY(-13px)
   }
 
 }
@@ -174,7 +184,7 @@ span.empty {
 .card-container {
   position: relative;
   margin-top: 0;
-  height: 400px;
+  height: 500px;
   overflow-y: scroll;
   border: 1px solid  $light-grey;
   border-top: 0 solid transparent;
@@ -203,8 +213,12 @@ span.empty {
   margin-top: 10px;
 }
 
-.below-navbar {
-  margin-top: 20px;
+.navbar-extra-offset {
+  margin-top: 75px;
+}
+
+.navbar-offset {
+  padding-top: 55px;
 }
 
 hr {
@@ -320,7 +334,7 @@ hr {
 
 .collections-list {
   position: relative;
-  height: 400px;
+  height: 500px;
   overflow-y: scroll;
   margin-right: 0;
   margin-left: 0;
@@ -334,6 +348,10 @@ hr {
     border: 1px solid $lighter-grey;
     border-right: 0 solid transparent;
     border-left: 0 solid transparent;
+
+    &:first-child {
+      border-top: 0 solid transparent;
+    }
 
     div {
       margin-top: 4px;
@@ -384,7 +402,7 @@ hr {
 }
 
 .placeholder {
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -400,6 +418,23 @@ hr {
 
 .tab-content {
   position: relative;
+}
+
+.club-modal {
+  & .modal-body {
+    padding: 0;
+    & .list-group-item {
+      border-radius: 0;
+      border-color: $lighter-grey;
+      color: $black;
+      &:first-child {
+        border-top: 0 solid transparent;
+      }
+      &:last-child {
+        border-bottom: 0 solid transparent;
+      }
+    }
+  }
 }
 
 .input-group-addon {
@@ -467,6 +502,14 @@ hr {
   margin: 0;
 }
 
-.alerts-inline {
+body {
   position: relative;
+  margin:0;
+  padding:0;
+  min-height: 100vh;
+}
+
+.save-as-name {
+  width: 200px !important;
+  font-size: 16px;
 }

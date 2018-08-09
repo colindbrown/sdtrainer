@@ -25,8 +25,8 @@ class AddClubCard extends React.Component {
                 this.props.showAlert("alert-warning", "A club with that name already exists");
             } else {
                 db.clubs.create(this.state.newClubName).then(() => {
-                    this.props.updateActiveClub(this.state.newClubName);
-                    this.setState({ newClubName: "", redirect: "/club"});
+                    this.props.showAlert("alert-success", "Club created");
+                    this.props.loadClubs();
                 });
             }
         }

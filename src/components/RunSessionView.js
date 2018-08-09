@@ -17,6 +17,9 @@ class RunSessionView extends React.Component {
 
     componentDidMount() {
         this.loadSessionNames();
+        if (this.props.passedCollection) {
+            this.loadPassedCollection();
+        }
     }
 
     async loadSession(name) {
@@ -37,6 +40,11 @@ class RunSessionView extends React.Component {
         db.sessions.fetchPlanNames().then((planNames) => {
             this.setState({ planNames, loading: false });
         });
+    }
+
+    async loadPassedCollection() {
+        this.loadSession(this.props.passedCollection.name);
+        this.props.resetPassedCollection();
     }
 
     finishSession(e) {
@@ -77,8 +85,9 @@ class RunSessionView extends React.Component {
         } else {
             placeholderContent={title: "Run a Session", text: "You don't have any session plans to run at the moment.", rel: "/create", destination: "Plan a Session"};
         }
+        const listHeader = this.state.activeSession ? "Running session: " + this.state.activeSession : "";
         return (
-            <div>
+            <div className="navbar-offset">
                 <RunFunctionBar
                     planNames={this.state.planNames}
                     activeSession={this.state.activeSession}
@@ -86,11 +95,11 @@ class RunSessionView extends React.Component {
                     changeSort={(sort) => this.changeSort(sort)}
                     finishSession={(e) => this.finishSession(e)}
                 />
-                <div className="row">
+                <div className="row no-gutters">
                     <List 
-                        size="col-md-12" 
+                        callSize="large"
                         id="runList" 
-                        columns={4} 
+                        header={listHeader}
                         calls={this.state.sessionCalls} 
                         loading={this.state.loading}
                         sort={this.state.sort} 
