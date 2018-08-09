@@ -208,7 +208,7 @@ class CreateCollectionView extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="navbar-offset">
                 <CreateFunctionBar
                     activeClub={this.props.activeClub.name}
                     initialCollectionName={this.state.initialCollectionName}
@@ -225,11 +225,11 @@ class CreateCollectionView extends React.Component {
                     filterEnter={() => this.filterEnter()}
                 />
                 <ConfirmModal type="edit" onClick={() => this.state.onConfirm()} />
-                <div className="row">
+                <div className="row no-gutters">
                     <List
-                        size="col-md-6"
+                        size="half"
                         id="callList"
-                        columns={2}
+                        header="Available Calls"
                         calls={this.state.callList}
                         sort={this.state.sort}
                         loading={this.state.callsLoading}
@@ -238,9 +238,9 @@ class CreateCollectionView extends React.Component {
                         returnSingle={(call) => this.returnSingle(call)}
                     />
                     <List
-                        size="col-md-6"
+                        size="half"
                         id="collectionList"
-                        columns={2}
+                        header="Selected Calls"
                         calls={this.state.collectionList}
                         sort={"arrayOrder"}
                         loading={this.state.collectionCallsLoading}

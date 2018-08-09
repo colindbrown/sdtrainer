@@ -13,16 +13,22 @@ import { db } from "./util/dbfunctions";
 import firebase from "firebase";
 import './App.css';
 
+const WindowContext = React.createContext({width: 0, height: 0});
+
 class App extends Component {
 
   state = {
     activeClub: {},
     activeUser: "",
     loadingUser: true,
+    windowWidth: 0,
+    windowHeight: 0,
     alert: []
   }
 
   componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', () => this.updateWindowDimensions());
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         db.users.setActive(user).then(() => {
@@ -45,6 +51,7 @@ class App extends Component {
 
   signOut = () => {
     firebase.auth().signOut();
+    this.resetClub();
   }
   
   clearAlert = () => {
@@ -59,6 +66,13 @@ class App extends Component {
     this.setState({ passedCollection: undefined });
   }
 
+  updateWindowDimensions() {
+    this.setState({ windowWidth: window.$(window).width(), windowHeight: window.$(window).height() });
+  }
+  
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
 
   render() {
     var routes;
@@ -126,6 +140,7 @@ class App extends Component {
     }
     return (
       <HashRouter>
+        <WindowContext.Provider value={{width: this.state.windowWidth, height: this.state.windowHeight }} >
         <div className="App">
           <Header activeClub={this.state.activeClub} activeUser={this.state.activeUser} signOut={() => this.signOut()} resetClub={() => this.resetClub()}/>
           {this.state.alert.text ? <Alerts alert={this.state.alert} clearAlert={() => this.clearAlert()} /> : ""}
@@ -140,9 +155,11 @@ class App extends Component {
           {routes}
           </AlertsContext.Provider>
         </div>
+        </WindowContext.Provider>
       </HashRouter>
     );
   }
 }
 
 export default App;
+export { WindowContext };

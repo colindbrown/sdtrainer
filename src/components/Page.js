@@ -5,9 +5,9 @@ class Page extends React.Component {
 
     render() {
         return (
-            <div className={`carousel-item ${this.props.active}`} >
+            <div className={`carousel-item ${this.props.active}`}>
                 {this.props.loading ? <Loader/> : ""}
-                <div className="row no-gutters d-flex flex-column page">
+                <div className={`row no-gutters d-flex flex-column page`} style={{height: `${this.props.columnSize * this.props.callSize.height}px`}}>
                     {this.props.calls}
                 </div>
             </div>
