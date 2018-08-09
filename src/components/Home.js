@@ -13,7 +13,7 @@ class Home extends React.Component {
 
     render() {
         return (
-            <div className="container d-flex align-content-center justify-content-center full-page">
+            <div className="container d-flex align-content-center justify-content-center full-page navbar-offset">
                 <div className="jumbotron d-flex flex-column align-content-center justify-content-center home-jumbo">
                     <h1 className="cover-heading font-weight-bold">Square</h1>
                     <p className="lead mt-3">A teaching assistant for Square Dancing Callers</p>

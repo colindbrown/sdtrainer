@@ -24,6 +24,7 @@ class UserDashboard extends React.Component {
     }
 
     loadClubs = async () => {
+        this.setState({clubsLoading: true})
         const clubs = await db.clubs.fetchAll();
         this.setState({ clubs, clubsLoading: false });
     }
@@ -80,6 +81,7 @@ class UserDashboard extends React.Component {
             clubCards.push(<AddClubCard 
                 key="addClubCard" 
                 updateActiveClub={(name) => this.props.updateActiveClub(name)}
+                loadClubs={() => this.loadClubs()}
                 showAlert={(type,text) => this.props.showAlert(type, text)}
             />);
         }
@@ -96,7 +98,7 @@ class UserDashboard extends React.Component {
         ) : <li><Placeholder content={{title: "Templates", text: "You don't have any templates to display at the moment.", rel: "/create", destination: "Create a Template"}}/></li>;
         }
         return (
-            <div className="container below-navbar">
+            <div className="container navbar-extra-offset">
                 <section className="jumbotron text-center club-jumbotron">
                     <div className="container">
                         <h1 className="jumbotron-heading">Welcome {firstName}</h1>

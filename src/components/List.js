@@ -2,6 +2,7 @@ import React from "react";
 import Call from "./Call";
 import Page from "./Page";
 import Placeholder from "./Placeholder";
+import { WindowContext } from "../App";
 
 class List extends React.Component {
 
@@ -72,8 +73,25 @@ class List extends React.Component {
     }
 
     render() {
-        const NUMCOLUMNS = this.props.columns;
-        const COLUMNSIZE = 12;
+        var callSize;
+        if (this.props.callSize === "large") {
+            callSize = {height: 60, width: 260};
+        } else {
+            callSize = {height: 50, width: 220};
+        }
+
+        const navHeight = 160;
+        var availableWidth, flexWidth;
+        if (this.props.size === "half") {
+            availableWidth = Math.min(this.props.windowWidth/2, 1200);
+            flexWidth = "col-md-6";
+        } else {
+            availableWidth = Math.min(this.props.windowWidth, 1300);
+            flexWidth = "col-md-12";
+        }
+
+        const NUMCOLUMNS = Math.floor((availableWidth-140)/callSize.width) || 1;
+        const COLUMNSIZE = Math.floor((this.props.windowHeight-navHeight)/callSize.height) || 1;
         const sort = this.getSort();
 
         const id = this.props.id || "listCarousel";
@@ -84,11 +102,15 @@ class List extends React.Component {
         var listItems = [];
         for (var i = 0; i < sortedCalls.length; i++) {
             const call = sortedCalls[i];
-            listItems.push(<Call {...call} key={call.name} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.handleClick(call.name)} />)
+            listItems.push(<Call {...call} key={call.name} 
+                callSize={callSize}
+                rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} 
+                onClick={() => this.handleClick(call.name)}
+            />);
         }
         while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
             const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
-            listItems.push(<Call empty={true} rounded={roundedCorners} group={0} key={`${id}, ${listItems.length}`} />)
+            listItems.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`${id}, ${listItems.length}`} />)
         }
 
         var pages = [];
@@ -98,32 +120,39 @@ class List extends React.Component {
                     key={j} 
                     active={j === 0 ? "active" : ""} 
                     loading={this.props.loading}
-                    columns={NUMCOLUMNS} columnSize={COLUMNSIZE} 
-                    calls={listItems.slice(j*(NUMCOLUMNS*COLUMNSIZE), (j+1)*(NUMCOLUMNS*COLUMNSIZE))} 
+                    columns={NUMCOLUMNS} columnSize={COLUMNSIZE}
+                    callSize={callSize}
+                    calls={listItems.slice(j*(NUMCOLUMNS*COLUMNSIZE), (j+1)*(NUMCOLUMNS*COLUMNSIZE))}
                 />
             );
         }
         const placeholder = !this.props.calls.length && this.props.placeholderContent && !this.props.loading? <Placeholder content={this.props.placeholderContent} /> : "";
 
         return (
-
-            <div id={id} className={`carousel slide ${this.props.size}`} data-wrap="false" data-interval="false">
-                <div className="carousel-inner container">
-                    {placeholder || ""}
-                    {pages}
+            <div className={`${flexWidth}`}>
+                <h4 className="list-header text-secondary">{this.props.header}</h4>
+                <div id={id} className={`carousel slide d-flex justify-content-center`} data-wrap="false" data-interval="false">
+                    <a className="carousel-control-prev btn btn-secondary" href={`#${id}`} role="button" data-slide="prev">
+                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span className="sr-only">Previous</span>
+                    </a>
+                    <div className="carousel-inner container" style={{width: `${NUMCOLUMNS*callSize.width + 2}px`}}>
+                        {placeholder || ""}
+                        {pages}
+                    </div>
+                    <a className="btn btn-secondary carousel-control-next" href={`#${id}`} role="button" data-slide="next">
+                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span className="sr-only">Next</span>
+                    </a>
                 </div>
-                <a className="carousel-control-prev btn btn-secondary" href={`#${id}`} role="button" data-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span className="sr-only">Previous</span>
-                </a>
-                <a className="btn btn-secondary carousel-control-next" href={`#${id}`} role="button" data-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span className="sr-only">Next</span>
-                </a>
             </div>
         )
     }
 
 }
 
-export default List;
+export default props => (
+    <WindowContext.Consumer>
+      {window => <List {...props} windowWidth={window.width} windowHeight={window.height} />}
+    </WindowContext.Consumer>
+  );

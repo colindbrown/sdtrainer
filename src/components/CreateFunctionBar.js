@@ -83,7 +83,7 @@ class CreateFunctionBar extends React.Component {
                     <button className="btn btn-secondary" href="#" onClick={this.handleReset}>Reset</button>
                 </div>
                 <form className="form-inline">
-                    <input className="form-control mr-sm-2" placeholder="Name" value={this.state.newCollectionName} onChange={this.handleChange} />
+                    <input className="form-control mr-sm-2 save-as-name" placeholder="Session/Template Name" value={this.state.newCollectionName} onChange={this.handleChange} />
                     <Dropdown label="Save as" items={saveAsDropdownItems} type="info" />
                 </form>
 

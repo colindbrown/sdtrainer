@@ -43,11 +43,20 @@ $white: #fff;
 }
 
 .main-bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
   background: $midnight;
+  height: 55px;
 }
 
 span.empty {
   opacity: 0;
+}
+
+.list-header {
+  margin: 10px 0 5px 0;
+  height: 30px;
 }
 
 .carousel-item ul {
@@ -57,42 +66,44 @@ span.empty {
 .carousel-item {
   border: 1px solid darkgrey;
   border-radius: 5px;
-  z-index: 0;
+  z-index: 1;
 }
 
 .carousel {
-  margin-top: 30px;
+  position: relative;
+  padding: 0;
 
   .carousel-inner {
     width: 80%;
     padding: 0px;
+    margin: 0;
   }
 }
 
 .carousel-control-prev, .carousel-control-next{
   width: 50px;
-  height: 80%;
-  margin-bottom: auto;
+  height: calc(100vh - 300px);
   margin-top: auto;
-
+  margin-bottom: auto;
+  position: relative;
 }
 
 .carousel-control-prev {
-  left: 25px;
-
+  margin-right: 15px;
+  margin-left: 5px;
 }
 
 .carousel-control-next {
-  right: 25px;
+  margin-right: 5px;
+  margin-left: 15px;
 }
 
 .page {
   position: relative;
-  height: 780px;
+  z-index: 0;
 }
 
 .call {
-  height: 65px;
   box-sizing: border-box;
   color:  $dark-grey;
   font-family: 'Bree Serif';
@@ -114,7 +125,9 @@ span.empty {
 
   span {
     position: absolute;
-    top: 18px;
+    top: 50%;
+    -webkit-transform: translateY(-13px);
+    transform: translateY(-13px)
   }
 
 }
@@ -170,7 +183,7 @@ span.empty {
 .card-container {
   position: relative;
   margin-top: 0;
-  height: 400px;
+  height: 500px;
   overflow-y: scroll;
   border: 1px solid  $light-grey;
   border-top: 0 solid transparent;
@@ -199,8 +212,12 @@ span.empty {
   margin-top: 10px;
 }
 
-.below-navbar {
-  margin-top: 20px;
+.navbar-extra-offset {
+  margin-top: 75px;
+}
+
+.navbar-offset {
+  padding-top: 55px;
 }
 
 hr {
@@ -214,7 +231,7 @@ hr {
 }
 
 .full-page {
-  height: 90vh;
+  height: calc(100vh - 55px);
   box-sizing: border-box;
 }
 
@@ -308,7 +325,7 @@ hr {
 
 .collections-list {
   position: relative;
-  height: 400px;
+  height: 500px;
   overflow-y: scroll;
   margin-right: 0;
   margin-left: 0;
@@ -372,7 +389,7 @@ hr {
 }
 
 .placeholder {
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -395,4 +412,25 @@ hr {
     border: 1px solid $medium-grey !important;
     background-color: $lighter-grey;
   }
+}
+
+.alerts-bar {
+  position: fixed;
+  top: 30px;
+  left: 20%;
+  width: 60%;
+  z-index: 10000;
+  margin: 0;
+}
+
+body {
+  position: relative;
+  margin:0;
+  padding:0;
+  min-height: 100vh;
+}
+
+.save-as-name {
+  width: 200px !important;
+  font-size: 16px;
 }
