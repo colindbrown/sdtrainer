@@ -2,14 +2,14 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import squareLogo from "../img/logo.PNG";
 
-const Header = ({activeClub, activeUser, signOut, resetClub}) => (
+const Header = ({activeClub, activeUser, signOut, resetClub, loading}) => (
   <header>
-    <nav className={`navbar navbar-dark navbar-expand-lg main-bar sticky-top ${activeUser ? "" : "bg-transparent"}`}>
+    <nav className={`navbar navbar-dark navbar-expand-lg main-bar sticky-top ${activeUser || loading? "" : "bg-transparent"}`}>
 
        <div className="nav-item">
         <ol className="breadcrumb header-breadcrumbs">
           <li className="breadcrumb-item">
-            <NavLink className={`${activeUser ? "navbar-brand ml-2 mr-0" : "home-logo"}`} to={`/`} onClick={resetClub}>
+            <NavLink className={`${activeUser || loading ? "navbar-brand ml-2 mr-0" : "home-logo"}`} to={`/`} onClick={resetClub}>
             <img
               src={squareLogo}
               width="30"
@@ -70,9 +70,9 @@ const Header = ({activeClub, activeUser, signOut, resetClub}) => (
         </ul>
         }
         <div className="nav-item dropdown ml-2">
-            <a className={`btn btn-sm btn-info`} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{activeUser.displayName.split(" ")[0]}</a>
+            <a className={`btn btn-sm btn-info`} to={'/'} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{activeUser.displayName.split(" ")[0]}</a>
             <div className="dropdown-menu dropdown-menu-right">
-            <button className="dropdown-item" onClick={() => signOut()}>Sign Out</button>
+            <NavLink exact className="dropdown-item" to={'/'} onClick={() => signOut()}>Sign Out</NavLink>
             </div>
         </div>
       </div>
