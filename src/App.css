@@ -393,7 +393,7 @@ hr {
   color: #ccc; }
 
 .alerts-bar {
-  position: absolute;
+  position: fixed;
   top: 30px;
   left: 20%;
   width: 60%;
@@ -409,3 +409,7 @@ body {
 .save-as-name {
   width: 200px !important;
   font-size: 16px; }
+
+.progress {
+  border: 1px solid #999;
+  height: 18px; }

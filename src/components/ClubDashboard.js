@@ -80,8 +80,9 @@ class ClubDashboard extends React.Component {
                         <h1 className="jumbotron-heading">{activeClub.name}</h1>
                         <hr/>
                         <p className="lead text-muted">{activeClub.taught} calls out of {db.calls.count} taught</p>
-                        <div className="progress">
-                            <div className="progress-bar bg-info" style={{ width: `${percentTaught}%` }} role="progressbar"></div>
+                        <div className="progress bg-white">
+                            {percentTaught === 0 ? <div className="m-auto text-secondary">0%</div> :
+                            <div className="progress-bar bg-info" style={{ width: `${percentTaught}%` }} role="progressbar">{Math.floor(percentTaught)}%</div>}
                         </div>
                         <p className="lead text-muted">{activeClub.sessions} sessions run</p>
                         <hr/>
