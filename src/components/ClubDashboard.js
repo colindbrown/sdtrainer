@@ -48,7 +48,11 @@ class ClubDashboard extends React.Component {
             finishedListItems = this.state.finishedSessions.length ? this.state.finishedSessions.map((session) => 
             <li className="list-group-item d-flex" key={session.name}>
                 <div className="float-left"><strong>{session.name}</strong></div>
-                <div className="ml-auto">Finished on {(new Date(session.finishedAt)).toDateString()}</div>
+                <div className="ml-auto mr-2">{session.used} out of {session.count} calls used</div>
+                <div className="mr-2">|</div>
+                <div className="mr-4">Finished on {(new Date(session.finishedAt)).toDateString()}</div>
+                <NavLink className="btn btn-sm btn-secondary mr-2" to={'/create'} onClick={() => this.props.setPassedCollection("loadSession", session.name)}>Duplicate</NavLink>
+                <NavLink className="btn btn-sm btn-info" to={'/review'} onClick={() => this.props.setPassedCollection("review", session.name)}>Review</NavLink>
             </li>
         ) : <Placeholder content={{title: "Finished Sessions", text: "You don't have any finished sessions to display yet.", rel: "/run", destination: "Run a Session"}}/>;
         }
@@ -59,7 +63,11 @@ class ClubDashboard extends React.Component {
             unfinishedListItems = this.state.sessionPlans.length ? this.state.sessionPlans.map((session) => 
             <li className="list-group-item d-flex justify-content-end" key={session.name}>
                 <div className="list-item-name"><p><strong>{session.name}</strong></p></div>
-                <div className="mr-5">Created on {(new Date(session.createdAt)).toDateString()}</div>
+                <div className="mr-2">{session.count} calls</div>
+                <div className="mr-2">|</div>
+                <div className="mr-4">Created on {(new Date(session.createdAt)).toDateString()}</div>
+                <NavLink className="btn btn-sm btn-secondary mr-2" to={'/create'} onClick={() => this.props.setPassedCollection("editSession", session.name)}>Edit</NavLink>
+                <NavLink className="btn btn-sm btn-info mr-2" to={'/run'} onClick={() => this.props.setPassedCollection("run", session.name)}>Run</NavLink>
                 <button className="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmModal" onClick={() => this.deleteItem(session.name)}>Delete</button>
             </li>
         ) : <li><Placeholder content={{title: "Session Plans", text: "You don't have any session plans to display at the moment.", rel: "/create", destination: "Plan a Session"}}/></li>;
@@ -81,7 +89,7 @@ class ClubDashboard extends React.Component {
                         <NavLink className={`btn btn-secondary`} to={`/`} onClick={() => this.props.resetClub()}>Select another Club</NavLink>
                     </div>
                 </section>
-                <ConfirmModal onClick={this.state.modalFunction} />
+                <ConfirmModal type="delete" onClick={this.state.modalFunction} />
                 <section>
                     <ul className="nav nav-tabs nav-fill row tabs-row" id="myTab" role="tablist">
                         <li className="nav-item">

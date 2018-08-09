@@ -1,5 +1,6 @@
 import React from "react";
 import List from "./List";
+import ConfirmModal from "./ConfirmModal";
 import { AlertsContext } from "./Alerts";
 import { db } from "../util/dbfunctions";
 import CreateFunctionBar from "./CreateFunctionBar";
@@ -20,7 +21,11 @@ class CreateCollectionView extends React.Component {
 
     // Lifecycle methods
     componentDidMount() {
-        this.loadAllCalls();
+        this.loadAllCalls().then(() => {
+            if (this.props.passedCollection) {
+                this.loadPassedCollection();
+            }
+        });
         this.loadTemplateNames();
         if (this.props.activeClub.name) {
             this.loadSessionNames();
@@ -45,6 +50,19 @@ class CreateCollectionView extends React.Component {
         db.templates.fetchNames().then((templateNames) => {
             this.setState({ templateNames });
         });
+    }
+
+    async loadPassedCollection() {
+        const {type, name} = this.props.passedCollection;
+        if (type.substring(0,4) === "edit") {
+            this.setState({ initialCollectionName: name });
+        }
+        if (type.substring(4,) === "Session") {
+            this.addSession(name);
+        } else {
+            this.addTemplate(name);
+        }
+        this.props.resetPassedCollection();
     }
 
     async addSession(name) {
@@ -73,9 +91,21 @@ class CreateCollectionView extends React.Component {
         } else if (this.state.collectionList.length === 0) {
             this.props.showAlert("alert-warning", "Please add some calls to your session");
         } else {
-            const sessionExists = await db.sessions.check(name);
+            const {sessionExists, finished} = await db.sessions.check(name);
             if (sessionExists) {
-                this.props.showAlert("alert-warning", "A session with that name already exists");
+                if (finished) {
+                    this.props.showAlert("alert-warning", "You can't modify a finished session");
+                } else {
+                    this.setState({ onConfirm: async () => {
+                        const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
+                        await db.sessions.edit(name, sessionCalls);
+                        this.props.showAlert("alert-success", "Session edited");
+                        this.removeAll();
+                        this.setState({initialCollectionName: ""});
+                        }});
+                    window.$('#confirmModal').modal('show');
+                    return false;
+                }
             } else {
                 const sessionCalls = this.state.collectionList.map((call) => ({ name: call.name, used: false, timestamp: Date.now() }));
                 await db.sessions.create(name, sessionCalls);
@@ -96,7 +126,15 @@ class CreateCollectionView extends React.Component {
         } else {
             const templateExists = await db.templates.check(name);
             if (templateExists) {
-                this.props.showAlert("alert-warning", "A template with that name already exists");
+                this.setState({ onConfirm: async () => {
+                    const templateCalls = this.state.collectionList.map((call) => ({ name: call.name }));
+                    await db.templates.edit(name, templateCalls);
+                    this.props.showAlert("alert-success", "Template saved");
+                    this.removeAll();
+                    this.setState({initialCollectionName: ""});
+                    }});
+                window.$('#confirmModal').modal('show');
+                return false;
             } else {
                 const templateCalls = this.state.collectionList.map((call) => ({ name: call.name }));
                 await db.templates.create(name, templateCalls);
@@ -173,6 +211,7 @@ class CreateCollectionView extends React.Component {
             <div className="navbar-offset">
                 <CreateFunctionBar
                     activeClub={this.props.activeClub.name}
+                    initialCollectionName={this.state.initialCollectionName}
                     addAllUsed={(e) => this.addAllUsed(e)}
                     removeAll={(e) => this.removeAll(e)}
                     saveNewSession={(name) => this.saveNewSession(name)}
@@ -185,6 +224,7 @@ class CreateCollectionView extends React.Component {
                     updateFilterString={(string) => this.updateFilterString(string)}
                     filterEnter={() => this.filterEnter()}
                 />
+                <ConfirmModal type="edit" onClick={() => this.state.onConfirm()} />
                 <div className="row no-gutters">
                     <List
                         size="half"

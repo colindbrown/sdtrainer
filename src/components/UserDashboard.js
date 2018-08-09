@@ -4,9 +4,10 @@ import { db } from "../util/dbfunctions";
 import AddClubCard from './AddClubCard';
 import { AlertsContext } from "./Alerts";
 import ConfirmModal from "./ConfirmModal";
+import ClubModal from "./ClubModal";
 import Loader from "./Loader";
 import Placeholder from './Placeholder';
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 
 
 class UserDashboard extends React.Component {
@@ -65,6 +66,16 @@ class UserDashboard extends React.Component {
         }
     }
 
+    passTemplate = (name) => {
+        if (this.state.clubs === [] && !this.state.clubsLoading) {
+            this.props.setPassedCollection("loadTemplate", name);
+            this.setState({ redirect: "/create" });
+        } else {
+            this.setState({ passedTemplateName: name });
+            window.$("#clubModal").modal("show");
+        }
+    }
+
     render() {
         const firstName = this.props.activeUser.displayName.split(" ")[0];
         var clubCards;
@@ -92,7 +103,11 @@ class UserDashboard extends React.Component {
             templateListItems = this.state.templates.length ? this.state.templates.map((template) => 
             <li className="list-group-item d-flex justify-content-end" key={template.name}>
                 <div className="list-item-name"><p><strong>{template.name}</strong></p></div>
-                <div className="mr-5">Created on {(new Date(template.createdAt)).toDateString()}</div>
+                <div className="mr-2">{template.count} calls</div>
+                <div className="mr-2">|</div>
+                <div className="mr-4">Created on {(new Date(template.createdAt)).toDateString()}</div>
+                <NavLink className="btn btn-sm btn-secondary mr-2" to={'/create'} onClick={() => this.props.setPassedCollection("editTemplate", template.name)}>Edit</NavLink>
+                <button className="btn btn-sm btn-info mr-2" data-toggle="modal" data-target="#clubsModal" onClick={() => this.passTemplate(template.name)}>Load</button>
                 <button className="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmModal" onClick={() => this.deleteItem("template", template.name)}>Delete</button>
             </li>
         ) : <li><Placeholder content={{title: "Templates", text: "You don't have any templates to display at the moment.", rel: "/create", destination: "Create a Template"}}/></li>;
@@ -108,7 +123,9 @@ class UserDashboard extends React.Component {
                         <NavLink className={`btn btn-info`} to={`/create`}>Create a Template</NavLink>
                     </div>
                 </section>
-                <ConfirmModal onClick={this.state.modalFunction} />
+                {this.state.redirect ? <Redirect to={this.state.redirect}/> : ""}
+                <ClubModal name={this.state.passedTemplateName} clubs={this.state.clubs} setPassedCollection={(name) => this.props.setPassedCollection("loadTemplate", name)} updateActiveClub={(name) => this.props.updateActiveClub(name)} />
+                <ConfirmModal type="delete" onClick={this.state.modalFunction} />
                 <section>
                     <ul className="nav nav-tabs nav-fill row tabs-row" id="myTab" role="tablist">
                         <li className="nav-item">

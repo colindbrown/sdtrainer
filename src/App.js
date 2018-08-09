@@ -58,6 +58,14 @@ class App extends Component {
     this.setState({ alert: [] });
   }
 
+  setPassedCollection = (type, name) => {
+    this.setState({ passedCollection: {type: type, name: name} });
+  }
+
+  resetPassedCollection() {
+    this.setState({ passedCollection: undefined });
+  }
+
   updateWindowDimensions() {
     this.setState({ windowWidth: window.$(window).width(), windowHeight: window.$(window).height() });
   }
@@ -80,35 +88,52 @@ class App extends Component {
               activeUser={this.state.activeUser}
               updateActiveClub={(name) => this.updateActiveClub(name)}
               resetClub={() => this.resetClub()} 
+              setPassedCollection={(type, name) => this.setPassedCollection(type, name)}
             />
           )}/>
           <Route path="/create" render={() => (
             <CreateCollectionView
-              activeClub={this.state.activeClub} 
-              />
+              activeClub={this.state.activeClub}
+              passedCollection={this.state.passedCollection}
+              resetPassedCollection={() => this.resetPassedCollection()} 
+            />
           )}/>
-          <Route path="/run" component={RunSessionView}/>
-          <Route path="/review" component={ReviewClubView}/>
+          <Route path="/run" render={() => (
+            <RunSessionView
+              passedCollection={this.state.passedCollection}
+              resetPassedCollection={() => this.resetPassedCollection()} 
+            />
+          )}/>
+          <Route path="/review" render={() => (
+            <ReviewClubView
+              passedCollection={this.state.passedCollection}
+              resetPassedCollection={() => this.resetPassedCollection()} 
+            />
+          )}/>
           <Route path="/" render={() => (
             <UserDashboard
               activeClub={this.state.activeClub} 
               activeUser={this.state.activeUser}
-              updateActiveClub={(name) => this.updateActiveClub(name)} 
-              />
+              updateActiveClub={(name) => this.updateActiveClub(name)}
+              setPassedCollection={(type, name) => this.setPassedCollection(type, name)} 
+            />
           )}/>
         </Switch>
     } else {
       routes = <Switch>
         <Route path="/create" render={() => (
-            <CreateCollectionView
-              activeClub={this.state.activeClub} 
-              />
-          )}/>
+          <CreateCollectionView
+            activeClub={this.state.activeClub}
+            passedCollection={this.state.passedCollection}
+            resetPassedCollection={() => this.resetPassedCollection()} 
+          />
+        )}/>
         <Route path="/" render={() => (
         <UserDashboard
               activeClub={this.state.activeClub} 
               activeUser={this.state.activeUser}
-              updateActiveClub={(name) => this.updateActiveClub(name)} 
+              updateActiveClub={(name) => this.updateActiveClub(name)}s
+              setPassedCollection={(type, name) => this.setPassedCollection(type, name)} 
               />
       )}/>
       </Switch>

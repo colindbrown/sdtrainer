@@ -8,19 +8,25 @@ class CreateFunctionBar extends React.Component {
         filterString: ""
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.initialCollectionName || nextProps.initialCollectionName === "") {
+            this.setState({ newCollectionName: nextProps.initialCollectionName });
+        }
+    }
+
     handleChange = (e) => {
         this.setState({ newCollectionName: e.target.value });
     }
 
-    handleSubmit = (type) => {
+    handleSubmit = async (type) => {
         if (type === "session") {
-            const result = this.props.saveNewSession(this.state.newCollectionName);
-            if (result) {
+            const success = await this.props.saveNewSession(this.state.newCollectionName);
+            if (success) {
                 this.setState({ newCollectionName: "" });
             };
         } else {
-            const result = this.props.saveNewTemplate(this.state.newCollectionName);
-            if (result) {
+            const success = await this.props.saveNewTemplate(this.state.newCollectionName);
+            if (success) {
                 this.setState({ newCollectionName: "" });
             };
         }
@@ -83,7 +89,7 @@ class CreateFunctionBar extends React.Component {
                     <button className="btn btn-secondary" href="#" onClick={this.handleReset}>Reset</button>
                 </div>
                 <form className="form-inline">
-                    <input className="form-control mr-sm-2 save-as-name" placeholder="Session/Template Name" value={this.state.newCollectionName} onChange={this.handleChange} />
+                    <input className="form-control mr-sm-2 save-as-name" type="text" placeholder="Session/Template Name" value={this.state.newCollectionName} onChange={this.handleChange} />
                     <Dropdown label="Save as" items={saveAsDropdownItems} type="info" />
                 </form>
 

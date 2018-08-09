@@ -279,6 +279,8 @@ hr {
     border: 1px solid #e9ecef;
     border-right: 0 solid transparent;
     border-left: 0 solid transparent; }
+    .collections-list .list-group-item:first-child {
+      border-top: 0 solid transparent; }
     .collections-list .list-group-item div {
       margin-top: 4px; }
 
@@ -330,6 +332,17 @@ hr {
 
 .tab-content {
   position: relative; }
+
+.club-modal .modal-body {
+  padding: 0; }
+  .club-modal .modal-body .list-group-item {
+    border-radius: 0;
+    border-color: #e9ecef;
+    color: #000; }
+    .club-modal .modal-body .list-group-item:first-child {
+      border-top: 0 solid transparent; }
+    .club-modal .modal-body .list-group-item:last-child {
+      border-bottom: 0 solid transparent; }
 
 .input-group-addon:hover {
   border: 1px solid #999 !important;

@@ -16,7 +16,11 @@ class ReviewClubView extends React.Component {
     }
 
     componentDidMount() {
-        this.loadAllCalls();
+        this.loadAllCalls().then(() => {
+            if (this.props.passedCollection) {
+                this.loadPassedCollection();
+            }
+        });
         this.loadSessionNames();
 
     }
@@ -26,6 +30,11 @@ class ReviewClubView extends React.Component {
         db.calls.fetchAll().then((allCalls) => {
             this.setState({ selectedCalls: allCalls, activeFilter: {}, selectedCallsLoading: false });
         });
+    }
+
+    async loadPassedCollection() {
+        this.loadSession(this.props.passedCollection.name);
+        this.props.resetPassedCollection();
     }
 
     async loadSessionNames() {
