@@ -4,17 +4,17 @@ import squareLogo from "../img/logo.PNG";
 
 const Header = ({activeClub, activeUser, signOut, resetClub}) => (
   <header>
-    <nav className="navbar navbar-dark navbar-expand-lg main-bar sticky-top">
+    <nav className={`navbar navbar-dark navbar-expand-lg main-bar sticky-top ${activeUser ? "" : "bg-transparent"}`}>
 
        <div className="nav-item">
         <ol className="breadcrumb header-breadcrumbs">
-          <li className="breadcrumb-item large-crumb">
-            <NavLink className={`navbar-brand ml-2 mr-0`} to={`/`} onClick={resetClub}>
+          <li className="breadcrumb-item">
+            <NavLink className={`${activeUser ? "navbar-brand ml-2 mr-0" : "home-logo"}`} to={`/`} onClick={resetClub}>
             <img
               src={squareLogo}
               width="30"
               height="30"
-              className="d-inline-block align-top mr-3"
+              className={`d-inline-block align-top`}
               alt=""
             />
             {activeUser ? <div>

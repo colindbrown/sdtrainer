@@ -121,7 +121,7 @@ class FormModal extends React.Component {
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <Alerts alert={this.state.alert} clearAlert={() => this.clearAlert()} />
+                            <Alerts alert={this.state.alert} clearAlert={() => this.clearAlert()} modal={true}/>
                             <form className="modal-form" onSubmit={this.handleSubmit}>
                                 {nameInput}
                                 <div className="form-group">
