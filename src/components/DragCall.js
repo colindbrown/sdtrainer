@@ -32,7 +32,7 @@ class DragCall extends React.Component {
 
     render() {
         return this.props.connectDragSource(
-            <div>
+            <div style={{height: `${this.props.callSize.height}px`, width: `${this.props.callSize.width}px`}}>
                 <Call {...this.props} empty={this.props.isDragging}/>
             </div>
         );

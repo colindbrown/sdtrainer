@@ -3,12 +3,10 @@ import ReviewFunctionBar from "./ReviewFunctionBar";
 import { db } from "../util/dbfunctions";
 import List from "./List";
 import Modal from "./Modal";
-import Alerts from "./Alerts";
 
 class ReviewClubView extends React.Component {
 
     state = {
-        alerts: [],
         selectedCalls: [],
         selectedCallsLoading: false,
         sessionNames: [],
@@ -18,7 +16,11 @@ class ReviewClubView extends React.Component {
     }
 
     componentDidMount() {
-        this.loadAllCalls();
+        this.loadAllCalls().then(() => {
+            if (this.props.passedCollection) {
+                this.loadPassedCollection();
+            }
+        });
         this.loadSessionNames();
 
     }
@@ -28,6 +30,11 @@ class ReviewClubView extends React.Component {
         db.calls.fetchAll().then((allCalls) => {
             this.setState({ selectedCalls: allCalls, activeFilter: {}, selectedCallsLoading: false });
         });
+    }
+
+    async loadPassedCollection() {
+        this.loadSession(this.props.passedCollection.name);
+        this.props.resetPassedCollection();
     }
 
     async loadSessionNames() {
@@ -62,17 +69,8 @@ class ReviewClubView extends React.Component {
         })
     }
 
-    showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
-    }
-
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
-    }
-
     resetFilters() {
-        this.setState({ activeFilter: {}});
+        this.setState({ activeFilter: {}, sort: ""});
         this.loadAllCalls();
     }
 
@@ -114,7 +112,7 @@ class ReviewClubView extends React.Component {
         case "group":
             this.setState({ selectedCallsLoading: true });
             db.calls.fetchByGroup(name).then((calls) => {
-                this.setState({ selectedCalls: calls, selectedCallsLoading: false, activeFilter: {type: "group", name: "Group " + name} });
+                this.setState({ selectedCalls: calls, selectedCallsLoading: false, activeFilter: {type: "group", name: "group " + name} });
             });
             break;
         default:
@@ -138,25 +136,60 @@ class ReviewClubView extends React.Component {
     changeSort(sort) {
         this.setState({sort});
     }
+    
+    getHeader() {
+        const {type, name} = this.state.activeFilter;
+        var header;
+        switch (type) {
+            case "filter":
+                header = "Viewing " + name + " calls";
+                break;
+            case "session":
+                header = "Viewing session " + name;
+                break;
+            case "group":
+                header = "Viewing " + name;
+                break;
+            default:
+                header = "Viewing all calls";
+                break;
+        }
+        switch (this.state.sort) {
+            case "lastUsed":
+                header += ", sorted by Last Used";
+                break;
+            case "numUses":
+                header += ", sorted by Most Used";
+                break;
+            case "group":
+                header += ", sorted by Group";
+                break;
+            case "plus/basic":
+                header += ", sorted by Plus/Basic";
+                break;
+            default:
+                break;
+        }
+        return header;
+    }
 
     render() {
+        const listHeader = this.getHeader();
         return (
-            <div>
+            <div className="navbar-offset">
                 <Modal data={this.state.modalData}/>
                 <ReviewFunctionBar
-                    sessionNames={this.state.sessionNames}
                     activeFilter={this.state.activeFilter}
+                    sessionNames={this.state.sessionNames}
                     selectFilter={(type, name) => this.selectFilter(type, name)}
                     exportSelection={() => {this.exportSelection()}}
                     resetFilters={() => this.resetFilters()}
                     changeSort={(sort) => this.changeSort(sort)}
                 />
-                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
-                <div className="row">
-                    <List 
-                        size="col-md-12" 
+                <div className="row no-gutters">
+                    <List
                         id="reviewList" 
-                        columns={4} 
+                        header={listHeader}
                         calls={this.state.selectedCalls} 
                         loading={this.state.selectedCallsLoading}
                         sort={this.state.sort} 

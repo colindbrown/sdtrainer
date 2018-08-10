@@ -45,9 +45,15 @@ class DropList extends React.Component {s
 
     render() {
         const calls = this.hideRemovedCall(this.props.calls);
+        var flexWidth;
+        if (this.props.size === "half") {
+            flexWidth = "col-md-6";
+        } else {
+            flexWidth = "col-md-12";
+        }
         return this.props.connectDropTarget(
-            <div className={`${this.props.size}`}>
-                <List {...this.props} calls={calls} drag={true} size="" bookmarkCall={(name) => this.bookmarkCall(name)} replaceCall={() => this.replaceCall()}/>
+            <div className={`${flexWidth}`}>
+                <List {...this.props} calls={calls} drag={true} size="fill" bookmarkCall={(name) => this.bookmarkCall(name)} replaceCall={() => this.replaceCall()}/>
             </div>
         );
     }

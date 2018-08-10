@@ -9,9 +9,21 @@ class TemplatesModel {
     // create a template with the provided calls
     async create(name, calls) {
         const newTemplate = this.db.TemplatesRef.doc();
-        newTemplate.set({ name: name, createdAt: Date.now() });
+        newTemplate.set({ name: name, createdAt: Date.now(), count: calls.length });
         for (var i = 0; i < calls.length; i++) {
             const ref = await newTemplate.collection("Calls").add(calls[i]);
+            ref.update({position: i});
+        }
+    }
+
+    // edit template with new calls
+    async edit(name, calls) {
+        const template = await this.fetchRef(name);
+        template.update({ count: calls.length });
+        const snapshot = await template.collection("Calls").get();
+        snapshot.docs.forEach((doc) => doc.ref.delete());
+        for (var i = 0; i < calls.length; i++) {
+            const ref = await template.collection("Calls").add(calls[i]);
             ref.update({position: i});
         }
     }

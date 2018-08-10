@@ -1,6 +1,6 @@
 import React from "react";
 import List from "./List";
-import Alerts from "./Alerts";
+import { AlertsContext } from "./Alerts";
 import { db } from "../util/dbfunctions";
 import RunFunctionBar from "./RunFunctionBar";
 
@@ -9,7 +9,6 @@ class RunSessionView extends React.Component {
     state = {
         sessionCalls: [],
         loading: false,
-        alerts: [],
         planNames: [],
         activeSession: "",
         sort: "userPosition"
@@ -18,6 +17,9 @@ class RunSessionView extends React.Component {
 
     componentDidMount() {
         this.loadSessionNames();
+        if (this.props.passedCollection) {
+            this.loadPassedCollection();
+        }
     }
 
     async loadSession(name) {
@@ -40,6 +42,11 @@ class RunSessionView extends React.Component {
         });
     }
 
+    async loadPassedCollection() {
+        this.loadSession(this.props.passedCollection.name);
+        this.props.resetPassedCollection();
+    }
+
     finishSession(e) {
         e.preventDefault();
         const sessionUpdate = this.state.sessionCalls.map((call) => ({ name: call.name, used: call.disabled, timestamp: call.timestamp}));
@@ -47,7 +54,7 @@ class RunSessionView extends React.Component {
         const historyUpdate = this.state.sessionCalls.map((call) => ({ name: call.name, everUsed: call.disabled, uses: [call.timestamp] }));
         db.history.update(this.state.activeSession, historyUpdate);
         this.setState({ activeSession: "", sessionCalls: [] });
-        this.showAlert("alert-success", "Session saved");
+        this.props.showAlert("alert-success", "Session finished");
     }
 
     toggleCall(name) {
@@ -60,15 +67,6 @@ class RunSessionView extends React.Component {
             sessionCalls[index] = call;
             this.setState({ sessionCalls });
         }
-    }
-
-    showAlert(type, text) {
-        const alerts = [{ type: type, text: text }];
-        this.setState({ alerts });
-    }
-
-    clearAlerts = () => {
-        this.setState({ alerts: [] });
     }
 
     selectActiveSession = (name) => {
@@ -87,8 +85,9 @@ class RunSessionView extends React.Component {
         } else {
             placeholderContent={title: "Run a Session", text: "You don't have any session plans to run at the moment.", rel: "/create", destination: "Plan a Session"};
         }
+        const listHeader = this.state.activeSession ? "Running session: " + this.state.activeSession : "";
         return (
-            <div>
+            <div className="navbar-offset">
                 <RunFunctionBar
                     planNames={this.state.planNames}
                     activeSession={this.state.activeSession}
@@ -96,12 +95,11 @@ class RunSessionView extends React.Component {
                     changeSort={(sort) => this.changeSort(sort)}
                     finishSession={(e) => this.finishSession(e)}
                 />
-                <Alerts alerts={this.state.alerts} clearAlerts={() => this.clearAlerts()} />
-                <div className="row">
+                <div className="row no-gutters">
                     <List 
-                        size="col-md-12" 
+                        callSize="large"
                         id="runList" 
-                        columns={4} 
+                        header={listHeader}
                         calls={this.state.sessionCalls} 
                         loading={this.state.loading}
                         sort={this.state.sort} 
@@ -115,4 +113,8 @@ class RunSessionView extends React.Component {
 
 }
 
-export default RunSessionView;
+export default props => (
+    <AlertsContext.Consumer>
+      {functions => <RunSessionView {...props} showAlert={functions.showAlert}/>}
+    </AlertsContext.Consumer>
+  );
