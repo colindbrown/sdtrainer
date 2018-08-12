@@ -31,7 +31,7 @@ class Home extends React.Component {
                     signInForm={this.state.modalSignIn}
                 />
                 <footer className="home-footer">
-                <p>supported on Chrome and Firefox for laptops and desktops</p>
+                <p>supported on Chrome, Firefox, and Safari for laptops and desktops</p>
                 </footer>
             </div>
         )
