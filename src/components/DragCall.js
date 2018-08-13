@@ -44,7 +44,7 @@ class DragCall extends React.Component {
             <div className={`btn list-group-item call btn-outline-light group-${this.props.group} rounded-call ${this.props.rounded}`} 
                 style={{height: `${this.props.callSize.height}px`, width: `${this.props.callSize.width}px`}}
                 onClick={this.props.onClick}>
-                <Call {...this.props} draggable={true}/>
+                <Call {...this.props} empty={this.props.isDragging} draggable={true}/>
             </div>
         );
     }

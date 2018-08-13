@@ -108,6 +108,9 @@ span.empty {
   .call-empty:hover {
     background: #fff; }
 
+.call-snapshot:focus {
+  box-shadow: inherit; }
+
 .group-0 {
   box-shadow: inset 0px 0px 9px 1px #ccc; }
   .group-0:hover {
