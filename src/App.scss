@@ -154,6 +154,15 @@ span.empty {
   }
 }
 
+.call-snapshot {
+  &:focus {
+    box-shadow: inherit;
+    border: inherit;
+
+  }
+  background-color: $black;
+}
+
 .group-0 {
   box-shadow: inset 0px 0px 9px 1px  $light-grey;
 

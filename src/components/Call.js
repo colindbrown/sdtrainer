@@ -19,6 +19,9 @@ class Call extends React.Component {
             } else {
                 styling += `btn-outline-light group-${this.props.group}`;
             }
+            if (this.props.snapshot) {
+                styling += " call-snapshot";
+            }
         }
         const name = this.props.category === "plus" ? this.props.name + " +" : this.props.name;
         return (

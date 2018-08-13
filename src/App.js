@@ -13,6 +13,7 @@ import { db } from "./util/dbfunctions";
 import firebase from "firebase";
 import { DragDropContext } from  "react-dnd";
 import HTML5Backend from 'react-dnd-html5-backend';
+import CustomDragLayer from "./components/CustomDragLayer";
 import './App.css';
 
 const WindowContext = React.createContext({width: 0, height: 0});
@@ -154,7 +155,8 @@ class App extends Component {
             clearAlert: () => {
                 this.setState({ alert: {} });
             }}}>
-          {routes}
+            <CustomDragLayer/>
+            {routes}
           </AlertsContext.Provider>
         </div>
         </WindowContext.Provider>
