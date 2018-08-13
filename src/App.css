@@ -84,14 +84,23 @@ span.empty {
     background: #fdfdfd;
     color: #666; }
   .call:first-child {
-    border-radius: .25rem 0rem 0rem 0rem; }
+    border-radius: 0; }
   .call:last-child {
-    border-radius: 0rem 0rem .25rem 0rem; }
+    border-radius: 0; }
   .call span {
     position: absolute;
     top: 50%;
     -webkit-transform: translateY(-13px);
     transform: translateY(-13px); }
+
+.rounded-call:first-child {
+  border-radius: .25rem 0rem 0rem 0rem; }
+
+.rounded-call:last-child {
+  border-radius: 0rem 0rem .25rem 0rem; }
+
+.inherit-rounded {
+  border-radius: inherit; }
 
 .call-empty {
   border: 1px solid #e9ecef;

@@ -118,10 +118,10 @@ span.empty {
     color:  $dark-grey;
   }
   &:first-child {
-    border-radius: .25rem 0rem 0rem 0rem;
+    border-radius: 0;
   }
   &:last-child {
-    border-radius: 0rem 0rem .25rem 0rem ;
+    border-radius: 0;
   }
 
   span {
@@ -131,6 +131,19 @@ span.empty {
     transform: translateY(-13px)
   }
 
+}
+
+.rounded-call {
+  &:first-child {
+    border-radius: .25rem 0rem 0rem 0rem;
+  }
+  &:last-child {
+    border-radius: 0rem 0rem .25rem 0rem;
+  }
+}
+
+.inherit-rounded {
+  border-radius: inherit;
 }
 
 .call-empty {
