@@ -7,6 +7,10 @@ import { WindowContext } from "../App";
 
 class List extends React.Component {
 
+    state = {
+        placeholderIndex: undefined
+    }
+
     roundedCorners(NUMCOLUMNS,COLUMNSIZE,i) {
         if (i % (NUMCOLUMNS*COLUMNSIZE) === COLUMNSIZE - 1) {
             return "round-bl";
@@ -73,6 +77,21 @@ class List extends React.Component {
         }
     }
 
+    getPlaceholderIndex(NUMCOLUMNS, COLUMNSIZE) {
+        if (this.props.sort === "arrayOrder" && this.props.placeholderPosition) {
+            const {x, y, page} = this.props.placeholderPosition;
+            if (y < 0 || y >= COLUMNSIZE) {
+                return undefined;
+            } else if (x < 0 || x >= NUMCOLUMNS) {
+                return undefined;
+                //handle page turns
+            } else {
+                return (y + COLUMNSIZE * (x + NUMCOLUMNS * (page)));
+            }
+        }
+        return undefined;
+    }
+
     render() {
         var callSize;
         if (this.props.callSize === "large") {
@@ -103,23 +122,41 @@ class List extends React.Component {
         const filteredCalls = this.filterCalls(this.props.calls);
         const sortedCalls = this.props.sort === "arrayOrder" ? filteredCalls : filteredCalls.sort(sort);
 
+        var listCalls = sortedCalls.slice(0);
+        const placeholderIndex = this.getPlaceholderIndex(NUMCOLUMNS, COLUMNSIZE);
+        if (placeholderIndex) {
+            if (placeholderIndex >= sortedCalls.length) {
+                listCalls.push({empty: true});
+            } else {
+                listCalls.splice(placeholderIndex, 0, {empty: true});
+            }
+        } else {
+            listCalls = sortedCalls.slice(0);
+        }
+        
+
         var listItems = [];
-        for (var i = 0; i < sortedCalls.length; i++) {
-            const call = sortedCalls[i];
-            listItems.push(this.props.drag ? 
-                <DragCall {...call} key={call.name} 
-                    rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} 
-                    onClick={() => this.handleClick(call.name)} 
-                    bookmarkCall={(name) => this.props.bookmarkCall(name)} 
-                    replaceCall={() => this.props.replaceCall()}
-                    callSize={callSize}
-                />
-                : <Call {...call} key={call.name} callSize={callSize} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.handleClick(call.name)} />
-            )
+        for (var i = 0; i < listCalls.length; i++) {
+            const call = listCalls[i];
+            if (call.empty) {
+                const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
+                listItems.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`placeholder`} />);
+            } else {
+                listItems.push(this.props.drag ? 
+                    <DragCall {...call} key={call.name} 
+                        rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} 
+                        onClick={() => this.handleClick(call.name)} 
+                        bookmarkCall={(name) => this.props.bookmarkCall(name)} 
+                        replaceCall={() => this.props.replaceCall()}
+                        callSize={callSize}
+                    />
+                    : <Call {...call} key={call.name} callSize={callSize} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.handleClick(call.name)} />
+                )
+            }
         }
         while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
             const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
-            listItems.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`${id}, ${listItems.length}`} />)
+            listItems.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`${id}, ${listItems.length}`} />);
         }
 
         var pages = [];
@@ -127,6 +164,7 @@ class List extends React.Component {
             pages.push(
                 <Page 
                     key={j} 
+                    id={`${id}${j}`}
                     active={j === 0 ? "active" : ""} 
                     loading={this.props.loading}
                     columns={NUMCOLUMNS} columnSize={COLUMNSIZE}

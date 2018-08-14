@@ -3,10 +3,31 @@ import List from "./List"
 import { ItemTypes } from './DragCall';
 import { DropTarget } from 'react-dnd';
 
+function getPlaceholderPosition(callPosition, listPosition, callSize) {
+    // shift placeholder if y position more than card height / 2
+    return {x: Math.floor((callPosition.x - listPosition.x) / callSize.width + 0.5), y: Math.floor((callPosition.y - listPosition.y) / callSize.height + 0.5)}
+  }
+
 const listTarget = {
   drop(props, monitor) {
     props.addCallAt(monitor.getItem().name, 0);
-  }
+  },
+  hover(props, monitor, component) {
+    const activePage = window.$(`#${props.id} > div > .active`)[0];
+    const listPosition = { x: activePage.getBoundingClientRect().left, y: activePage.getBoundingClientRect().top}
+
+    const placeholderPosition = getPlaceholderPosition(
+      monitor.getSourceClientOffset(),
+      listPosition,
+      monitor.getItem().callSize
+    );
+
+    placeholderPosition["page"] = activePage.id.slice(component.props.id.length);
+
+    if (!component.placeholderPosition || (component.placeholderPosition.x !== placeholderPosition.x || component.placeholderPosition.y !== placeholderPosition.y)) {
+        component.placeholderPosition = placeholderPosition;
+    }
+}
 };
 
 function collect(connect, monitor) {
@@ -19,9 +40,18 @@ function collect(connect, monitor) {
 class DropList extends React.Component {s
 
     state = {
-        removedCall: undefined
+        removedCall: undefined,
+        placeholderPosition: undefined
     }
 
+    set placeholderPosition(placeholderPosition) {
+        this.setState({ placeholderPosition });
+    }
+
+    get placeholderPosition() {
+        return this.state.placeholderPosition;
+    }
+    
     replaceCall = () => {
         this.setState({removedCall: undefined});
     }
@@ -40,7 +70,7 @@ class DropList extends React.Component {s
 
     bookmarkCall = (name) => {
         const index = this.props.calls.findIndex((call) => call.name === name);
-        this.setState({origin: index});
+        //this.setState({origin: index});
     }
 
     render() {
@@ -53,7 +83,15 @@ class DropList extends React.Component {s
         }
         return this.props.connectDropTarget(
             <div className={`${flexWidth}`}>
-                <List {...this.props} calls={calls} drag={true} size="fill" bookmarkCall={(name) => this.bookmarkCall(name)} replaceCall={() => this.replaceCall()}/>
+                <List 
+                    {...this.props} 
+                    calls={calls} 
+                    drag={true} 
+                    placeholderPosition={this.state.placeholderPosition}
+                    size="fill" 
+                    bookmarkCall={(name) => this.bookmarkCall(name)} 
+                    replaceCall={() => this.replaceCall()}
+                />
             </div>
         );
     }
