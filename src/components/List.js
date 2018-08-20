@@ -35,8 +35,10 @@ class List extends React.Component {
         updatedState.NUMCOLUMNS = Math.floor((availableWidth-140)/updatedState.callSize.width) || 1;
         updatedState.COLUMNSIZE = Math.floor((props.windowHeight-state.navHeight)/updatedState.callSize.height) || 1;
 
-        updatedState.placeholderIndex = List.getPlaceholderIndex(props, updatedState.NUMCOLUMNS, updatedState.COLUMNSIZE);
-        props.setPlaceholderIndex(updatedState.placeholderIndex);
+        if (props.draggable) {
+            updatedState.placeholderIndex = List.getPlaceholderIndex(props, updatedState.NUMCOLUMNS, updatedState.COLUMNSIZE);
+            props.setPlaceholderIndex(updatedState.placeholderIndex);
+        }
 
         return updatedState;
     }
@@ -122,7 +124,11 @@ class List extends React.Component {
                 } else if (placeholderIndex > props.calls.length) {
                     return props.calls.length;
                 } else {
-                    return placeholderIndex;
+                    if (props.dragSourceOrigin && props.dragSourcePosition < placeholderIndex) {
+                        return placeholderIndex + 1;
+                    } else {
+                        return placeholderIndex;
+                    }
                 }
             }
         }
@@ -141,7 +147,7 @@ class List extends React.Component {
         var listCalls;
         if (this.props.sort === "arrayOrder") {
             listCalls = filteredCalls.slice(0);
-            if (placeholderIndex) {
+            if (placeholderIndex >= 0) {
                 if (placeholderIndex >= filteredCalls.length) {
                     listCalls.push({empty: true});
                 } else {
@@ -160,8 +166,9 @@ class List extends React.Component {
                 const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
                 listItems.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`placeholder`} />);
             } else {
-                listItems.push(this.props.drag ? 
-                    <DragCall {...call} key={call.name} 
+                listItems.push(this.props.draggable ? 
+                    <DragCall {...call} key={call.name}
+                        position={i}
                         rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} 
                         onClick={() => this.handleClick(call.name)}
                         callSize={callSize}
@@ -177,7 +184,18 @@ class List extends React.Component {
         }
 
         var pages = [];
+        var extraCallAdded = false;
         for (var j = 0; j < (listItems.length / (NUMCOLUMNS*COLUMNSIZE)); j++) {
+            var firstCallIndex = j*(NUMCOLUMNS*COLUMNSIZE);
+            var lastCallIndex = (j+1)*(NUMCOLUMNS*COLUMNSIZE);
+            if (extraCallAdded) {
+                firstCallIndex += 1;
+                lastCallIndex += 1;
+            }
+            if (this.props.draggable && this.props.dragSourceOrigin && this.props.dragSourcePosition >= firstCallIndex && this.props.dragSourcePosition < lastCallIndex) {
+                lastCallIndex += 1
+                extraCallAdded = true;
+            }
             pages.push(
                 <Page 
                     key={j} 
@@ -186,7 +204,7 @@ class List extends React.Component {
                     loading={this.props.loading}
                     columns={NUMCOLUMNS} columnSize={COLUMNSIZE}
                     callSize={callSize}
-                    calls={listItems.slice(j*(NUMCOLUMNS*COLUMNSIZE), (j+1)*(NUMCOLUMNS*COLUMNSIZE))}
+                    calls={listItems.slice(firstCallIndex, lastCallIndex)}
                 />
             );
         }

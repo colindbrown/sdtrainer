@@ -28,13 +28,15 @@ const listTarget = {
     if (!component.placeholderPosition || (component.placeholderPosition.x !== placeholderPosition.x || component.placeholderPosition.y !== placeholderPosition.y)) {
         component.placeholderPosition = placeholderPosition;
     }
+
 }
 };
 
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver()
+    isOver: monitor.isOver(),
+    dragSourceItem: monitor.getItem()
   };
 }
 
@@ -66,11 +68,19 @@ class DropList extends React.Component {s
         } else {
             flexWidth = "col-md-12";
         }
+        var dragSourcePosition = -1;
+        var dragSourceOrigin = false;
+        if (this.props.dragSourceItem) {
+            dragSourcePosition = this.props.dragSourceItem.position;
+            dragSourceOrigin = this.props.dragSourceItem.source === this.props.id;
+        }
         return this.props.connectDropTarget(
             <div className={`${flexWidth}`}>
                 <List
                     {...this.props}
-                    drag={true} 
+                    draggable={true} 
+                    dragSourcePosition={dragSourcePosition}
+                    dragSourceOrigin={dragSourceOrigin}
                     placeholderPosition={this.state.placeholderPosition}
                     size="fill"
                     setPlaceholderIndex={this.setPlaceholderIndex}

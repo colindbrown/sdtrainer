@@ -17,6 +17,10 @@ const callSource = {
             callSize: props.callSize,
             source: props.source
         };
+    },
+    isDragging(props, monitor) {
+      const isDragging = props.name && props.name === monitor.getItem().name;
+      return isDragging;
     }
   };
 
@@ -37,7 +41,7 @@ class DragCall extends React.Component {
     render() {
         return this.props.connectDragSource(
             <div className={`btn list-group-item call btn-outline-light group-${this.props.group} rounded-call ${this.props.rounded}`} 
-                style={{height: `${this.props.callSize.height}px`, width: `${this.props.callSize.width}px`}}
+                style={this.props.isDragging ? {display: 'none'} : {height: `${this.props.callSize.height}px`, width: `${this.props.callSize.width}px`}}
                 onClick={this.props.onClick}>
                 <Call {...this.props} empty={this.props.isDragging} draggable={true}/>
             </div>

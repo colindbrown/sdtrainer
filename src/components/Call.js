@@ -32,6 +32,7 @@ class Call extends React.Component {
             data-target={dataTarget} 
             className={`${styling} d-flex justify-content-center`} 
             style={callStyle}
+            id={this.props.name}
             onClick={this.props.onClick}>
                 <span className={`${this.props.empty ? "empty" : ""}`}>{name}</span>
             </li>
