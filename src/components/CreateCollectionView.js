@@ -69,7 +69,7 @@ class CreateCollectionView extends React.Component {
         this.setState({ collectionCallsLoading: true })
         db.sessions.fetchCalls(name).then((sessionCalls) => {
             sessionCalls.forEach(((call) => {
-                this.moveCall(call.name, "collectionList");
+                this.moveCallTo(call.name, -1, "callList", "collectionList");
             }));
             this.setState({collectionCallsLoading: false })
         });
@@ -79,7 +79,7 @@ class CreateCollectionView extends React.Component {
         this.setState({ collectionCallsLoading: true })
         db.templates.fetchCalls(name).then((templateCalls) => {
             templateCalls.forEach(((call) => {
-                this.moveCall(call.name, "collectionList");
+                this.moveCallTo(call.name, -1, "callList", "collectionList");
             }));
             this.setState({collectionCallsLoading: false })
         });
@@ -153,7 +153,7 @@ class CreateCollectionView extends React.Component {
         this.setState({collectionCallsLoading: true })
         db.history.fetchByEverUsed(true).then((calls) => {
             calls.forEach(((call) => {
-                this.moveCall(call.name, "collectionList");
+                this.moveCallTo(call.name, -1, "callList", "collectionList");
             }));
             this.setState({collectionCallsLoading: false })
         })
@@ -161,7 +161,7 @@ class CreateCollectionView extends React.Component {
 
     removeAll = () => {
         const collectionList = this.state.collectionList.slice(0);
-        collectionList.forEach((call) => this.moveCall(call.name, "callList"));
+        collectionList.forEach((call) => this.moveCallTo(call.name, -1, "collectionList", "callList"));
     }
 
     changeSort(sort) {
@@ -174,7 +174,7 @@ class CreateCollectionView extends React.Component {
 
     filterEnter() {
         if (this.state.single.name) {
-            this.moveCall(this.state.single.name, "collectionList");
+            this.moveCallTo(this.state.single.name, -1, "callList", "collectionList");
             return true;
         }  
         return false;

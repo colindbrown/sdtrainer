@@ -8,7 +8,8 @@ import { WindowContext } from "../App";
 class List extends React.Component {
 
     state = {
-        navHeight: 160
+        navHeight: 160,
+        currentTimeout: undefined
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -38,6 +39,7 @@ class List extends React.Component {
         if (props.draggable) {
             updatedState.placeholderIndex = List.getPlaceholderIndex(props, updatedState.NUMCOLUMNS, updatedState.COLUMNSIZE);
             props.setPlaceholderIndex(updatedState.placeholderIndex);
+            updatedState.currentTimeout = List.handlePageTurns(props, state.currentTimeout, updatedState.NUMCOLUMNS, updatedState.COLUMNSIZE);
         }
 
         return updatedState;
@@ -116,7 +118,6 @@ class List extends React.Component {
                 return undefined;
             } else if (x < 0 || x >= NUMCOLUMNS) {
                 return undefined;
-                //handle page turns
             } else {
                 const placeholderIndex = (y + COLUMNSIZE * (x + NUMCOLUMNS * (page)));
                 if (placeholderIndex < 0) {
@@ -133,6 +134,33 @@ class List extends React.Component {
             }
         }
         return undefined;
+    }
+
+    static handlePageTurns(props, timeout, NUMCOLUMNS, COLUMNSIZE) {
+        if (props.sort === "arrayOrder" && props.placeholderPosition) {
+            const {x, y} = props.placeholderPosition;
+            if (y < 0 || y >= COLUMNSIZE) {
+                clearTimeout(timeout);
+                return undefined;
+            } else if (x < 0) {
+                clearTimeout(timeout);
+                return setTimeout(() => {
+                    window.$(`#${props.id}`).carousel('prev');
+                }, 1000);
+            } else if (x >= NUMCOLUMNS) {
+                clearTimeout(timeout);
+                return setTimeout(() => {
+                    window.$(`#${props.id}`).carousel('next');
+                }, 1000);
+            } else {
+                clearTimeout(timeout);
+                return undefined;
+            }
+        } else if (timeout) {
+            clearTimeout(timeout);
+        }
+        return undefined;
+
     }
 
     render() {
