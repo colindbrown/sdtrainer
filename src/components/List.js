@@ -99,6 +99,7 @@ class List extends React.Component {
         const filteredCalls = this.filterCalls(this.props.calls);
         const sortedCalls = this.props.sort === "arrayOrder" ? filteredCalls : filteredCalls.sort(sort);
 
+        const onePage = this.props.calls.length <= NUMCOLUMNS * COLUMNSIZE;
         var listItems = [];
         for (var i = 0; i < sortedCalls.length; i++) {
             const call = sortedCalls[i];
@@ -132,7 +133,7 @@ class List extends React.Component {
             <div className={`${flexWidth}`}>
                 <h4 className="list-header text-secondary">{this.props.header}</h4>
                 <div id={id} className={`carousel slide d-flex justify-content-center`} data-wrap="false" data-interval="false">
-                    <a className="carousel-control-prev btn btn-secondary" href={`#${id}`} role="button" data-slide="prev">
+                    <a className={`carousel-control-prev btn btn-secondary ${onePage ? "disabled" : ""}`} href={`#${id}`} role="button" data-slide="prev">
                         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span className="sr-only">Previous</span>
                     </a>
@@ -140,7 +141,7 @@ class List extends React.Component {
                         {placeholder || ""}
                         {pages}
                     </div>
-                    <a className="btn btn-secondary carousel-control-next" href={`#${id}`} role="button" data-slide="next">
+                    <a className={`btn btn-secondary carousel-control-next ${onePage ? "disabled" : ""}`} href={`#${id}`} role="button" data-slide="next">
                         <span className="carousel-control-next-icon" aria-hidden="true"></span>
                         <span className="sr-only">Next</span>
                     </a>

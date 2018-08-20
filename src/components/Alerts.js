@@ -5,7 +5,7 @@ class Alerts extends React.Component {
     render() {
         const alert = this.props.alert;
         return (
-            <div className={`alert ${alert.type} alerts-bar`} role="alert" key={alert.text}>
+            <div className={`alert ${alert.type} m-2 ${this.props.modal ? "" : "alerts-bar"}`} role="alert" key={alert.text}>
                 <span className="mr-auto">
                     {alert.text}
                 </span>

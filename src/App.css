@@ -185,9 +185,15 @@ hr {
   height: 450px;
   width: 700px;
   margin: auto; }
+  .home-jumbo::before {
+    opacity: .2; }
 
 .full-page {
-  height: calc(100vh - 55px);
+  height: 100vh;
+  width: 100vw;
+  max-width: unset;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box; }
 
 .modal-form {
@@ -348,6 +354,44 @@ hr {
   border: 1px solid #999 !important;
   background-color: #e9ecef; }
 
+.text-silver {
+  color: #e9ecef; }
+
+.header-breadcrumbs {
+  margin-bottom: 0px;
+  background: inherit;
+  padding: 0px; }
+  .header-breadcrumbs .small-crumb {
+    padding-top: 9px;
+    padding-bottom: 6px; }
+
+.navbar-brand {
+  display: inline-flex; }
+  .navbar-brand img {
+    margin-right: 8px; }
+
+.home-logo img {
+  position: fixed;
+  top: 25px;
+  left: 25px;
+  height: 45px;
+  width: 45px; }
+
+.bg-dance {
+  background-image: url("./img/dark-background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; }
+
+.bg-transparent {
+  background-color: transparent; }
+
+.home-footer {
+  position: fixed;
+  bottom: 5px;
+  font-size: 14px;
+  color: #ccc; }
+
 .alerts-bar {
   position: fixed;
   top: 30px;
@@ -365,3 +409,7 @@ body {
 .save-as-name {
   width: 200px !important;
   font-size: 16px; }
+
+.progress {
+  border: 1px solid #999;
+  height: 18px; }
