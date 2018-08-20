@@ -41,6 +41,7 @@ class App extends Component {
         this.setState({activeUser: "", loadingUser: false});
       }
     });
+    window.$('[data-toggle="tooltip"]').tooltip()
   }
 
   updateActiveClub = async (name) => {
@@ -145,7 +146,13 @@ class App extends Component {
       <HashRouter>
         <WindowContext.Provider value={{width: this.state.windowWidth, height: this.state.windowHeight }} >
         <div className="App">
-          <Header activeClub={this.state.activeClub} activeUser={this.state.activeUser} signOut={() => this.signOut()} resetClub={() => this.resetClub()}/>
+          <Header 
+            activeClub={this.state.activeClub} 
+            activeUser={this.state.activeUser} 
+            signOut={() => this.signOut()} 
+            resetClub={() => this.resetClub()} 
+            loading={this.state.loadingUser}
+          />
           {this.state.alert.text ? <Alerts alert={this.state.alert} clearAlert={() => this.clearAlert()} /> : ""}
           <AlertsContext.Provider value={{ 
             showAlert: (type, text) => {
