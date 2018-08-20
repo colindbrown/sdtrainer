@@ -57,7 +57,6 @@ class DropList extends React.Component {s
         if (placeholderIndex !== this.state.placeholderIndex) {
             this.setState({placeholderIndex});
         }
-        return placeholderIndex;
     }
 
     render() {
@@ -69,7 +68,7 @@ class DropList extends React.Component {s
         }
         return this.props.connectDropTarget(
             <div className={`${flexWidth}`}>
-                <List 
+                <List
                     {...this.props}
                     drag={true} 
                     placeholderPosition={this.state.placeholderPosition}

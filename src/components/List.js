@@ -36,6 +36,7 @@ class List extends React.Component {
         updatedState.COLUMNSIZE = Math.floor((props.windowHeight-state.navHeight)/updatedState.callSize.height) || 1;
 
         updatedState.placeholderIndex = List.getPlaceholderIndex(props, updatedState.NUMCOLUMNS, updatedState.COLUMNSIZE);
+        props.setPlaceholderIndex(updatedState.placeholderIndex);
 
         return updatedState;
     }
@@ -115,7 +116,14 @@ class List extends React.Component {
                 return undefined;
                 //handle page turns
             } else {
-                return props.setPlaceholderIndex((y + COLUMNSIZE * (x + NUMCOLUMNS * (page))));
+                const placeholderIndex = (y + COLUMNSIZE * (x + NUMCOLUMNS * (page)));
+                if (placeholderIndex < 0) {
+                    return undefined;
+                } else if (placeholderIndex > props.calls.length) {
+                    return props.calls.length;
+                } else {
+                    return placeholderIndex;
+                }
             }
         }
         return undefined;

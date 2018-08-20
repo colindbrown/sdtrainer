@@ -147,26 +147,6 @@ class CreateCollectionView extends React.Component {
         return false;
     }
 
-    moveCall = (name, destination) => {
-        var callList = this.state.callList;
-        var collectionList = this.state.collectionList;
-
-        if (destination === "collectionList") {
-            const index = callList.findIndex((call) => call.name === name);
-            if (index >= 0) {
-                collectionList.push(callList[index]);
-                callList.splice(index, 1);
-            }
-        } else {
-            const index = collectionList.findIndex((call) => call.name === name);
-            if (index >= 0) {
-                callList.push(collectionList[index]);
-                collectionList.splice(index, 1);
-            }
-        }
-        this.setState({ callList, collectionList });
-    }
-
     // Props methods
     addAllUsed = async (e) => {
         e.preventDefault();
@@ -214,14 +194,12 @@ class CreateCollectionView extends React.Component {
 
         const sourceIndex = lists[source].findIndex((call) => call.name === name);
         if (sourceIndex >= 0) {
-            console.log(sourceIndex)
-            const call = lists[source].splice(sourceIndex, 1)[0];
-
-            var destinationIndex = destIndex;
+            var destinationIndex = destIndex === -1 ? lists[destination].length - 1 : destIndex;
             if (source === destination && sourceIndex < destIndex) {
                 destinationIndex -= 1;
             }
 
+            const call = lists[source].splice(sourceIndex, 1)[0];
             lists[destination].splice(destinationIndex, 0, call);
         }
 
@@ -255,7 +233,7 @@ class CreateCollectionView extends React.Component {
                         calls={this.state.callList}
                         sort={this.state.sort}
                         loading={this.state.callsLoading}
-                        onClick={(name) => this.moveCall(name, "collectionList")} 
+                        onClick={(name) => this.moveCallTo(name, -1, "callList", "collectionList")} 
                         moveCallTo={(name, index, source) => this.moveCallTo(name, index, source, "callList")}
                         filter={this.state.filterString}
                         returnSingle={(call) => this.returnSingle(call)}
@@ -268,8 +246,8 @@ class CreateCollectionView extends React.Component {
                         sort={"arrayOrder"}
                         loading={this.state.collectionCallsLoading}
                         placeholderContent={{title: "Create a Collection", 
-                            text: "Add calls to your collection using the function bar or the list to the left. Once you're done, save your collection as either a session plan or a template."}}
-                        onClick={(name) => this.moveCall(name, "callList")} 
+                            text: "Add calls to your collection using the function bar, clicking on the list to the left, or by drag-and-drop. Once you're done, save your collection as either a session plan or a template."}}
+                        onClick={(name) => this.moveCallTo(name, -1, "collectionList", "callList")} 
                         moveCallTo={(name, index, source) => this.moveCallTo(name, index, source, "collectionList")}
                     />
                 </div>
