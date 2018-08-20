@@ -206,16 +206,26 @@ class CreateCollectionView extends React.Component {
         }
     }
 
-    addCallAt(name, index, destination) {
-        this.moveCall(name, destination);
-    }
+    moveCallTo(name, destIndex, source, destination) {
+        var lists = { 
+            callList: this.state.callList, 
+            collectionList: this.state.collectionList 
+        }
 
-    bookmarkCall() {
+        const sourceIndex = lists[source].findIndex((call) => call.name === name);
+        if (sourceIndex >= 0) {
+            console.log(sourceIndex)
+            const call = lists[source].splice(sourceIndex, 1)[0];
 
-    }
+            var destinationIndex = destIndex;
+            if (source === destination && sourceIndex < destIndex) {
+                destinationIndex -= 1;
+            }
 
-    replaceCall() {
+            lists[destination].splice(destinationIndex, 0, call);
+        }
 
+        this.setState({ callList: lists.callList, collectionList: lists.collectionList });
     }
 
     render() {
@@ -246,7 +256,7 @@ class CreateCollectionView extends React.Component {
                         sort={this.state.sort}
                         loading={this.state.callsLoading}
                         onClick={(name) => this.moveCall(name, "collectionList")} 
-                        addCallAt={(name, index) => this.addCallAt(name, index, "callList")}
+                        moveCallTo={(name, index, source) => this.moveCallTo(name, index, source, "callList")}
                         filter={this.state.filterString}
                         returnSingle={(call) => this.returnSingle(call)}
                     />
@@ -260,7 +270,7 @@ class CreateCollectionView extends React.Component {
                         placeholderContent={{title: "Create a Collection", 
                             text: "Add calls to your collection using the function bar or the list to the left. Once you're done, save your collection as either a session plan or a template."}}
                         onClick={(name) => this.moveCall(name, "callList")} 
-                        addCallAt={(name, index) => this.addCallAt(name, index, "collectionList")}
+                        moveCallTo={(name, index, source) => this.moveCallTo(name, index, source, "collectionList")}
                     />
                 </div>
             </div>

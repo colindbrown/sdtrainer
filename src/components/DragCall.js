@@ -9,19 +9,14 @@ const ItemTypes = {
 
 const callSource = {
     beginDrag(props) {
-        props.bookmarkCall(props.name);
         return {
             name: props.name,
             position: props.position,
             category: props.category,
             group: props.group,
-            callSize: props.callSize
+            callSize: props.callSize,
+            source: props.source
         };
-    },
-    endDrag(props, monitor) {
-        if (!monitor.didDrop()) {
-            props.replaceCall();
-        }
     }
   };
 

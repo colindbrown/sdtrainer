@@ -1,5 +1,4 @@
 import React from 'react';
-import ItemTypes from './DragCall';
 import Call from "./Call";
 import { DragLayer } from 'react-dnd';
 

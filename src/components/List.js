@@ -8,7 +8,36 @@ import { WindowContext } from "../App";
 class List extends React.Component {
 
     state = {
-        placeholderIndex: undefined
+        navHeight: 160
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        var updatedState = state;
+
+        if (props.callSize === "large") {
+            updatedState.callSize = {height: 60, width: 260};
+        } else {
+            updatedState.callSize = {height: 50, width: 220};
+        }
+
+        var availableWidth;
+        if (props.size === "half") {
+            updatedState.flexWidth = "col-md-6";
+            availableWidth = Math.min(props.windowWidth/2, 1300);
+        } else if (props.size === "fill") {
+            updatedState.flexWidth = "col-md-12";
+            availableWidth = Math.min(props.windowWidth/2, 1300);
+        } else {
+            updatedState.flexWidth = "col-md-12";
+            availableWidth = Math.min(props.windowWidth, 1300);
+        }
+
+        updatedState.NUMCOLUMNS = Math.floor((availableWidth-140)/updatedState.callSize.width) || 1;
+        updatedState.COLUMNSIZE = Math.floor((props.windowHeight-state.navHeight)/updatedState.callSize.height) || 1;
+
+        updatedState.placeholderIndex = List.getPlaceholderIndex(props, updatedState.NUMCOLUMNS, updatedState.COLUMNSIZE);
+
+        return updatedState;
     }
 
     roundedCorners(NUMCOLUMNS,COLUMNSIZE,i) {
@@ -77,63 +106,43 @@ class List extends React.Component {
         }
     }
 
-    getPlaceholderIndex(NUMCOLUMNS, COLUMNSIZE) {
-        if (this.props.sort === "arrayOrder" && this.props.placeholderPosition) {
-            const {x, y, page} = this.props.placeholderPosition;
+    static getPlaceholderIndex(props, NUMCOLUMNS, COLUMNSIZE) {
+        if (props.sort === "arrayOrder" && props.placeholderPosition) {
+            const {x, y, page} = props.placeholderPosition;
             if (y < 0 || y >= COLUMNSIZE) {
                 return undefined;
             } else if (x < 0 || x >= NUMCOLUMNS) {
                 return undefined;
                 //handle page turns
             } else {
-                return (y + COLUMNSIZE * (x + NUMCOLUMNS * (page)));
+                return props.setPlaceholderIndex((y + COLUMNSIZE * (x + NUMCOLUMNS * (page))));
             }
         }
         return undefined;
     }
 
     render() {
-        var callSize;
-        if (this.props.callSize === "large") {
-            callSize = {height: 60, width: 260};
-        } else {
-            callSize = {height: 50, width: 220};
-        }
+        const {NUMCOLUMNS, COLUMNSIZE, callSize, placeholderIndex, flexWidth} = this.state;
 
-        const navHeight = 160;
-        var availableWidth, flexWidth;
-        if (this.props.size === "half") {
-            availableWidth = Math.min(this.props.windowWidth/2, 1300);
-            flexWidth = "col-md-6";
-        } else if (this.props.size === "fill") {
-            flexWidth = "col-md-12";
-            availableWidth = Math.min(this.props.windowWidth/2, 1300);
-        } else {
-            availableWidth = Math.min(this.props.windowWidth, 1300);
-            flexWidth = "col-md-12";
-        }
-
-        const NUMCOLUMNS = Math.floor((availableWidth-140)/callSize.width) || 1;
-        const COLUMNSIZE = Math.floor((this.props.windowHeight-navHeight)/callSize.height) || 1;
         const sort = this.getSort();
-
         const id = this.props.id || "listCarousel";
+        const placeholder = !this.props.calls.length && this.props.placeholderContent && !this.props.loading? <Placeholder content={this.props.placeholderContent} /> : "";
 
         const filteredCalls = this.filterCalls(this.props.calls);
-        const sortedCalls = this.props.sort === "arrayOrder" ? filteredCalls : filteredCalls.sort(sort);
 
-        var listCalls = sortedCalls.slice(0);
-        const placeholderIndex = this.getPlaceholderIndex(NUMCOLUMNS, COLUMNSIZE);
-        if (placeholderIndex) {
-            if (placeholderIndex >= sortedCalls.length) {
-                listCalls.push({empty: true});
-            } else {
-                listCalls.splice(placeholderIndex, 0, {empty: true});
+        var listCalls;
+        if (this.props.sort === "arrayOrder") {
+            listCalls = filteredCalls.slice(0);
+            if (placeholderIndex) {
+                if (placeholderIndex >= filteredCalls.length) {
+                    listCalls.push({empty: true});
+                } else {
+                    listCalls.splice(placeholderIndex, 0, {empty: true});
+                }
             }
         } else {
-            listCalls = sortedCalls.slice(0);
-        }
-        
+            listCalls = filteredCalls.sort(sort);
+        }     
 
         var listItems = [];
         for (var i = 0; i < listCalls.length; i++) {
@@ -145,10 +154,9 @@ class List extends React.Component {
                 listItems.push(this.props.drag ? 
                     <DragCall {...call} key={call.name} 
                         rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} 
-                        onClick={() => this.handleClick(call.name)} 
-                        bookmarkCall={(name) => this.props.bookmarkCall(name)} 
-                        replaceCall={() => this.props.replaceCall()}
+                        onClick={() => this.handleClick(call.name)}
                         callSize={callSize}
+                        source={this.props.id}
                     />
                     : <Call {...call} key={call.name} callSize={callSize} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.handleClick(call.name)} />
                 )
@@ -173,7 +181,6 @@ class List extends React.Component {
                 />
             );
         }
-        const placeholder = !this.props.calls.length && this.props.placeholderContent && !this.props.loading? <Placeholder content={this.props.placeholderContent} /> : "";
 
         return (
             <div className={`${flexWidth}`}>

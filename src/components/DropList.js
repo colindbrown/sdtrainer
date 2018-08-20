@@ -4,13 +4,14 @@ import { ItemTypes } from './DragCall';
 import { DropTarget } from 'react-dnd';
 
 function getPlaceholderPosition(callPosition, listPosition, callSize) {
-    // shift placeholder if y position more than card height / 2
     return {x: Math.floor((callPosition.x - listPosition.x) / callSize.width + 0.5), y: Math.floor((callPosition.y - listPosition.y) / callSize.height + 0.5)}
-  }
+}
 
 const listTarget = {
-  drop(props, monitor) {
-    props.addCallAt(monitor.getItem().name, 0);
+  drop(props, monitor, component) {
+    const item = monitor.getItem()
+    props.moveCallTo(item.name, component.state.placeholderIndex || 0, item.source);
+    component.placeholderPosition = undefined;
   },
   hover(props, monitor, component) {
     const activePage = window.$(`#${props.id} > div > .active`)[0];
@@ -40,8 +41,8 @@ function collect(connect, monitor) {
 class DropList extends React.Component {s
 
     state = {
-        removedCall: undefined,
-        placeholderPosition: undefined
+        placeholderPosition: undefined,
+        placeholderIndex: undefined
     }
 
     set placeholderPosition(placeholderPosition) {
@@ -51,30 +52,15 @@ class DropList extends React.Component {s
     get placeholderPosition() {
         return this.state.placeholderPosition;
     }
-    
-    replaceCall = () => {
-        this.setState({removedCall: undefined});
-    }
 
-    hideRemovedCall(calls) {
-        if (this.state.removedCall) {
-            const index = calls.findIndex((call) => call.name === this.state.removedCall);
-            if (index >= 0) {
-                calls[index].empty = true;
-                calls.push(calls[index]);
-                calls.splice(index, 1);
-            }
+    setPlaceholderIndex = (placeholderIndex) => {
+        if (placeholderIndex !== this.state.placeholderIndex) {
+            this.setState({placeholderIndex});
         }
-        return calls;
-    }
-
-    bookmarkCall = (name) => {
-        const index = this.props.calls.findIndex((call) => call.name === name);
-        //this.setState({origin: index});
+        return placeholderIndex;
     }
 
     render() {
-        const calls = this.hideRemovedCall(this.props.calls);
         var flexWidth;
         if (this.props.size === "half") {
             flexWidth = "col-md-6";
@@ -84,13 +70,11 @@ class DropList extends React.Component {s
         return this.props.connectDropTarget(
             <div className={`${flexWidth}`}>
                 <List 
-                    {...this.props} 
-                    calls={calls} 
+                    {...this.props}
                     drag={true} 
                     placeholderPosition={this.state.placeholderPosition}
-                    size="fill" 
-                    bookmarkCall={(name) => this.bookmarkCall(name)} 
-                    replaceCall={() => this.replaceCall()}
+                    size="fill"
+                    setPlaceholderIndex={this.setPlaceholderIndex}
                 />
             </div>
         );
