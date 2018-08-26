@@ -245,7 +245,7 @@ class List extends React.Component {
                         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span className="sr-only">Previous</span>
                     </a>
-                    <div className="carousel-inner container" style={{width: `${NUMCOLUMNS*callSize.width + 2}px`}}>
+                    <div className="carousel-inner container" style={{width: `${NUMCOLUMNS*callSize.width + 2}px`, minWidth: `${NUMCOLUMNS*callSize.width + 2}px`}}>
                         {placeholder || ""}
                         {pages}
                     </div>
