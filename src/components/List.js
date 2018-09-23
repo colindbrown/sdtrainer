@@ -184,7 +184,7 @@ class List extends React.Component {
         return callsList;
     }
 
-    createCallObjects(callsList) {
+    createCallObjects(callsList, id) {
         const {NUMCOLUMNS, COLUMNSIZE, callSize} = this.state;
 
         var objectsList = [];
@@ -213,7 +213,7 @@ class List extends React.Component {
         return objectsList;
     }
 
-    createPages(objectsList) {
+    createPages(objectsList, id) {
         const {NUMCOLUMNS, COLUMNSIZE, callSize} = this.state;
 
         var pages = [];
@@ -252,8 +252,8 @@ class List extends React.Component {
         const onePage = this.props.calls.length <= NUMCOLUMNS * COLUMNSIZE;
 
         var callsList = this.formatCalls();
-        var objectsList = this.createCallObjects(callsList);
-        var pages = this.createPages(objectsList);
+        var objectsList = this.createCallObjects(callsList, id);
+        var pages = this.createPages(objectsList, id);
 
         return (
             <div className={`${flexWidth}`}>
