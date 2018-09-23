@@ -18,7 +18,8 @@ class CreateFunctionBar extends React.Component {
         this.setState({ newCollectionName: e.target.value });
     }
 
-    handleSubmit = async (type) => {
+    handleSubmit = async (e, type) => {
+        e.preventDefault();
         if (type === "session") {
             const success = await this.props.saveNewSession(this.state.newCollectionName);
             if (success) {
@@ -70,8 +71,8 @@ class CreateFunctionBar extends React.Component {
         ];
 
         const saveAsDropdownItems = [
-            {text: "Session Plan", onClick: () => this.handleSubmit("session"), disabled: !this.props.activeClub},
-            {text: "Template", onClick: () => this.handleSubmit("template")}
+            {text: "Session Plan", onClick: (e) => this.handleSubmit(e, "session"), disabled: !this.props.activeClub},
+            {text: "Template", onClick: (e) => this.handleSubmit(e, "template")}
         ]
 
         return (
