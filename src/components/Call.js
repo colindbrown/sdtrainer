@@ -2,7 +2,7 @@ import React from "react";
 
 class Call extends React.Component {
 
-    render() {
+    getStyling() {
         var styling = "";
         var dataTarget = "#exportModal";
         var callStyle;
@@ -25,6 +25,13 @@ class Call extends React.Component {
                 styling += ` rounded-call ${this.props.rounded}`;
             }
         }
+
+        return {styling, callStyle}
+    }
+
+    render() {
+        var {styling, callStyle} = this.getStyling();
+        var dataTarget = "#exportModal";
         const name = this.props.category === "plus" ? this.props.name + " +" : this.props.name;
         return (
             <li 

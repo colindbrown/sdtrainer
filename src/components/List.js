@@ -163,38 +163,38 @@ class List extends React.Component {
 
     }
 
-    render() {
-        const {NUMCOLUMNS, COLUMNSIZE, callSize, placeholderIndex, flexWidth} = this.state;
-
-        const sort = this.getSort();
-        const id = this.props.id || "listCarousel";
-        const placeholder = !this.props.calls.length && this.props.placeholderContent && !this.props.loading? <Placeholder content={this.props.placeholderContent} /> : "";
-
+    formatCalls() {
         const filteredCalls = this.filterCalls(this.props.calls);
+        const placeholderIndex =this.state.placeholderIndex;
+        const sort = this.getSort();
 
-        var listCalls;
+        var callsList;
         if (this.props.sort === "arrayOrder") {
-            listCalls = filteredCalls.slice(0);
+            callsList = filteredCalls.slice(0);
             if (placeholderIndex >= 0) {
                 if (placeholderIndex >= filteredCalls.length) {
-                    listCalls.push({empty: true});
+                    callsList.push({empty: true});
                 } else {
-                    listCalls.splice(placeholderIndex, 0, {empty: true});
+                    callsList.splice(placeholderIndex, 0, {empty: true});
                 }
             }
         } else {
-            listCalls = filteredCalls.sort(sort);
-        }     
+            callsList = filteredCalls.sort(sort);
+        } 
+        return callsList;
+    }
 
-        const onePage = this.props.calls.length <= NUMCOLUMNS * COLUMNSIZE;
-        var listItems = [];
-        for (var i = 0; i < listCalls.length; i++) {
-            const call = listCalls[i];
+    createCallObjects(callsList) {
+        const {NUMCOLUMNS, COLUMNSIZE, callSize} = this.state;
+
+        var objectsList = [];
+        for (var i = 0; i < callsList.length; i++) {
+            const call = callsList[i];
             if (call.empty) {
-                const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
-                listItems.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`placeholder`} />);
+                const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,objectsList.length);
+                objectsList.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`placeholder`} />);
             } else {
-                listItems.push(this.props.draggable ? 
+                objectsList.push(this.props.draggable ? 
                     <DragCall {...call} key={call.name}
                         position={i}
                         rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} 
@@ -206,14 +206,19 @@ class List extends React.Component {
                 )
             }
         }
-        while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
-            const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
-            listItems.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`${id}, ${listItems.length}`} />);
+        while (objectsList.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || objectsList.length === 0) {
+            const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,objectsList.length);
+            objectsList.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`${id}, ${objectsList.length}`} />);
         }
+        return objectsList;
+    }
+
+    createPages(objectsList) {
+        const {NUMCOLUMNS, COLUMNSIZE, callSize} = this.state;
 
         var pages = [];
         var extraCallAdded = false;
-        for (var j = 0; j < (listItems.length / (NUMCOLUMNS*COLUMNSIZE)); j++) {
+        for (var j = 0; j < (objectsList.length / (NUMCOLUMNS*COLUMNSIZE)); j++) {
             var firstCallIndex = j*(NUMCOLUMNS*COLUMNSIZE);
             var lastCallIndex = (j+1)*(NUMCOLUMNS*COLUMNSIZE);
             if (extraCallAdded) {
@@ -232,10 +237,23 @@ class List extends React.Component {
                     loading={this.props.loading}
                     columns={NUMCOLUMNS} columnSize={COLUMNSIZE}
                     callSize={callSize}
-                    calls={listItems.slice(firstCallIndex, lastCallIndex)}
+                    calls={objectsList.slice(firstCallIndex, lastCallIndex)}
                 />
             );
         }
+        return pages;
+    }
+
+    render() {
+        const {NUMCOLUMNS, COLUMNSIZE, callSize, flexWidth} = this.state;
+
+        const id = this.props.id || "listCarousel";
+        const placeholder = !this.props.calls.length && this.props.placeholderContent && !this.props.loading? <Placeholder content={this.props.placeholderContent} /> : "";
+        const onePage = this.props.calls.length <= NUMCOLUMNS * COLUMNSIZE;
+
+        var callsList = this.formatCalls();
+        var objectsList = this.createCallObjects(callsList);
+        var pages = this.createPages(objectsList);
 
         return (
             <div className={`${flexWidth}`}>
