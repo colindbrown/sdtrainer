@@ -1,10 +1,49 @@
 import React from "react";
 import Call from "./Call";
+import DragCall from "./DragCall";
 import Page from "./Page";
 import Placeholder from "./Placeholder";
 import { WindowContext } from "../App";
 
 class List extends React.Component {
+
+    state = {
+        navHeight: 160,
+        currentTimeout: undefined
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        var updatedState = state;
+
+        if (props.callSize === "large") {
+            updatedState.callSize = {height: 60, width: 260};
+        } else {
+            updatedState.callSize = {height: 50, width: 220};
+        }
+
+        var availableWidth;
+        if (props.size === "half") {
+            updatedState.flexWidth = "col-md-6";
+            availableWidth = Math.min(props.windowWidth/2, 1300);
+        } else if (props.size === "fill") {
+            updatedState.flexWidth = "col-md-12";
+            availableWidth = Math.min(props.windowWidth/2, 1300);
+        } else {
+            updatedState.flexWidth = "col-md-12";
+            availableWidth = Math.min(props.windowWidth, 1300);
+        }
+
+        updatedState.NUMCOLUMNS = Math.floor((availableWidth-140)/updatedState.callSize.width) || 1;
+        updatedState.COLUMNSIZE = Math.floor((props.windowHeight-state.navHeight)/updatedState.callSize.height) || 1;
+
+        if (props.draggable) {
+            updatedState.placeholderIndex = List.getPlaceholderIndex(props, updatedState.NUMCOLUMNS, updatedState.COLUMNSIZE);
+            props.setPlaceholderIndex(updatedState.placeholderIndex);
+            updatedState.currentTimeout = List.handlePageTurns(props, state.currentTimeout, updatedState.NUMCOLUMNS, updatedState.COLUMNSIZE);
+        }
+
+        return updatedState;
+    }
 
     roundedCorners(NUMCOLUMNS,COLUMNSIZE,i) {
         if (i % (NUMCOLUMNS*COLUMNSIZE) === COLUMNSIZE - 1) {
@@ -72,62 +111,149 @@ class List extends React.Component {
         }
     }
 
-    render() {
-        var callSize;
-        if (this.props.callSize === "large") {
-            callSize = {height: 60, width: 260};
-        } else {
-            callSize = {height: 50, width: 220};
+    static getPlaceholderIndex(props, NUMCOLUMNS, COLUMNSIZE) {
+        if (props.sort === "arrayOrder" && props.placeholderPosition) {
+            const {x, y, page} = props.placeholderPosition;
+            if (y < 0 || y >= COLUMNSIZE) {
+                return undefined;
+            } else if (x < 0 || x >= NUMCOLUMNS) {
+                return undefined;
+            } else {
+                const placeholderIndex = (y + COLUMNSIZE * (x + NUMCOLUMNS * (page)));
+                if (placeholderIndex < 0) {
+                    return undefined;
+                } else if (placeholderIndex > props.calls.length) {
+                    return props.calls.length;
+                } else {
+                    if (props.dragSourceOrigin && props.dragSourcePosition < placeholderIndex) {
+                        return placeholderIndex + 1;
+                    } else {
+                        return placeholderIndex;
+                    }
+                }
+            }
         }
+        return undefined;
+    }
 
-        const navHeight = 160;
-        var availableWidth, flexWidth;
-        if (this.props.size === "half") {
-            availableWidth = Math.min(this.props.windowWidth/2, 1200);
-            flexWidth = "col-md-6";
-        } else {
-            availableWidth = Math.min(this.props.windowWidth, 1300);
-            flexWidth = "col-md-12";
+    static handlePageTurns(props, timeout, NUMCOLUMNS, COLUMNSIZE) {
+        if (props.sort === "arrayOrder" && props.placeholderPosition) {
+            const {x, y} = props.placeholderPosition;
+            if (y < 0 || y >= COLUMNSIZE) {
+                clearTimeout(timeout);
+                return undefined;
+            } else if (x < 0) {
+                clearTimeout(timeout);
+                return setTimeout(() => {
+                    window.$(`#${props.id}`).carousel('prev');
+                }, 1000);
+            } else if (x >= NUMCOLUMNS) {
+                clearTimeout(timeout);
+                return setTimeout(() => {
+                    window.$(`#${props.id}`).carousel('next');
+                }, 1000);
+            } else {
+                clearTimeout(timeout);
+                return undefined;
+            }
+        } else if (timeout) {
+            clearTimeout(timeout);
         }
+        return undefined;
 
-        const NUMCOLUMNS = Math.floor((availableWidth-140)/callSize.width) || 1;
-        const COLUMNSIZE = Math.floor((this.props.windowHeight-navHeight)/callSize.height) || 1;
+    }
+
+    formatCalls() {
+        const filteredCalls = this.filterCalls(this.props.calls);
+        const placeholderIndex =this.state.placeholderIndex;
         const sort = this.getSort();
 
-        const id = this.props.id || "listCarousel";
+        var callsList;
+        if (this.props.sort === "arrayOrder") {
+            callsList = filteredCalls.slice(0);
+            if (placeholderIndex >= 0) {
+                if (placeholderIndex >= filteredCalls.length) {
+                    callsList.push({empty: true});
+                } else {
+                    callsList.splice(placeholderIndex, 0, {empty: true});
+                }
+            }
+        } else {
+            callsList = filteredCalls.sort(sort);
+        } 
+        return callsList;
+    }
 
-        const filteredCalls = this.filterCalls(this.props.calls);
-        const sortedCalls = this.props.sort === "arrayOrder" ? filteredCalls : filteredCalls.sort(sort);
+    createCallObjects(callsList, id) {
+        const {NUMCOLUMNS, COLUMNSIZE, callSize} = this.state;
 
-        const onePage = this.props.calls.length <= NUMCOLUMNS * COLUMNSIZE;
-        var listItems = [];
-        for (var i = 0; i < sortedCalls.length; i++) {
-            const call = sortedCalls[i];
-            listItems.push(<Call {...call} key={call.name} 
-                callSize={callSize}
-                rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} 
-                onClick={() => this.handleClick(call.name)}
-            />);
+        var objectsList = [];
+        for (var i = 0; i < callsList.length; i++) {
+            const call = callsList[i];
+            if (call.empty) {
+                const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,objectsList.length);
+                objectsList.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`placeholder`} />);
+            } else {
+                objectsList.push(this.props.draggable ? 
+                    <DragCall {...call} key={call.name}
+                        position={i}
+                        rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} 
+                        onClick={() => this.handleClick(call.name)}
+                        callSize={callSize}
+                        source={this.props.id}
+                    />
+                    : <Call {...call} key={call.name} callSize={callSize} rounded={this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,i)} onClick={() => this.handleClick(call.name)} />
+                )
+            }
         }
-        while (listItems.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || listItems.length === 0) {
-            const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,listItems.length);
-            listItems.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`${id}, ${listItems.length}`} />)
+        while (objectsList.length % (NUMCOLUMNS*COLUMNSIZE) !== 0 || objectsList.length === 0) {
+            const roundedCorners = this.roundedCorners(NUMCOLUMNS,COLUMNSIZE,objectsList.length);
+            objectsList.push(<Call empty={true} rounded={roundedCorners} callSize={callSize} group={0} key={`${id}, ${objectsList.length}`} />);
         }
+        return objectsList;
+    }
+
+    createPages(objectsList, id) {
+        const {NUMCOLUMNS, COLUMNSIZE, callSize} = this.state;
 
         var pages = [];
-        for (var j = 0; j < (listItems.length / (NUMCOLUMNS*COLUMNSIZE)); j++) {
+        var extraCallAdded = false;
+        for (var j = 0; j < (objectsList.length / (NUMCOLUMNS*COLUMNSIZE)); j++) {
+            var firstCallIndex = j*(NUMCOLUMNS*COLUMNSIZE);
+            var lastCallIndex = (j+1)*(NUMCOLUMNS*COLUMNSIZE);
+            if (extraCallAdded) {
+                firstCallIndex += 1;
+                lastCallIndex += 1;
+            }
+            if (this.props.draggable && this.props.dragSourceOrigin && this.props.dragSourcePosition >= firstCallIndex && this.props.dragSourcePosition < lastCallIndex) {
+                lastCallIndex += 1
+                extraCallAdded = true;
+            }
             pages.push(
                 <Page 
                     key={j} 
+                    id={`${id}${j}`}
                     active={j === 0 ? "active" : ""} 
                     loading={this.props.loading}
                     columns={NUMCOLUMNS} columnSize={COLUMNSIZE}
                     callSize={callSize}
-                    calls={listItems.slice(j*(NUMCOLUMNS*COLUMNSIZE), (j+1)*(NUMCOLUMNS*COLUMNSIZE))}
+                    calls={objectsList.slice(firstCallIndex, lastCallIndex)}
                 />
             );
         }
+        return pages;
+    }
+
+    render() {
+        const {NUMCOLUMNS, COLUMNSIZE, callSize, flexWidth} = this.state;
+
+        const id = this.props.id || "listCarousel";
         const placeholder = !this.props.calls.length && this.props.placeholderContent && !this.props.loading? <Placeholder content={this.props.placeholderContent} /> : "";
+        const onePage = this.props.calls.length <= NUMCOLUMNS * COLUMNSIZE;
+
+        var callsList = this.formatCalls();
+        var objectsList = this.createCallObjects(callsList, id);
+        var pages = this.createPages(objectsList, id);
 
         return (
             <div className={`${flexWidth}`}>
@@ -137,7 +263,7 @@ class List extends React.Component {
                         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span className="sr-only">Previous</span>
                     </a>
-                    <div className="carousel-inner container" style={{width: `${NUMCOLUMNS*callSize.width + 2}px`}}>
+                    <div className="carousel-inner container" style={{width: `${NUMCOLUMNS*callSize.width + 2}px`, minWidth: `${NUMCOLUMNS*callSize.width + 2}px`}}>
                         {placeholder || ""}
                         {pages}
                     </div>

@@ -75,7 +75,6 @@ span.empty {
   padding: 0;
 
   .carousel-inner {
-    width: 80%;
     padding: 0px;
     margin: 0;
   }
@@ -118,10 +117,10 @@ span.empty {
     color:  $dark-grey;
   }
   &:first-child {
-    border-radius: .25rem 0rem 0rem 0rem;
+    border-radius: 0;
   }
   &:last-child {
-    border-radius: 0rem 0rem .25rem 0rem ;
+    border-radius: 0;
   }
 
   span {
@@ -133,11 +132,30 @@ span.empty {
 
 }
 
+.rounded-call {
+  &:first-child {
+    border-radius: .25rem 0rem 0rem 0rem;
+  }
+  &:last-child {
+    border-radius: 0rem 0rem .25rem 0rem;
+  }
+}
+
+.inherit-rounded {
+  border-radius: inherit;
+}
+
 .call-empty {
   border: 1px solid  $lighter-grey;
   background:  $white;
   &:hover {
     background:  $white;
+  }
+}
+
+.call-snapshot {
+  &:focus {
+    box-shadow: inherit;
   }
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import List from "./List";
+import DropList from "./DropList";
 import ConfirmModal from "./ConfirmModal";
 import { AlertsContext } from "./Alerts";
 import { db } from "../util/dbfunctions";
@@ -69,7 +69,7 @@ class CreateCollectionView extends React.Component {
         this.setState({ collectionCallsLoading: true })
         db.sessions.fetchCalls(name).then((sessionCalls) => {
             sessionCalls.forEach(((call) => {
-                this.moveCall(call.name, "collectionList");
+                this.moveCallTo(call.name, -1, "callList", "collectionList");
             }));
             this.setState({collectionCallsLoading: false })
         });
@@ -79,7 +79,7 @@ class CreateCollectionView extends React.Component {
         this.setState({ collectionCallsLoading: true })
         db.templates.fetchCalls(name).then((templateCalls) => {
             templateCalls.forEach(((call) => {
-                this.moveCall(call.name, "collectionList");
+                this.moveCallTo(call.name, -1, "callList", "collectionList");
             }));
             this.setState({collectionCallsLoading: false })
         });
@@ -147,33 +147,13 @@ class CreateCollectionView extends React.Component {
         return false;
     }
 
-    moveCall = (name, destination) => {
-        var callList = this.state.callList;
-        var collectionList = this.state.collectionList;
-
-        if (destination === "collectionList") {
-            const index = callList.findIndex((call) => call.name === name);
-            if (index >= 0) {
-                collectionList.push(callList[index]);
-                callList.splice(index, 1);
-            }
-        } else {
-            const index = collectionList.findIndex((call) => call.name === name);
-            if (index >= 0) {
-                callList.push(collectionList[index]);
-                collectionList.splice(index, 1);
-            }
-        }
-        this.setState({ callList, collectionList });
-    }
-
     // Props methods
     addAllUsed = async (e) => {
         e.preventDefault();
         this.setState({collectionCallsLoading: true })
         db.history.fetchByEverUsed(true).then((calls) => {
             calls.forEach(((call) => {
-                this.moveCall(call.name, "collectionList");
+                this.moveCallTo(call.name, -1, "callList", "collectionList");
             }));
             this.setState({collectionCallsLoading: false })
         })
@@ -181,7 +161,7 @@ class CreateCollectionView extends React.Component {
 
     removeAll = () => {
         const collectionList = this.state.collectionList.slice(0);
-        collectionList.forEach((call) => this.moveCall(call.name, "callList"));
+        collectionList.forEach((call) => this.moveCallTo(call.name, -1, "collectionList", "callList"));
     }
 
     changeSort(sort) {
@@ -194,7 +174,7 @@ class CreateCollectionView extends React.Component {
 
     filterEnter() {
         if (this.state.single.name) {
-            this.moveCall(this.state.single.name, "collectionList");
+            this.moveCallTo(this.state.single.name, -1, "callList", "collectionList");
             return true;
         }  
         return false;
@@ -204,6 +184,26 @@ class CreateCollectionView extends React.Component {
         if (this.state.single !== call) {
             this.setState({single: call});
         }
+    }
+
+    moveCallTo(name, destIndex, source, destination) {
+        var lists = { 
+            callList: this.state.callList, 
+            collectionList: this.state.collectionList 
+        }
+
+        const sourceIndex = lists[source].findIndex((call) => call.name === name);
+        if (sourceIndex >= 0) {
+            var destinationIndex = destIndex === -1 ? lists[destination].length - 1 : destIndex;
+            if (source === destination && sourceIndex < destIndex) {
+                destinationIndex -= 1;
+            }
+
+            const call = lists[source].splice(sourceIndex, 1)[0];
+            lists[destination].splice(destinationIndex, 0, call);
+        }
+
+        this.setState({ callList: lists.callList, collectionList: lists.collectionList });
     }
 
     render() {
@@ -226,18 +226,19 @@ class CreateCollectionView extends React.Component {
                 />
                 <ConfirmModal type="edit" onClick={() => this.state.onConfirm()} />
                 <div className="row no-gutters">
-                    <List
+                    <DropList
                         size="half"
                         id="callList"
                         header="Available Calls"
                         calls={this.state.callList}
                         sort={this.state.sort}
                         loading={this.state.callsLoading}
-                        onClick={(name) => this.moveCall(name, "collectionList")} 
+                        onClick={(name) => this.moveCallTo(name, -1, "callList", "collectionList")} 
+                        moveCallTo={(name, index, source) => this.moveCallTo(name, index, source, "callList")}
                         filter={this.state.filterString}
                         returnSingle={(call) => this.returnSingle(call)}
                     />
-                    <List
+                    <DropList
                         size="half"
                         id="collectionList"
                         header="Selected Calls"
@@ -245,8 +246,9 @@ class CreateCollectionView extends React.Component {
                         sort={"arrayOrder"}
                         loading={this.state.collectionCallsLoading}
                         placeholderContent={{title: "Create a Collection", 
-                            text: "Add calls to your collection using the function bar or the list to the left. Once you're done, save your collection as either a session plan or a template."}}
-                        onClick={(name) => this.moveCall(name, "callList")} 
+                            text: "Add calls to your collection using the function bar, clicking on the list to the left, or by drag-and-drop. Once you're done, save your collection as either a session plan or a template."}}
+                        onClick={(name) => this.moveCallTo(name, -1, "collectionList", "callList")} 
+                        moveCallTo={(name, index, source) => this.moveCallTo(name, index, source, "collectionList")}
                     />
                 </div>
             </div>

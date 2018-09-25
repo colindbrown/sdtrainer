@@ -48,7 +48,6 @@ span.empty {
   position: relative;
   padding: 0; }
   .carousel .carousel-inner {
-    width: 80%;
     padding: 0px;
     margin: 0; }
 
@@ -84,20 +83,32 @@ span.empty {
     background: #fdfdfd;
     color: #666; }
   .call:first-child {
-    border-radius: .25rem 0rem 0rem 0rem; }
+    border-radius: 0; }
   .call:last-child {
-    border-radius: 0rem 0rem .25rem 0rem; }
+    border-radius: 0; }
   .call span {
     position: absolute;
     top: 50%;
     -webkit-transform: translateY(-13px);
     transform: translateY(-13px); }
 
+.rounded-call:first-child {
+  border-radius: .25rem 0rem 0rem 0rem; }
+
+.rounded-call:last-child {
+  border-radius: 0rem 0rem .25rem 0rem; }
+
+.inherit-rounded {
+  border-radius: inherit; }
+
 .call-empty {
   border: 1px solid #e9ecef;
   background: #fff; }
   .call-empty:hover {
     background: #fff; }
+
+.call-snapshot:focus {
+  box-shadow: inherit; }
 
 .group-0 {
   box-shadow: inset 0px 0px 9px 1px #ccc; }

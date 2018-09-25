@@ -72,7 +72,7 @@ const Header = ({activeClub, activeUser, signOut, resetClub, loading}) => (
         <div className="nav-item dropdown ml-2">
             <a className={`btn btn-sm btn-info`} to={'/'} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{activeUser.displayName.split(" ")[0]}</a>
             <div className="dropdown-menu dropdown-menu-right">
-            <Link exact className="dropdown-item" to={'/'} onClick={() => signOut()}>Sign Out</Link>
+            <Link className="dropdown-item" to={'/'} onClick={() => signOut()}>Sign Out</Link>
             </div>
         </div>
       </div>
