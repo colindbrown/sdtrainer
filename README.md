@@ -47,7 +47,7 @@ npm start
 ## Credit
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
-This project uses Node.js, ReactJS, and Google Firebase Firestore
+This project uses Node.js, ReactJS, and Google Firebase Firestore, as well as React DnD for drag-and-drop.
 
 ## License
 MIT
