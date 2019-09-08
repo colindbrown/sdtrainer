@@ -11,7 +11,7 @@ class RunSessionView extends React.Component {
         loading: false,
         planNames: [],
         activeSession: "",
-        sort: "userPosition"
+        sort: ""
     }
 
 
