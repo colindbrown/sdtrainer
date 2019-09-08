@@ -75,6 +75,12 @@ class List extends React.Component {
         if (attribute === "name" || attribute === "position") {
             reverse = true;
         }
+        
+        if (a.disabled && !b.disabled) {
+            return 1;   
+        } else if (b.disabled && !a.disabled) {
+            return -1;
+        }
 
         if (a[attribute] < b[attribute]) {
             return reverse ? -1 : 1;
